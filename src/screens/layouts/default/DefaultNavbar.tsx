@@ -1,36 +1,51 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import NavbarSVG from "../../../helpers/SVG/layoutComponents/NavbarSVG";
+import { useRoute } from "@react-navigation/native";
 
 const DefaultNavbar = ({ navigation }: any) => {
+  const route = useRoute();
+  const currentRouteName = route.name;
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.sidebarItem}
+        style={[
+          styles.sidebarItem,
+          currentRouteName === "HomeScreen" && styles.sidebarItemActive,
+        ]}
         onPress={() => navigation.navigate("HomeScreen")}
       >
         <View>
           <NavbarSVG id="Overview" />
         </View>
       </TouchableOpacity>
-      <View style={styles.sidebarItem}>
-        <Text>
-          <NavbarSVG id="Transactions" />
-        </Text>
-      </View>
-      <View style={styles.sidebarItem}>
-        <Text>
-          <NavbarSVG id="Statistic" />
-        </Text>
-      </View>
       <TouchableOpacity
-        style={styles.sidebarItem}
+        style={[
+          styles.sidebarItem,
+          currentRouteName === "TransactionScreen" && styles.sidebarItemActive,
+        ]}
+        onPress={() => navigation.navigate("TransactionScreen")}
+      >
+        <View>
+          <NavbarSVG id="Transactions" />
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.sidebarItem,
+          currentRouteName === "StatisticScreen" && styles.sidebarItemActive,
+        ]}
+        onPress={() => navigation.navigate("StatisticScreen")}
+      >
+        <View>
+          <NavbarSVG id="Statistic" />
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.sidebarItem,
+          currentRouteName === "SettingsScreen" && styles.sidebarItemActive,
+        ]}
         onPress={() => navigation.navigate("SettingsScreen")}
       >
         <View>
@@ -57,6 +72,9 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRightWidth: 1,
     borderStyle: "solid",
+  },
+  sidebarItemActive: {
+    backgroundColor: "rgba(119, 36, 197, 0.324)",
   },
 });
 

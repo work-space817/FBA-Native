@@ -4,14 +4,21 @@ import Svg, { Path } from "react-native-svg";
 
 interface Props {
   id: string;
+  width?: string;
+  height?: string;
 }
 
-const HeaderSVG = ({ id }: Props) => {
+const HeaderSVG = ({ id, width = "50", height = "50" }: Props) => {
   switch (id) {
     case "Cloud":
       return (
         <View>
-          <Svg fill="#000000" height="50px" width="50px" viewBox="0 0 297 297">
+          <Svg
+            fill="#000000"
+            height={height}
+            width={width}
+            viewBox="0 0 297 297"
+          >
             <Path
               d="M297,136.323c0-26.571-19.465-48.683-44.885-52.821c-4.065-17.137-19.496-29.921-37.857-29.921
 	c-11.905,0-23.075,5.484-30.393,14.63c-9.301,0.275-17.778,3.846-24.338,9.564c-9.537-6.058-20.836-9.581-32.946-9.581

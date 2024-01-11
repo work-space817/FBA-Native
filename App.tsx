@@ -1,8 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import DefaultHeader from "./src/screens/layouts/default/DefaultHeader";
-import DefaultNavbar from "./src/screens/layouts/default/DefaultNavbar";
-import HomeScreen from "./src/screens/home/HomeScreen";
+import { StyleSheet, Text } from "react-native";
 import AndroidFont from "./src/helpers/functions/AndroidFont";
 import Navigation from "./src/navigation/Navigation";
 

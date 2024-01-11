@@ -1,15 +1,24 @@
-import { StyleSheet, Text, View, Image, Platform } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import HeaderSVG from "../../../helpers/SVG/layoutComponents/HeaderSVG";
-const DefaultHeader = () => {
+import { useRoute } from "@react-navigation/native";
+
+const DefaultHeader = ({ navigation }: any) => {
+  const route = useRoute();
+  const currentRouteName = route.name.replace("Screen", "");
+
   return (
     <View>
       <View style={styles.headerContainer}>
         <View style={styles.headerTitle}>
           <HeaderSVG id={"Cloud"} />
-          <Text style={styles.headerTitleText}>Overiew</Text>
+          <Text style={styles.headerTitleText}>{currentRouteName}</Text>
         </View>
-        <HeaderSVG id={"LogOut"} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AuthenticationScreen")}
+        >
+          <HeaderSVG id={"LogOut"} />
+        </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
       <Text style={styles.headerOptionalText}>
