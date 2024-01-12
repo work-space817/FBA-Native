@@ -1,27 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, Text, ButtonProps } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, ViewStyle } from "react-native";
 
 interface ICustomButtom {
   title: string;
-  theme?: string;
-  color?: string;
-  textColor?: string;
-  activeVoid?: (e: any) => void;
+  theme?: "none" | "primary" | "secondary";
+  onPress?: (e: any) => void;
 }
 
-const CustomButton = ({
-  title,
-  color = "rgba(126,76,215,.75)",
-  textColor = "rgb(255,255,255)",
-  theme,
-  activeVoid,
-}: ICustomButtom) => {
+const CustomButton = ({ title, theme = "none", onPress }: ICustomButtom) => {
+  const buttonStyles: ViewStyle = styles[theme] || styles.none;
+  const textStyles = styles[`${theme}Text`] || styles.noneText;
   return (
-    <TouchableOpacity
-      onPress={activeVoid}
-      style={[styles.button, { backgroundColor: color }]}
-    >
-      <Text style={[styles.text, { color: textColor }]}>{title}</Text>
+    <TouchableOpacity onPress={onPress} style={[styles.button, buttonStyles]}>
+      <Text style={[styles.text, textStyles]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -31,10 +22,28 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     borderWidth: 0,
+    alignItems: "center",
   },
   text: {
     fontFamily: "Quicksand_600SemiBold",
   },
-  primary: {},
+  none: {
+    backgroundColor: "rgb(225,225,225)",
+  },
+  noneText: {
+    color: "rgb(0,0,0)",
+  },
+  primary: {
+    backgroundColor: "rgba(126,76,215,.75)",
+  },
+  primaryText: {
+    color: "rgb(255,255,255)",
+  },
+  secondary: {
+    backgroundColor: "rgba(126,76,215,.75)",
+  },
+  secondaryText: {
+    color: "rgb(255,255,255)",
+  },
 });
 export default CustomButton;
