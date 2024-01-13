@@ -7,6 +7,8 @@ import setUserAuth from "../../../api/firebase/user/userInfo/setUserAuth";
 import { ISignUp } from "./types";
 import CustomInput from "../../UI/CustomInput";
 import CustomButton from "../../UI/CustomButton";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../../navigation/Navigation";
 
 const SignUp = () => {
   const init: ISignUp = {
@@ -14,8 +16,11 @@ const SignUp = () => {
     password: "",
     currentBalance: "0",
   };
+
+  const { navigate } = useNavigation<StackNavigation>();
   const onSubmitHandler = async (values: ISignUp) => {
     try {
+      //  navigate("HomeScreen");
     } catch (error: any) {
       console.log("error: ", error);
       const code = error.code;

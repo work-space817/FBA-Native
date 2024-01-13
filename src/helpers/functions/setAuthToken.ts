@@ -6,6 +6,8 @@ const setAuthToken = async (authResult: UserCredential) => {
   const user = authResult.user;
   const userToken = (await getIdToken(user)) as string;
   const uid = auth.currentUser?.uid as string;
+  console.log("auth.currentUser: ", auth.currentUser?.email);
+
   try {
     if (userToken && uid) {
       await AsyncStorage.setItem("token", userToken);

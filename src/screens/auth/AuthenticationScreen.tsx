@@ -5,14 +5,13 @@ import CustomButton from "../../components/UI/CustomButton";
 import { useState } from "react";
 import SignUp from "../../components/auth/registration/SignUp";
 import LogIn from "../../components/auth/login/LogIn";
+import { StackNavigation } from "../../navigation/Navigation";
 
 export default function AuthenticationScreen() {
-  const navigate = useNavigation();
-
   const [logInVisible, setLogInVisible] = useState(false);
   const [signUpVisible, setSignUpVisible] = useState(false);
+  const { navigate } = useNavigation<StackNavigation>();
 
-  let buttonTheme = "none";
   const showLogIn = (e: React.TouchEvent<Element>) => {
     if (e) {
       setSignUpVisible(false);
@@ -25,25 +24,24 @@ export default function AuthenticationScreen() {
       setSignUpVisible(true);
     }
   };
+
+  const handleOnNavigate = () => navigate("HomeScreen");
+
   return (
     <AuthLayout>
-      <TouchableOpacity onPress={navigate.goBack}>
+      <TouchableOpacity onPress={handleOnNavigate}>
         <Text style={styles.authTitle}>Financial Budgeting App</Text>
       </TouchableOpacity>
       <View style={styles.buttonsLayout}>
         <CustomButton
           title={"Sign up"}
           onPress={showSignUp}
-          theme={
-            signUpVisible ? (buttonTheme = "primary") : (buttonTheme = "none")
-          }
+          theme={signUpVisible ? "primary" : "none"}
         />
         <CustomButton
           title={"Log in"}
           onPress={showLogIn}
-          theme={
-            logInVisible ? (buttonTheme = "primary") : (buttonTheme = "none")
-          }
+          theme={logInVisible ? "primary" : "none"}
         />
       </View>
       {signUpVisible && <SignUp />}

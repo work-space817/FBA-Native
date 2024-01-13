@@ -1,6 +1,8 @@
 import { StyleSheet, Text } from "react-native";
 import AndroidFont from "./src/helpers/functions/AndroidFont";
 import Navigation from "./src/navigation/Navigation";
+import { Provider } from "react-redux";
+import { store } from "./src/store";
 
 export default function App() {
   const fontsLoaded = AndroidFont();
@@ -8,7 +10,11 @@ export default function App() {
     return <Text>Loading...</Text>;
   }
 
-  return <Navigation />;
+  return (
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({

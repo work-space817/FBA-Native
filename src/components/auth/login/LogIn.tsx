@@ -12,15 +12,29 @@ import CustomButton from "../../UI/CustomButton";
 import { auth } from "../../../api/firebase/config";
 import setAuthToken from "../../../helpers/functions/setAuthToken";
 import { ILogIn } from "./types";
+import { useDispatch } from "react-redux";
+import { AuthUserActionType } from "../../../store/reducers/types";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../../navigation/Navigation";
 
 const LogIn = () => {
   const init: ILogIn = {
     email: "",
     password: "",
   };
+  const dispatch = useDispatch();
+  const { navigate } = useNavigation<StackNavigation>();
 
   const onSubmitHandler = async (values: ILogIn) => {
     try {
+      const logInResult = await signInWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      await setAuthToken(logInResult);
+      dispatch({ type: AuthUserActionType.LOGIN_USER });
+      navigate("HomeScreen");
     } catch (error: any) {
       console.log(error);
       const code = error.code;
@@ -81,7 +95,7 @@ const LogIn = () => {
           clientSideError={errors.password}
           touched={touched.password}
         />
-        <CustomButton title={"Log in"} theme="primary" onPress={() => {}} />
+        <CustomButton title={"Log in"} theme="primary" onPress={handleSubmit} />
       </View>
     </View>
   );
