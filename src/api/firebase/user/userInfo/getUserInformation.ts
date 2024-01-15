@@ -4,7 +4,7 @@ import getUserId from "../../../../helpers/functions/getUserId";
 import { ISignUp } from "../../../../components/auth/registration/types";
 
 const getUserInformation = async () => {
-  const userId = getUserId();
+  const userId = await getUserId();
   const userRef = collection(firestore, "users");
   const querySnapshot = await getDocs(userRef);
   const userInfo = querySnapshot.docs.find((user) =>

@@ -4,7 +4,7 @@ import getUserId from "../../../../helpers/functions/getUserId";
 import { IBalance } from "./types";
 
 const getUserBalance = async () => {
-  const userId = getUserId();
+  const userId = await getUserId();
   const userBalanceRef = doc(collection(firestore, "userBalance"), `${userId}`);
   const querySnapshot = await getDoc(userBalanceRef);
   const balanceData = querySnapshot.data() as IBalance;

@@ -12,7 +12,7 @@ const DefaultLayout = ({ children, navigation }: DefaultLayoutProps) => {
   return (
     <View style={styles.outerLayout}>
       <View style={styles.innerLayout}>
-        <DefaultHeader navigation={navigation} />
+        <DefaultHeader />
         {children}
       </View>
       <DefaultNavbar navigation={navigation} />

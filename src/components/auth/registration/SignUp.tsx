@@ -9,7 +9,11 @@ import CustomInput from "../../UI/CustomInput";
 import CustomButton from "../../UI/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../navigation/Navigation";
-
+import { auth } from "../../../api/firebase/config";
+import setUserBalance from "../../../api/firebase/user/userBalance/setUserBalance";
+import { IBalance } from "../../../api/firebase/user/userBalance/types";
+import { useDispatch } from "react-redux";
+import { AuthUserActionType } from "../../../store/reducers/types";
 const SignUp = () => {
   const init: ISignUp = {
     email: "",
@@ -18,9 +22,24 @@ const SignUp = () => {
   };
 
   const { navigate } = useNavigation<StackNavigation>();
+  const dispatch = useDispatch();
   const onSubmitHandler = async (values: ISignUp) => {
     try {
-      //  navigate("HomeScreen");
+      const SignUpResult = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      console.log(values);
+      await setUserAuth(values, SignUpResult);
+      dispatch({ type: AuthUserActionType.LOGIN_USER });
+      const userBalance: IBalance = {
+        currentBalance: +values.currentBalance,
+        incomingBalance: 0,
+        outcomingBalance: 0,
+      };
+      await setUserBalance(userBalance);
+      navigate("HomeScreen");
     } catch (error: any) {
       console.log("error: ", error);
       const code = error.code;
@@ -83,7 +102,7 @@ const SignUp = () => {
       <View style={styles.formContainer}>
         <CustomInput
           label="Email"
-          field="emailAddress"
+          field="email"
           inputMode="email"
           value={values.email}
           keyboardType="email-address"
@@ -113,10 +132,11 @@ const SignUp = () => {
           clientSideError={errors.currentBalance}
           touched={touched.currentBalance}
         />
-        {/* <TouchableOpacity onPress={() => {}} style={styles.button}>
-          <Text style={styles.buttonText}>Sign up</Text>
-        </TouchableOpacity> */}
-        <CustomButton title={"Sign up"} theme="primary" onPress={() => {}} />
+        <CustomButton
+          title={"Sign up"}
+          theme="primary"
+          onPress={handleSubmit}
+        />
       </View>
     </View>
   );

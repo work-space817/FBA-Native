@@ -4,7 +4,7 @@ import getUserId from "../../../../helpers/functions/getUserId";
 import { firestore } from "../../config";
 
 const setUserBalance = async (values: IBalance) => {
-  const userId = getUserId();
+  const userId = await getUserId();
 
   const userBalanceRef = doc(collection(firestore, "userBalance"), `${userId}`);
   const balanceData = setDoc(userBalanceRef, values);

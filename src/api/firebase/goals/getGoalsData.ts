@@ -3,7 +3,7 @@ import { firestore } from "../config";
 import getUserId from "../../../helpers/functions/getUserId";
 
 const getGoalsData = async () => {
-  const userId = getUserId();
+  const userId = await getUserId();
 
   const userGoalsRef = doc(collection(firestore, "goals"), `${userId}`);
   const querySnapshot = await getDocs(collection(userGoalsRef, "goal"));

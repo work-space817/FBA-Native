@@ -3,7 +3,7 @@ import getUserId from "../../../helpers/functions/getUserId";
 import { firestore } from "../config";
 
 const setTransactionData = async (values: any) => {
-  const userId = getUserId();
+  const userId = await getUserId();
   const userTransactionsRef = doc(
     collection(firestore, "transactions"),
     `${userId}`

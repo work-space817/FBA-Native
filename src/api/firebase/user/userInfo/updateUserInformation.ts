@@ -10,7 +10,7 @@ import { User, updatePassword } from "firebase/auth";
 
 const updateUserInformation = async (values: any) => {
   console.log("values: ", values);
-  const userId = getUserId();
+  const userId = await getUserId();
   const userRef = collection(firestore, "users");
   const querySnapshot = await getDocs(userRef);
   const userInfo = querySnapshot.docs.find((user) =>

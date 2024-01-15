@@ -1,11 +1,23 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import HeaderSVG from "../../../helpers/SVG/layoutComponents/HeaderSVG";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { StackNavigation } from "../../../navigation/Navigation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { AuthUserActionType } from "../../../store/reducers/types";
 
-const DefaultHeader = ({ navigation }: any) => {
+const DefaultHeader = () => {
+  const dispatch = useDispatch();
   const route = useRoute();
   const currentRouteName = route.name.replace("Screen", "");
+  const { navigate } = useNavigation<StackNavigation>();
+  const handleOnNavigate = async () => {
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("uid");
+    dispatch({ type: AuthUserActionType.LOGOUT_USER });
+    navigate("AuthenticationScreen");
+  };
 
   return (
     <View>
@@ -14,9 +26,7 @@ const DefaultHeader = ({ navigation }: any) => {
           <HeaderSVG id={"Cloud"} />
           <Text style={styles.headerTitleText}>{currentRouteName}</Text>
         </View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("AuthenticationScreen")}
-        >
+        <TouchableOpacity onPress={handleOnNavigate}>
           <HeaderSVG id={"LogOut"} />
         </TouchableOpacity>
       </View>
