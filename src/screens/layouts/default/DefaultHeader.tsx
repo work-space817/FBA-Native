@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Quicksand_600SemiBold",
     color: "rgba(0,0,0,0.5)",
+    marginBottom: 15,
   },
 });
 export default DefaultHeader;

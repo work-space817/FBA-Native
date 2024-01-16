@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigation } from "../../navigation/Navigation";
 import { useNavigation } from "@react-navigation/native";
+import OperationMenu from "../../components/common/OperationMenu";
+import Card from "../../components/card/Card";
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
   const checkUpUser = async () => {
@@ -21,7 +23,8 @@ export default function HomeScreen({ navigation }: any) {
   return (
     <DefaultLayout navigation={navigation}>
       <View>
-        <Text>Homepage</Text>
+        <OperationMenu />
+        <Card />
       </View>
     </DefaultLayout>
   );

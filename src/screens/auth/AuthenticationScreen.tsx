@@ -15,6 +15,8 @@ import CustomLoading from "../../components/UI/CustomLoading";
 export default function AuthenticationScreen() {
   const [logInVisible, setLogInVisible] = useState(false);
   const [signUpVisible, setSignUpVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store: any) => store.auth as IAuthUser);
   const { navigate } = useNavigation<StackNavigation>();
@@ -30,9 +32,14 @@ export default function AuthenticationScreen() {
           dispatch({ type: AuthUserActionType.LOGOUT_USER });
         }
       } catch (error: any) {
-        console.error("Помилка перевірки айді користувача:", error);
+        console.error("User auth error:", error);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
       }
     };
+
     console.log("isAuth:", isAuth);
     getUserId();
   }, [isAuth]);
@@ -57,7 +64,7 @@ export default function AuthenticationScreen() {
       <TouchableOpacity onPress={handleOnNavigate}>
         <Text style={styles.authTitle}>Financial Budgeting App</Text>
       </TouchableOpacity>
-      {isAuth ? (
+      {isAuth || isLoading ? (
         <CustomLoading />
       ) : (
         <View style={styles.buttonsLayout}>

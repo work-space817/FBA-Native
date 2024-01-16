@@ -18,11 +18,9 @@ const CustomButton = ({ title, theme = "none", onPress }: ICustomButtom) => {
 };
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 6,
-    padding: 10,
-    borderRadius: 15,
+    padding: 8,
+    borderRadius: 16,
     borderWidth: 0,
-    alignItems: "center",
   },
   text: {
     fontFamily: "Quicksand_600SemiBold",
