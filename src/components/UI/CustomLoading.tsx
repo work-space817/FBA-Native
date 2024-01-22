@@ -1,47 +1,31 @@
-import React, { useEffect, useRef } from "react";
-import { Animated, View, StyleSheet } from "react-native";
-import HeaderSVG from "../../helpers/SVG/layoutComponents/HeaderSVG";
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import CustomLoadingAnimation from "./CustomLoadingAnimation";
 
 const CustomLoading = () => {
-  const translateX = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(translateX, {
-          toValue: 150,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(translateX, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-  }, [translateX]);
-
-  const animatedStyles = {
-    transform: [
-      {
-        translateX,
-      },
-    ],
-  };
   return (
-    <View style={styles.loading}>
-      <Animated.View style={animatedStyles}>
-        <HeaderSVG id="Cloud" />
-      </Animated.View>
+    <View style={styles.layout}>
+      <View style={styles.container}>
+        <CustomLoadingAnimation />
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  loading: {
-    width: "50%",
-    justifyContent: "flex-start",
+  layout: {
+    zIndex: 9999,
+    // width: "350%",
+    // height: "350%",
+    // top: "-50%",
+    // left: "-50%",
+    // flex: 1,
+    position: "absolute",
+    backgroundColor: "rgba(220,220,220, 0.9)",
+  },
+  container: {
+    position: "relative",
+    top: "40%",
+    left: "21%",
   },
 });
-
 export default CustomLoading;

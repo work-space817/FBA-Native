@@ -10,7 +10,7 @@ import { AuthUserActionType, IAuthUser } from "../../store/reducers/types";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
-import CustomLoading from "../../components/UI/CustomLoading";
+import CustomLoading from "../../components/UI/CustomLoadingAnimation";
 
 export default function AuthenticationScreen() {
   const [logInVisible, setLogInVisible] = useState(false);

@@ -7,6 +7,8 @@ import { StackNavigation } from "../../navigation/Navigation";
 import { useNavigation } from "@react-navigation/native";
 import OperationMenu from "../../components/common/OperationMenu";
 import Card from "../../components/card/Card";
+import GoalSlider from "../../components/goals/GoalSlider";
+import GoalEmpty from "../../components/goals/GoalEmpty";
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
   const checkUpUser = async () => {
@@ -24,6 +26,7 @@ export default function HomeScreen({ navigation }: any) {
     <DefaultLayout navigation={navigation}>
       <View>
         <OperationMenu />
+        <GoalSlider />
         <Card />
       </View>
     </DefaultLayout>

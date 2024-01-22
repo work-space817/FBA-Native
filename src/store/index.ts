@@ -2,14 +2,16 @@ import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { AuthReducer } from "./reducers/userReducers/AuthReducer";
+import { UserBalanceReducer } from "./reducers/userReducers/UserBalanceReducer";
+import { GoalListReducer } from "./reducers/goalReducer/GoalListReducer";
 export const rootReducer = combineReducers({
   auth: AuthReducer,
   //   selectCategories: SelectCategoriesReducer,
   //   selectGoal: SelectGoalReducer,
-  //   goalList: GoalListReducer,
+  goalList: GoalListReducer,
   //   transactionList: TransactionListReducer,
   //   modalClose: ModalCloserReducer,
-  //   userBalance: UserBalanceReducer,
+  userBalance: UserBalanceReducer,
   //   datesRange: DatesRange,
   //   monthAndYearRange: MonthAndYearRange,
 });

@@ -1,4 +1,5 @@
 import { IBalance } from "../../api/firebase/user/userBalance/types";
+import { IGoal } from "../../components/goals/types";
 
 export interface IAuthUser {
   isAuth: boolean;
@@ -7,14 +8,14 @@ export enum AuthUserActionType {
   LOGIN_USER = "AUTH_LOGIN_USER",
   LOGOUT_USER = "AUTH_LOGOUT_USER",
 }
-// export interface IGoalList {
-//   goalList: IGoal[];
-//   isUpdatedGoaliList: boolean;
-// }
-// export enum GoalListActionType {
-//   GOAL_LIST = "GOAL_LIST",
-//   UPDATE_GOALS_LIST = "UPDATE_GOALS_LIST",
-// }
+export interface IGoalList {
+  goalList: IGoal[];
+  isUpdatedGoaliList: boolean;
+}
+export enum GoalListActionType {
+  GOAL_LIST = "GOAL_LIST",
+  UPDATE_GOALS_LIST = "UPDATE_GOALS_LIST",
+}
 // export interface IGoalSelect {
 //   selectedGoal: IGoal | null;
 // }
@@ -35,17 +36,17 @@ export enum AuthUserActionType {
 // export enum ModalCloserActionType {
 //   MODAL_CLOSE = "MODAL_CLOSE",
 // }
-// export interface IUserBalance {
-//   balance: IBalance;
-//   isUpdatedBalance: boolean;
-// }
-// export enum UserBalanceActionType {
-//   SET_BALANCE = "SET_BALANCE",
-//   SET_CURRENT_BALANCE = "SET_CURRENT_BALANCE",
-//   SET_INCOME_BALANCE = "SET_INCOME_BALANCE",
-//   SET_OUTCOME_BALANCE = "SET_OUTCOME_BALANCE",
-//   UPDATE_BALANCE = "UPDATE_BALANCE",
-// }
+export interface IUserBalance {
+  balance: IBalance;
+  isUpdatedBalance: boolean;
+}
+export enum UserBalanceActionType {
+  SET_BALANCE = "SET_BALANCE",
+  SET_CURRENT_BALANCE = "SET_CURRENT_BALANCE",
+  SET_INCOME_BALANCE = "SET_INCOME_BALANCE",
+  SET_OUTCOME_BALANCE = "SET_OUTCOME_BALANCE",
+  UPDATE_BALANCE = "UPDATE_BALANCE",
+}
 // export interface ITransactionList {
 //   transactionList: ITransaction[];
 //   isUpdatedList: boolean;
