@@ -9,6 +9,7 @@ import OperationMenu from "../../components/common/OperationMenu";
 import Card from "../../components/card/Card";
 import GoalSlider from "../../components/goals/GoalSlider";
 import GoalEmpty from "../../components/goals/GoalEmpty";
+import CustomButton from "../../components/UI/CustomButton";
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
   const checkUpUser = async () => {

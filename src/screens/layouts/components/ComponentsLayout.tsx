@@ -1,33 +1,10 @@
-import { ReactNode } from "react";
-import { View, StyleSheet, DimensionValue } from "react-native";
+import { FC } from "react";
+import { View, StyleSheet, DimensionValue, ViewProps } from "react-native";
 
-interface IComponentsLayout {
-  children: ReactNode;
-  width?: DimensionValue;
-  marginVertical?: DimensionValue;
-  marginHorizontal?: DimensionValue;
-}
+interface IComponentsLayout extends ViewProps {}
 
-const ComponentsLayout = ({
-  children,
-  width,
-  marginVertical,
-  marginHorizontal,
-}: IComponentsLayout) => {
-  return (
-    <View
-      style={[
-        styles.layout,
-        {
-          width: width,
-          marginVertical: marginVertical,
-          marginHorizontal: marginHorizontal,
-        },
-      ]}
-    >
-      {children}
-    </View>
-  );
+const ComponentsLayout: FC<IComponentsLayout> = ({ style, children }) => {
+  return <View style={[styles.layout, style]}>{children}</View>;
 };
 const styles = StyleSheet.create({
   layout: {

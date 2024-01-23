@@ -1,19 +1,20 @@
 import React, { FC } from "react";
-import { TextInput, Text, View, StyleSheet } from "react-native";
+import {
+  TextInput,
+  Text,
+  View,
+  StyleSheet,
+  TextInputProps,
+} from "react-native";
 
-interface CustomInputProps {
+interface CustomInputProps extends TextInputProps {
   label: string;
-  inputMode?: "text" | "numeric" | "email";
-  keyboardType?: "default" | "number-pad" | "email-address";
   isSecureTextEntry?: boolean;
   field?: string;
   value?: any;
-  placeholder?: string;
-  onChange: (text: string) => void;
-  onFocus?: () => void;
+  onChange: (text: any) => void;
   clientSideError?: string;
   touched?: boolean;
-  autoComplete?: string;
   disabled?: boolean;
 }
 
@@ -64,7 +65,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    width: "100%",
     height: 40,
     borderColor: "gray",
     borderWidth: 1,

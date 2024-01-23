@@ -1,17 +1,25 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import CustomButton from "../UI/CustomButton";
+import CustomModal from "../UI/CustomModal";
+import GoalAdd from "../goals/GoalAdd";
 
 const OperationMenu = () => {
   return (
     <View style={styles.layout}>
       <View style={styles.children}>
         <Text style={styles.text}>Goals</Text>
-        <CustomButton title={"New"} theme={"primary"} />
+        <CustomModal title={"New"}>
+          <GoalAdd />
+        </CustomModal>
       </View>
       <View style={styles.children}>
-        <CustomButton title={"Add income"} theme={"primary"} />
-        <CustomButton title={"Add outcome"} theme={"primary"} />
+        <CustomModal title={"Add income"}>
+          <Text>Next</Text>
+        </CustomModal>
+        <CustomModal title={"Add outcome"}>
+          <Text>Next</Text>
+        </CustomModal>
       </View>
     </View>
   );

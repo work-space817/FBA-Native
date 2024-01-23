@@ -8,52 +8,55 @@ import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
 
 const Goal: FC<IGoal> = memo(
-  ({ cost, expireDate, title, index, selectedCategories, id }) => {
+  ({ cost, expireDate, title, selectedCategories, id }) => {
     const dispatch = useDispatch();
     // const location = useLocation();
     // const navigate = useNavigate();
     const now = new Date().getTime();
     // const formattedExpireDate = DateFormater(expireDate);
 
-    const selectGoal = useCallback(async () => {
-      const fetchGoals = await getGoalsData();
-      const fetchCurrentGoal = fetchGoals.find((doc, docIndex) =>
-        docIndex + 1 === index ? doc.data() : null
-      );
-      const currentGoalData = { ...fetchCurrentGoal?.data(), id };
-      console.log("currentGoalData: ", currentGoalData);
-      //   if (id) {
-      //     dispatch({
-      //       type: GoalSelectActionType.GOAL_SELECT,
-      //       payload: currentGoalData,
-      //     });
-      //   }
-      //   if (location.pathname !== "/transactions") {
-      //     navigate("/transactions");
-      //   }
-    }, [`navigate`, index, id, dispatch]);
+    // const selectGoal = useCallback(async () => {
+    //   const fetchGoals = await getGoalsData();
+    //   const fetchCurrentGoal = fetchGoals.find((doc, docIndex) =>
+    //     docIndex + 1 === index ? doc.data() : null
+    //   );
+    //   const currentGoalData = { ...fetchCurrentGoal?.data(), id };
+    //   console.log("currentGoalData: ", currentGoalData);
+    //   //   if (id) {
+    //   //     dispatch({
+    //   //       type: GoalSelectActionType.GOAL_SELECT,
+    //   //       payload: currentGoalData,
+    //   //     });
+    //   //   }
+    //   //   if (location.pathname !== "/transactions") {
+    //   //     navigate("/transactions");
+    //   //   }
+    // }, [`navigate`, index, id, dispatch]);
 
     return (
-      <ComponentsLayout width={105} marginHorizontal={10} marginVertical={15}>
-        <View style={styles.layout}>
-          <View style={styles.distance}>
-            <Text style={styles.cost}>{cost} UAH</Text>
-            <View style={styles.expireDate}>
-              <Text style={styles.expireDateText}>{expireDate}</Text>
-              <GoalSVG id="Clock" width="12" height="15" />
-            </View>
-          </View>
-          <View style={styles.distance}>
-            <SelectCategoriesSVG id={selectedCategories as string} />
-            <Text>{title}</Text>
+      <ComponentsLayout style={styles.layout}>
+        {/* <View style={styles.layout}> */}
+        <View style={styles.distance}>
+          <Text style={styles.cost}>{cost} UAH</Text>
+          <View style={styles.expireDate}>
+            <Text style={styles.expireDateText}>{expireDate}</Text>
+            <GoalSVG id="Clock" width="12" height="15" />
           </View>
         </View>
+        <View style={styles.distance}>
+          <SelectCategoriesSVG id={selectedCategories as string} />
+          <Text>{title}</Text>
+        </View>
+        {/* </View> */}
       </ComponentsLayout>
     );
   }
 );
 const styles = StyleSheet.create({
   layout: {
+    width: 105,
+    marginHorizontal: 10,
+    marginVertical: 15,
     gap: 12,
   },
   distance: {

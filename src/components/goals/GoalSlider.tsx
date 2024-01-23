@@ -16,45 +16,24 @@ import GoalEmpty from "./GoalEmpty";
 const GoalSlider = memo(() => {
   const fetchGoalData = GoalList();
   const { goalList } = useSelector((store: any) => store.goalList as IGoalList);
-  const scrollViewRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const scrollToNextItem = () => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToIndex({
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
         index: goalList.length - 1,
       });
     }
   };
 
   const scrollToPreviousItem = () => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToIndex({
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
         index: 0,
       });
     }
   };
 
-  const visibleGoalsList = () => {
-    return (
-      <FlatList
-        ref={scrollViewRef}
-        data={goalList}
-        horizontal
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Goal
-            cost={item.cost}
-            expireDate={item.expireDate}
-            title={item.title}
-            index={item.index}
-            selectedCategories={item.selectedCategories}
-            id={item.expireDate}
-          />
-        )}
-      />
-    );
-  };
-  const goalEmpty = () => <GoalEmpty />;
   return (
     <View style={styles.layout}>
       <TouchableOpacity
@@ -65,7 +44,7 @@ const GoalSlider = memo(() => {
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.flatList}>
         <FlatList
-          ref={scrollViewRef}
+          ref={flatListRef}
           data={goalList}
           horizontal
           renderItem={({ item }) => (
@@ -73,12 +52,11 @@ const GoalSlider = memo(() => {
               cost={item.cost}
               expireDate={item.expireDate}
               title={item.title}
-              index={item.index}
               selectedCategories={item.selectedCategories}
               id={item.expireDate}
             />
           )}
-          ListFooterComponent={goalEmpty}
+          ListFooterComponent={() => <GoalEmpty />}
         />
       </ScrollView>
 

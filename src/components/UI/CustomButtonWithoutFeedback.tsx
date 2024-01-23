@@ -1,19 +1,20 @@
 import React, { FC, useState } from "react";
 import {
   StyleSheet,
-  TouchableOpacity,
   Text,
   ViewStyle,
-  TouchableOpacityProps,
+  TouchableWithoutFeedbackProps,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
-interface ICustomButtom extends TouchableOpacityProps {
+interface ICustomButtonWithoutFeedback extends TouchableWithoutFeedbackProps {
   title: string;
   theme?: "none" | "primary" | "secondary";
   onPress?: (e: any) => void;
 }
 
-const CustomButton: FC<ICustomButtom> = ({
+const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({
   children,
   title,
   style,
@@ -23,13 +24,12 @@ const CustomButton: FC<ICustomButtom> = ({
   const buttonStyles: ViewStyle = styles[theme] || styles.none;
   const textStyles = styles[`${theme}Text`] || styles.noneText;
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.button, style, buttonStyles]}
-    >
-      {children}
-      <Text style={[styles.text, textStyles]}>{title}</Text>
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={[styles.button, style, buttonStyles]}>
+        {children}
+        <Text style={[styles.text, textStyles]}>{title}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
     color: "rgb(255,255,255)",
   },
 });
-export default CustomButton;
+export default CustomButtonWithoutFeedback;

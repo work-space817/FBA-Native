@@ -4,9 +4,10 @@ import thunk from "redux-thunk";
 import { AuthReducer } from "./reducers/userReducers/AuthReducer";
 import { UserBalanceReducer } from "./reducers/userReducers/UserBalanceReducer";
 import { GoalListReducer } from "./reducers/goalReducer/GoalListReducer";
+import { SelectCategoriesReducer } from "./reducers/common/SelectCategoriesReducer";
 export const rootReducer = combineReducers({
   auth: AuthReducer,
-  //   selectCategories: SelectCategoriesReducer,
+  selectCategories: SelectCategoriesReducer,
   //   selectGoal: SelectGoalReducer,
   goalList: GoalListReducer,
   //   transactionList: TransactionListReducer,

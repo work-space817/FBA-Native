@@ -16,20 +16,20 @@ export enum GoalListActionType {
   GOAL_LIST = "GOAL_LIST",
   UPDATE_GOALS_LIST = "UPDATE_GOALS_LIST",
 }
-// export interface IGoalSelect {
-//   selectedGoal: IGoal | null;
-// }
-// export enum GoalSelectActionType {
-//   GOAL_SELECT = "GOAL_SELECT",
-// }
-// export interface ISelectCategories {
-//   selectedCategories: string | null;
-//   isSelected: boolean;
-// }
-// export enum SelectCategoriesActionType {
-//   SELECT_CATEGORIES = "SELECT_CATEGORIES",
-//   UNSELECT_CATEGORIES = "UNSELECT_CATEGORIES",
-// }
+export interface IGoalSelect {
+  selectedGoal: IGoal | null;
+}
+export enum GoalSelectActionType {
+  GOAL_SELECT = "GOAL_SELECT",
+}
+export interface ISelectCategories {
+  selectedCategories: string | null;
+  isSelected: boolean;
+}
+export enum SelectCategoriesActionType {
+  SELECT_CATEGORIES = "SELECT_CATEGORIES",
+  UNSELECT_CATEGORIES = "UNSELECT_CATEGORIES",
+}
 // export interface IModalCloser {
 //   isModalClose: boolean;
 // }
