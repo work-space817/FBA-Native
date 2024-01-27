@@ -30,16 +30,24 @@ const CustomLoadingAnimation = () => {
     ],
   };
   return (
-    <View style={styles.loading}>
-      <Animated.View style={animatedStyles}>
-        <HeaderSVG id="Cloud" />
-      </Animated.View>
+    <View style={styles.layout}>
+      <View style={styles.loading}>
+        <Animated.View style={animatedStyles}>
+          <HeaderSVG id="Cloud" />
+        </Animated.View>
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  layout: {
+    width: "100%",
+    zIndex: 999,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   loading: {
-    width: "50%",
+    width: "62%",
     justifyContent: "flex-start",
   },
 });

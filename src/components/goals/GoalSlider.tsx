@@ -12,6 +12,7 @@ import GoalList from "./GoalList";
 import { useSelector } from "react-redux";
 import { IGoalList } from "../../store/reducers/types";
 import GoalEmpty from "./GoalEmpty";
+import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
 
 const GoalSlider = memo(() => {
   const fetchGoalData = GoalList();
@@ -43,23 +44,26 @@ const GoalSlider = memo(() => {
         <ArrowsSVG id="ArrowLeft" width={"12"} height={"24"} />
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.flatList}>
-        <FlatList
-          ref={flatListRef}
-          data={goalList}
-          horizontal
-          renderItem={({ item }) => (
-            <Goal
-              cost={item.cost}
-              expireDate={item.expireDate}
-              title={item.title}
-              selectedCategories={item.selectedCategories}
-              id={item.expireDate}
-            />
-          )}
-          ListFooterComponent={() => <GoalEmpty />}
-        />
+        {fetchGoalData ? (
+          <CustomLoadingAnimation />
+        ) : (
+          <FlatList
+            ref={flatListRef}
+            data={goalList}
+            horizontal
+            renderItem={({ item }) => (
+              <Goal
+                cost={item.cost}
+                expireDate={item.expireDate}
+                title={item.title}
+                selectedCategories={item.selectedCategories}
+                id={item.expireDate}
+              />
+            )}
+            ListFooterComponent={() => <GoalEmpty />}
+          />
+        )}
       </ScrollView>
-
       <TouchableOpacity
         onPress={scrollToNextItem}
         style={{ justifyContent: "center", height: 140 }}

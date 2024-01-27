@@ -2,17 +2,19 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { IGoalAdd } from "./types";
-import React, { useCallback, useMemo, useState } from "react";
-import setGoalsData from "../../api/firebase/goals/setGoalsData";
-import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import {
-  ISelectCategories,
   GoalListActionType,
+  ISelectCategories,
+  ModalCloserActionType,
 } from "../../store/reducers/types";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import CustomButton from "../UI/CustomButton";
 import CustomInput from "../UI/CustomInput";
 import SelectCategories from "../common/SelectCategories";
+import { format } from "date-fns";
+import { Calendar } from "react-native-calendars";
+import setGoalsData from "../../api/firebase/goals/setGoalsData";
 
 const GoalAdd = () => {
   const init: IGoalAdd = {
@@ -22,35 +24,30 @@ const GoalAdd = () => {
   const { selectedCategories } = useSelector(
     (store: any) => store.selectCategories as ISelectCategories
   );
+  console.log(selectedCategories);
   const dispatch = useDispatch();
   const today = new Date();
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(today);
-  const expireDate = selectedDay?.toLocaleDateString();
-  //   const footer = selectedDay ? (
-  //     <p>You selected {format(selectedDay, "PPP")}.</p>
-  //   ) : (
-  //     <p>Please pick a day.</p>
-  //   );
-
+  const formattedDate = format(today, "yyyy-MM-dd");
+  const [selectedDay, setSelectedDay] = useState<any>(today);
+  const expireDate = format(selectedDay, "dd.MM.yyyy");
   const onSubmitHandler = async (values: IGoalAdd) => {
     try {
-      //   const currentCategory = {
-      //     ...values,
-      //     selectedCategories,
-      //     expireDate,
-      //   };
-      //   console.log(currentCategory);
-      //   setGoalsData(currentCategory);
-      //   handleReset(values);
-      //   const updateGoalList = dispatch({
-      //     type: GoalListActionType.UPDATE_GOALS_LIST,
-      //   });
-      //   const modalCloser = dispatch({
-      //     type: ModalCloserActionType.MODAL_CLOSE,
-      //     payload: true,
-      //   });
-
-      console.log("Нова ціль успішно створена.");
+      const data = {
+        ...values,
+        selectedCategories,
+        expireDate,
+      };
+      console.log(data);
+      setGoalsData(data);
+      handleReset(values);
+      const updateGoalList = dispatch({
+        type: GoalListActionType.UPDATE_GOALS_LIST,
+      });
+      const modalCloser = dispatch({
+        type: ModalCloserActionType.MODAL_CLOSE,
+        payload: true,
+      });
+      console.log("New goal was created");
     } catch (error: any) {
       console.log("Bad request", error);
     }
@@ -63,6 +60,7 @@ const GoalAdd = () => {
       .positive("Value can not be less than 0")
       .required("Field should not be empty"),
   });
+
   const formik = useFormik({
     initialValues: init,
     onSubmit: onSubmitHandler,
@@ -77,6 +75,7 @@ const GoalAdd = () => {
     handleReset,
     setFieldValue,
   } = formik;
+
   const iconsList = useMemo(
     () => [
       { id: "Transport" },
@@ -89,11 +88,25 @@ const GoalAdd = () => {
     ],
     []
   );
-  const handleFocus = useCallback(() => {
-    setFieldValue("cost", "");
-  }, [setFieldValue]);
+
+  const handleDayPress = useCallback((day: any) => {
+    setSelectedDay(day.dateString);
+  }, []);
+
   return (
     <View style={styles.container}>
+      <Calendar
+        minDate={formattedDate}
+        onDayPress={handleDayPress}
+        firstDay={1}
+        markedDates={{
+          [selectedDay]: {
+            selected: true,
+            marked: true,
+            selectedColor: "blue",
+          },
+        }}
+      />
       <CustomInput
         label="Enter your title"
         field="title"
@@ -110,7 +123,7 @@ const GoalAdd = () => {
         keyboardType="number-pad"
         value={values.cost}
         onChange={handleChange("cost")}
-        onFocus={handleFocus}
+        onFocus={() => setFieldValue("cost", "")}
         //   clientSideError={errors.currentBalance}
         touched={touched.cost}
       />
@@ -122,6 +135,8 @@ const GoalAdd = () => {
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1,
+    // justifyContent: "center",
     // paddingTop: 25,
     // paddingBottom: 25,
     // borderColor: "black",

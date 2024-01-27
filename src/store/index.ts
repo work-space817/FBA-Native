@@ -5,9 +5,11 @@ import { AuthReducer } from "./reducers/userReducers/AuthReducer";
 import { UserBalanceReducer } from "./reducers/userReducers/UserBalanceReducer";
 import { GoalListReducer } from "./reducers/goalReducer/GoalListReducer";
 import { SelectCategoriesReducer } from "./reducers/common/SelectCategoriesReducer";
+import { ModalCloserReducer } from "./reducers/common/ModalCloserReducer";
 export const rootReducer = combineReducers({
   auth: AuthReducer,
   selectCategories: SelectCategoriesReducer,
+  modalClose: ModalCloserReducer,
   //   selectGoal: SelectGoalReducer,
   goalList: GoalListReducer,
   //   transactionList: TransactionListReducer,

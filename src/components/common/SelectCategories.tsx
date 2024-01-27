@@ -20,12 +20,11 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
     const [isActive, setisActive] = useState<number | null>(null);
     const dispatch = useDispatch();
 
-    const selectIcon = (e: any, index: number) => {
-      const seletedCategories = e.currentTarget.textContent;
+    const selectIcon = (iconId: string, index: number) => {
       setisActive(index);
       const selectedCategory = dispatch({
         type: SelectCategoriesActionType.SELECT_CATEGORIES,
-        payload: seletedCategories,
+        payload: iconId,
       });
     };
 
@@ -35,7 +34,7 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
         <View style={styles.itemsList}>
           {icons.map((icon, index) => (
             <CustomButtonWithoutFeedback
-              onPress={(e) => selectIcon(e, index)}
+              onPress={() => selectIcon(icon.id, index)}
               style={styles.items}
               title={icon.id}
               theme={isActive == index && isSelected ? "primary" : "none"}

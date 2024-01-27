@@ -3,12 +3,18 @@ import React, { memo } from "react";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import CustomModal from "../UI/CustomModal";
+import GoalAdd from "./GoalAdd";
 
 const GoalEmpty = memo(() => {
   return (
     <ComponentsLayout style={styles.layout}>
       <View>
-        <GoalSVG id="Empty" width="40" height="40" />
+        <CustomModal
+          title={"New Goal"}
+          customActive={<GoalSVG id="Empty" width="40" height="40" />}
+        >
+          <GoalAdd />
+        </CustomModal>
       </View>
       <View>
         <Text style={styles.title}>New goal</Text>
@@ -21,8 +27,8 @@ const styles = StyleSheet.create({
     width: 105,
     marginHorizontal: 10,
     marginVertical: 15,
-    gap: 32,
-    paddingVertical: 22,
+    gap: 8,
+    paddingVertical: 16,
     alignItems: "center",
   },
   title: {

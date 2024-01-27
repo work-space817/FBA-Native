@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 import { auth } from "../../api/firebase/config";
 import getUserInformation from "../../api/firebase/user/userInfo/getUserInformation";
 import { ISignUp } from "../auth/registration/types";
-import CustomLoading from "../UI/CustomLoading";
 
 const CardUI = () => {
   const [userData, setUserData] = useState<ISignUp>();

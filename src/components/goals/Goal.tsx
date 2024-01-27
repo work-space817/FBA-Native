@@ -6,6 +6,7 @@ import { View, Text, StyleSheet } from "react-native";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
+import { GoalSelectActionType } from "../../store/reducers/types";
 
 const Goal: FC<IGoal> = memo(
   ({ cost, expireDate, title, selectedCategories, id }) => {
@@ -22,20 +23,19 @@ const Goal: FC<IGoal> = memo(
     //   );
     //   const currentGoalData = { ...fetchCurrentGoal?.data(), id };
     //   console.log("currentGoalData: ", currentGoalData);
-    //   //   if (id) {
-    //   //     dispatch({
-    //   //       type: GoalSelectActionType.GOAL_SELECT,
-    //   //       payload: currentGoalData,
-    //   //     });
-    //   //   }
-    //   //   if (location.pathname !== "/transactions") {
-    //   //     navigate("/transactions");
-    //   //   }
+    //   if (id) {
+    //     dispatch({
+    //       type: GoalSelectActionType.GOAL_SELECT,
+    //       payload: currentGoalData,
+    //     });
+    //   }
+    //   // if (location.pathname !== "/transactions") {
+    //   //   navigate("/transactions");
+    //   // }
     // }, [`navigate`, index, id, dispatch]);
 
     return (
       <ComponentsLayout style={styles.layout}>
-        {/* <View style={styles.layout}> */}
         <View style={styles.distance}>
           <Text style={styles.cost}>{cost} UAH</Text>
           <View style={styles.expireDate}>
@@ -47,7 +47,6 @@ const Goal: FC<IGoal> = memo(
           <SelectCategoriesSVG id={selectedCategories as string} />
           <Text>{title}</Text>
         </View>
-        {/* </View> */}
       </ComponentsLayout>
     );
   }

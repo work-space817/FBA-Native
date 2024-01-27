@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, memo, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -13,25 +13,21 @@ interface ICustomButtom extends TouchableOpacityProps {
   onPress?: (e: any) => void;
 }
 
-const CustomButton: FC<ICustomButtom> = ({
-  children,
-  title,
-  style,
-  theme = "none",
-  onPress,
-}) => {
-  const buttonStyles: ViewStyle = styles[theme] || styles.none;
-  const textStyles = styles[`${theme}Text`] || styles.noneText;
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.button, style, buttonStyles]}
-    >
-      {children}
-      <Text style={[styles.text, textStyles]}>{title}</Text>
-    </TouchableOpacity>
-  );
-};
+const CustomButton: FC<ICustomButtom> = memo(
+  ({ children, title, style, theme = "none", onPress }) => {
+    const buttonStyles: ViewStyle = styles[theme] || styles.none;
+    const textStyles = styles[`${theme}Text`] || styles.noneText;
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={[styles.button, style, buttonStyles]}
+      >
+        {children}
+        <Text style={[styles.text, textStyles]}>{title}</Text>
+      </TouchableOpacity>
+    );
+  }
+);
 const styles = StyleSheet.create({
   button: {
     padding: 8,

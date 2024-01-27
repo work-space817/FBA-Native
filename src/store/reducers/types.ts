@@ -30,12 +30,12 @@ export enum SelectCategoriesActionType {
   SELECT_CATEGORIES = "SELECT_CATEGORIES",
   UNSELECT_CATEGORIES = "UNSELECT_CATEGORIES",
 }
-// export interface IModalCloser {
-//   isModalClose: boolean;
-// }
-// export enum ModalCloserActionType {
-//   MODAL_CLOSE = "MODAL_CLOSE",
-// }
+export interface IModalCloser {
+  isModalClose: boolean;
+}
+export enum ModalCloserActionType {
+  MODAL_CLOSE = "MODAL_CLOSE",
+}
 export interface IUserBalance {
   balance: IBalance;
   isUpdatedBalance: boolean;
