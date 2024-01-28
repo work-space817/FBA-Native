@@ -1,12 +1,12 @@
 import React from "react";
 import { View } from "react-native";
-import Svg, { Path, Rect } from "react-native-svg";
+import Svg, { Path, Rect, SvgProps } from "react-native-svg";
 
-interface Props {
+interface INavbarSVG extends SvgProps {
   id: string;
 }
 
-const NavbarSVG = ({ id }: Props) => {
+const NavbarSVG = ({ id }: INavbarSVG) => {
   switch (id) {
     case "Overview":
       return (

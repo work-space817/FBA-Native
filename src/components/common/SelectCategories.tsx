@@ -29,7 +29,7 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
     };
 
     return (
-      <View style={styles.layout}>
+      <>
         <Text>{title}</Text>
         <View style={styles.itemsList}>
           {icons.map((icon, index) => (
@@ -44,31 +44,30 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
             </CustomButtonWithoutFeedback>
           ))}
         </View>
-      </View>
+      </>
     );
   }
 );
 const styles = StyleSheet.create({
-  layout: {},
   itemsList: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
     marginVertical: 10,
+    paddingLeft: 5,
   },
   items: {
     flexDirection: "row",
     justifyContent: "center",
     gap: 5,
-    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    shadowColor: "#000000",
+    shadowColor: "rgb(0, 0, 0)",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 14,
+    elevation: 15,
   },
 });
 

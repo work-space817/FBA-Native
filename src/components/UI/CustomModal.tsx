@@ -1,5 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
-import { Modal, StyleSheet, View, ModalProps, ScrollView } from "react-native";
+import {
+  Modal,
+  StyleSheet,
+  View,
+  ModalProps,
+  ScrollView,
+  Platform,
+} from "react-native";
 import CustomButton from "./CustomButton";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { useSelector } from "react-redux";
@@ -23,20 +30,15 @@ const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
   return (
     <>
       <Modal
-        animationType="fade"
-        transparent={true}
         visible={modalVisible}
+        animationType={Platform.OS === "android" ? "fade" : "slide"}
+        presentationStyle="formSheet"
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
       >
         <View style={styles.layout}>
           <ComponentsLayout style={[styles.modalView]}>
-            <CustomButton
-              onPress={() => setModalVisible(!modalVisible)}
-              title={"Close modal"}
-              theme="primary"
-            />
             <ScrollView keyboardDismissMode="on-drag">{children}</ScrollView>
           </ComponentsLayout>
         </View>
@@ -63,14 +65,13 @@ const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.25)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalView: {
     width: "95%",
-    paddingVertical: 20,
-    // paddingBottom: 20,
+    paddingBottom: 20,
   },
 });
 

@@ -1,12 +1,10 @@
 import { memo } from "react";
-import Svg, { Path } from "react-native-svg";
-interface Props {
+import Svg, { Path, SvgProps } from "react-native-svg";
+interface IArrowsSVG extends SvgProps {
   id: string;
-  width: string;
-  height: string;
 }
 
-const ArrowsSVG = memo(({ id, width, height }: Props) => {
+const ArrowsSVG = memo(({ id, width, height }: IArrowsSVG) => {
   switch (id) {
     case "ArrowLeft":
       return (

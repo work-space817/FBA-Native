@@ -2,11 +2,12 @@ import { FC, memo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { IGoal } from "./types";
 import getGoalsData from "../../api/firebase/goals/getGoalsData";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
 import { GoalSelectActionType } from "../../store/reducers/types";
+import DateFormater from "../../helpers/functions/dateFormater";
 
 const Goal: FC<IGoal> = memo(
   ({ cost, expireDate, title, selectedCategories, id }) => {
@@ -14,7 +15,7 @@ const Goal: FC<IGoal> = memo(
     // const location = useLocation();
     // const navigate = useNavigate();
     const now = new Date().getTime();
-    // const formattedExpireDate = DateFormater(expireDate);
+    const formattedExpireDate = DateFormater(expireDate);
 
     // const selectGoal = useCallback(async () => {
     //   const fetchGoals = await getGoalsData();
@@ -34,13 +35,19 @@ const Goal: FC<IGoal> = memo(
     //   // }
     // }, [`navigate`, index, id, dispatch]);
 
+    const expiredLayout: StyleProp<ViewStyle> =
+      now > formattedExpireDate ? styles.expiredLayout : null;
+    const expiredDateText: StyleProp<any> =
+      now > formattedExpireDate ? styles.expiredDateText : null;
+    const expiredClock = now > formattedExpireDate ? "red" : undefined;
+
     return (
-      <ComponentsLayout style={styles.layout}>
+      <ComponentsLayout style={[styles.layout, expiredLayout]}>
         <View style={styles.distance}>
           <Text style={styles.cost}>{cost} UAH</Text>
-          <View style={styles.expireDate}>
-            <Text style={styles.expireDateText}>{expireDate}</Text>
-            <GoalSVG id="Clock" width="12" height="15" />
+          <View style={styles.date}>
+            <Text style={[styles.dateText, expiredDateText]}>{expireDate}</Text>
+            <GoalSVG id="Clock" width="12" height="15" fill={expiredClock} />
           </View>
         </View>
         <View style={styles.distance}>
@@ -58,6 +65,11 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     gap: 12,
   },
+  expiredLayout: {
+    borderColor: "red",
+    borderWidth: 1,
+    borderStyle: "solid",
+  },
   distance: {
     paddingVertical: 6,
     gap: 4,
@@ -66,16 +78,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Quicksand_700Bold",
   },
-  expireDate: {
+  date: {
     gap: 6,
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-end",
   },
-  expireDateText: {
+  dateText: {
     fontSize: 12,
     fontFamily: "Quicksand_600SemiBold",
     color: "rgba(0,0, 0, 0.50)",
+  },
+  expiredDateText: {
+    color: "rgb(255,0, 0)",
   },
 });
 

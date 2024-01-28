@@ -1,6 +1,4 @@
-import { Text, View } from "react-native";
 import DefaultLayout from "../layouts/default/DefaultLayout";
-import { auth } from "../../api/firebase/config";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigation } from "../../navigation/Navigation";
@@ -9,8 +7,15 @@ import OperationMenu from "../../components/common/OperationMenu";
 import Card from "../../components/card/Card";
 import { BackHandler } from "react-native";
 import GoalSlider from "../../components/goals/GoalSlider";
+import GoalList from "../../components/goals/GoalList";
+import { useDispatch } from "react-redux";
+import {
+  GoalListActionType,
+  UserBalanceActionType,
+} from "../../store/reducers/types";
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
+  const dispatch = useDispatch();
   const checkUpUser = async () => {
     const uid = await AsyncStorage.getItem("uid");
     console.log(uid);
@@ -29,13 +34,24 @@ export default function HomeScreen({ navigation }: any) {
     return () => backHandler.remove();
   }, []);
 
+  const onRefreshComponents = () => {
+    dispatch({
+      type: GoalListActionType.UPDATE_GOALS_LIST,
+    });
+    dispatch({
+      type: UserBalanceActionType.UPDATE_BALANCE,
+    });
+    console.log("Refreshing components...");
+  };
+
   return (
-    <DefaultLayout navigation={navigation}>
-      <View>
-        <OperationMenu />
-        <GoalSlider />
-        <Card />
-      </View>
+    <DefaultLayout
+      navigation={navigation}
+      onRefreshComponents={onRefreshComponents}
+    >
+      <OperationMenu />
+      <GoalSlider />
+      <Card />
     </DefaultLayout>
   );
 }

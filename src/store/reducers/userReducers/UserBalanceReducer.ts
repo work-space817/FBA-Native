@@ -22,7 +22,7 @@ export const UserBalanceReducer = (
     case UserBalanceActionType.UPDATE_BALANCE:
       return {
         ...state,
-        isUpdatedBalance: action.payload,
+        isUpdatedBalance: true,
       };
     default:
       return state;

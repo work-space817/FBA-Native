@@ -1,10 +1,16 @@
 import { FC } from "react";
-import { View, StyleSheet, DimensionValue, ViewProps } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ViewProps,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 
 interface IComponentsLayout extends ViewProps {}
 
 const ComponentsLayout: FC<IComponentsLayout> = ({ style, children }) => {
-  return <View style={[styles.layout, style]}>{children}</View>;
+  return <View style={[styles.layout, [style]]}>{children}</View>;
 };
 const styles = StyleSheet.create({
   layout: {

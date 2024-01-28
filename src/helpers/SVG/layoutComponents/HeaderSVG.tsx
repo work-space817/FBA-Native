@@ -1,14 +1,12 @@
 import React from "react";
 import { View } from "react-native";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path, SvgProps } from "react-native-svg";
 
-interface Props {
+interface IHeaderSVG extends SvgProps {
   id: string;
-  width?: string;
-  height?: string;
 }
 
-const HeaderSVG = ({ id, width = "50", height = "50" }: Props) => {
+const HeaderSVG = ({ id, width = "50", height = "50" }: IHeaderSVG) => {
   switch (id) {
     case "Cloud":
       return (
