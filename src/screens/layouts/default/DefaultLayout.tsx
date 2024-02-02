@@ -1,10 +1,15 @@
 import React, { ReactNode } from "react";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+  ViewProps,
+} from "react-native";
 import DefaultHeader from "./DefaultHeader";
 import DefaultNavbar from "./DefaultNavbar";
 
-interface DefaultLayoutProps {
-  children: ReactNode;
+interface DefaultLayoutProps extends ViewProps {
   navigation: any;
   onRefreshComponents?: any;
 }
@@ -39,6 +44,7 @@ const DefaultLayout = ({
 
 const styles = StyleSheet.create({
   outerLayout: {
+    backgroundColor: "rgba(140,0,255,.1)",
     flex: 1,
     justifyContent: "space-between",
   },

@@ -7,7 +7,7 @@ import { IUserBalance } from "../../store/reducers/types";
 const BalanceUI = () => {
   const fetchUserBalanceData = UserBalance();
   const { balance } = useSelector(
-    (store: any) => store.userBalance as IUserBalance
+    (store: RootState) => store.userBalance as IUserBalance
   );
 
   return (

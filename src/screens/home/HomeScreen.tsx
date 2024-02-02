@@ -1,5 +1,5 @@
 import DefaultLayout from "../layouts/default/DefaultLayout";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigation } from "../../navigation/Navigation";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,8 @@ import {
   GoalListActionType,
   UserBalanceActionType,
 } from "../../store/reducers/types";
+import LineDiagram from "../../components/diagrams/exchangeRate/LineDiagram";
+import ExchangeRateLinear from "../../components/diagrams/exchangeRate/ExchangeRateLinear";
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
@@ -52,6 +54,8 @@ export default function HomeScreen({ navigation }: any) {
       <OperationMenu />
       <GoalSlider />
       <Card />
+      {/* <LineDiagram data={[]} width={0} /> */}
+      <ExchangeRateLinear />
     </DefaultLayout>
   );
 }

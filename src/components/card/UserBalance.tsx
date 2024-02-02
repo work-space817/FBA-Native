@@ -11,7 +11,7 @@ const UserBalance = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { isUpdatedBalance } = useSelector(
-    (store: any) => store.userBalance as IUserBalance
+    (store: RootState) => store.userBalance as IUserBalance
   );
   const fetchUserBalances = async () => {
     try {

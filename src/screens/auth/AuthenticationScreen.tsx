@@ -18,7 +18,7 @@ export default function AuthenticationScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((store: any) => store.auth as IAuthUser);
+  const { isAuth } = useSelector((store: RootState) => store.auth as IAuthUser);
   const { navigate } = useNavigation<StackNavigation>();
 
   useEffect(() => {

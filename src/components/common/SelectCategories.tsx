@@ -7,6 +7,7 @@ import {
 import { View, Text, StyleSheet } from "react-native";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import CustomButtonWithoutFeedback from "../UI/CustomButtonWithoutFeedback";
+import { RootState } from "../../store";
 
 interface ISelectCategoriesProps {
   icons: any[];
@@ -15,7 +16,7 @@ interface ISelectCategoriesProps {
 const SelectCategories: FC<ISelectCategoriesProps> = memo(
   ({ icons, title }) => {
     const { isSelected } = useSelector(
-      (store: any) => store.selectCategories as ISelectCategories
+      (store: RootState) => store.selectCategories as ISelectCategories
     );
     const [isActive, setisActive] = useState<number | null>(null);
     const dispatch = useDispatch();

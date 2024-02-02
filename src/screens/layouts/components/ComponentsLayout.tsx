@@ -1,20 +1,34 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   View,
   StyleSheet,
   ViewProps,
-  StyleProp,
-  ViewStyle,
+  DimensionValue,
+  LayoutChangeEvent,
 } from "react-native";
 
 interface IComponentsLayout extends ViewProps {}
 
-const ComponentsLayout: FC<IComponentsLayout> = ({ style, children }) => {
-  return <View style={[styles.layout, [style]]}>{children}</View>;
+const ComponentsLayout: FC<IComponentsLayout> = ({
+  style,
+  children,
+  onLayout,
+}) => {
+  const handleLayout = (event: any) => {
+    const { width } = event.nativeEvent.layout;
+    if (onLayout) {
+      onLayout(width);
+    }
+  };
+  return (
+    <View onLayout={handleLayout} style={[styles.layout, [style]]}>
+      {children}
+    </View>
+  );
 };
 const styles = StyleSheet.create({
   layout: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgb(255,245,250)",
     borderRadius: 18,
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -23,6 +37,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 10,
+    marginVertical: 15,
   },
 });
 

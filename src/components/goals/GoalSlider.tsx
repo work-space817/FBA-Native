@@ -13,10 +13,13 @@ import { useSelector } from "react-redux";
 import { IGoalList } from "../../store/reducers/types";
 import GoalEmpty from "./GoalEmpty";
 import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
+import { RootState } from "../../store";
 
 const GoalSlider = memo(() => {
   const fetchGoalData = GoalList();
-  const { goalList } = useSelector((store: any) => store.goalList as IGoalList);
+  const { goalList } = useSelector(
+    (store: RootState) => store.goalList as IGoalList
+  );
   const flatListRef = useRef<FlatList>(null);
 
   const scrollToNextItem = () => {

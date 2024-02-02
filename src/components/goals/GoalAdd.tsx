@@ -15,6 +15,8 @@ import SelectCategories from "../common/SelectCategories";
 import { format } from "date-fns";
 import { CalendarList } from "react-native-calendars";
 import setGoalsData from "../../api/firebase/goals/setGoalsData";
+import { RootState } from "../../store";
+import { Theme } from "react-native-calendars/src/types";
 
 const GoalAdd = () => {
   const init: IGoalAdd = {
@@ -22,7 +24,7 @@ const GoalAdd = () => {
     cost: "0",
   };
   const { selectedCategories } = useSelector(
-    (store: any) => store.selectCategories as ISelectCategories
+    (store: RootState) => store.selectCategories as ISelectCategories
   );
   const dispatch = useDispatch();
   const today = new Date();
@@ -119,6 +121,7 @@ const GoalAdd = () => {
                 selectedColor: "rgba(126,76,215,.75)",
               },
             }}
+            theme={{ calendarBackground: "transparent" }}
           />
         </View>
       )}

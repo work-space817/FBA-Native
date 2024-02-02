@@ -11,6 +11,7 @@ import CustomButton from "./CustomButton";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { useSelector } from "react-redux";
 import { IModalCloser } from "../../store/reducers/types";
+import { RootState } from "../../store";
 
 interface ICustomModal extends ModalProps {
   children: React.ReactNode;
@@ -20,7 +21,7 @@ interface ICustomModal extends ModalProps {
 const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { isModalClose } = useSelector(
-    (store: any) => store.modalClose as IModalCloser
+    (store: RootState) => store.modalClose as IModalCloser
   );
   useEffect(() => {
     if (isModalClose) {
@@ -65,7 +66,8 @@ const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.25)",
+    // backgroundColor: "rgba(0,0,0,0.25)",
+    backgroundColor: "rgba(115,0,245,.15)",
     justifyContent: "center",
     alignItems: "center",
   },

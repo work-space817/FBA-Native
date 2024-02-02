@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     fontFamily: "Quicksand_600SemiBold",
   },
   none: {
-    backgroundColor: "rgb(255,255,255)",
+    backgroundColor: "rgb(255,245,250)",
   },
   noneText: {
     color: "rgb(0,0,0)",
