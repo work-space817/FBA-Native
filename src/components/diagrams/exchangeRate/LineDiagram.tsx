@@ -16,10 +16,13 @@ const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
   const dataPointLabelComponent = useCallback(
     (date: string, value: string, index: number) => {
       const formattedDate = format(parseISO(date), "d MMMM yyyy");
-      const responsiveLabel: DimensionValue = index > 27 ? -50 : 0;
+      const responsiveLabel: DimensionValue = index > 27 ? -70 : 0;
       return (
         <View style={[styles.label, { left: responsiveLabel }]}>
-          <Text style={styles.dateText}>{formattedDate}</Text>
+          <View style={styles.dateTextBorder}>
+            <Text style={styles.dateText}>{formattedDate}</Text>
+          </View>
+
           <Text style={styles.valueText}>
             1 {selectedCurrency} = {value} ₴
           </Text>
@@ -29,17 +32,15 @@ const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
     []
   );
 
-  const customDataPoint = useCallback(() => {
-    return <View style={{ display: "none" }} />;
-  }, []);
   const minValue = Math.min(...data.map((item) => item.value));
   const maxValue = Math.max(...data.map((item) => item.value));
 
   const newData = data.map((item, index) => ({
     ...item,
     label: item.label.slice(8),
-    dataPointLabelComponent: () =>
-      dataPointLabelComponent(item.label, item.value.toString(), index),
+    newValue: item.value, //lib bug
+    newLabel: item.label, //lib bug
+    index: index,
   }));
 
   return (
@@ -60,11 +61,23 @@ const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
           showVerticalLines
           lineGradient
           lineGradientEndColor="rgb(255, 105, 66)"
-          focusEnabled
-          showStripOnFocus
           showTextOnFocus
-          customDataPoint={customDataPoint}
-          delayBeforeUnFocus={5000}
+          hideDataPoints
+          pointerConfig={{
+            pointer1Color: "transparent",
+            pointerStripWidth: 5,
+            pointerStripUptoDataPoint: true,
+            pointerStripColor: "rgba(126,76,215,.95)",
+            pointerLabelWidth: 110,
+            activatePointersOnLongPress: true,
+            pointerLabelComponent: (item: any) => {
+              return dataPointLabelComponent(
+                item[0].newLabel,
+                item[0].newValue,
+                item[0].index
+              );
+            },
+          }}
         />
       ) : (
         <View style={{ justifyContent: "center", height: 250, width: 300 }}>
@@ -76,18 +89,20 @@ const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
 };
 const styles = StyleSheet.create({
   label: {
-    backgroundColor: "rgba(126,76,215,.95)",
+    backgroundColor: "rgba(126,76,215,.7)",
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 4,
-    top: -25,
   },
   dateText: {
     color: "white",
     fontSize: 11,
     paddingBottom: 5,
+  },
+  dateTextBorder: {
+    borderColor: "rgb(222 226 230)",
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,.5)",
+    borderStyle: "solid",
   },
   valueText: {
     color: "white",

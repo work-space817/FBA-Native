@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import UserBalance from "./UserBalance";
 import { useSelector } from "react-redux";
 import { IUserBalance } from "../../store/reducers/types";
+import { RootState } from "../../store";
 
 const BalanceUI = () => {
   const fetchUserBalanceData = UserBalance();
