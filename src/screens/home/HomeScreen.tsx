@@ -15,6 +15,8 @@ import {
 } from "../../store/reducers/types";
 import LineDiagram from "../../components/diagrams/exchangeRate/LineDiagram";
 import ExchangeRateLinear from "../../components/diagrams/exchangeRate/ExchangeRateLinear";
+import PieDiagram from "../../components/diagrams/goalDiagrams/goalPieDiagram/PieDiagram";
+import GoalPieDiagram from "../../components/diagrams/goalDiagrams/goalPieDiagram/GoalPieDiagram";
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
@@ -54,8 +56,8 @@ export default function HomeScreen({ navigation }: any) {
       <OperationMenu />
       <GoalSlider />
       <Card />
-      {/* <LineDiagram data={[]} width={0} /> */}
       <ExchangeRateLinear />
+      <GoalPieDiagram />
     </DefaultLayout>
   );
 }

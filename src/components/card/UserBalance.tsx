@@ -6,6 +6,7 @@ import {
   IUserBalance,
   UserBalanceActionType,
 } from "../../store/reducers/types";
+import { RootState } from "../../store";
 
 const UserBalance = () => {
   const [loading, setLoading] = useState<boolean>(false);

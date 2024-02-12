@@ -16,12 +16,11 @@ import { format } from "date-fns";
 import { CalendarList } from "react-native-calendars";
 import setGoalsData from "../../api/firebase/goals/setGoalsData";
 import { RootState } from "../../store";
-import { Theme } from "react-native-calendars/src/types";
 
 const GoalAdd = () => {
   const init: IGoalAdd = {
     title: "",
-    cost: "0",
+    cost: "",
   };
   const { selectedCategories } = useSelector(
     (store: RootState) => store.selectCategories as ISelectCategories
@@ -47,6 +46,7 @@ const GoalAdd = () => {
     try {
       const data = {
         ...values,
+        cost: +values.cost,
         selectedCategories,
         expireDate,
       };
@@ -64,6 +64,10 @@ const GoalAdd = () => {
     } catch (error: any) {
       console.log("Bad request", error);
     }
+    dispatch({
+      type: ModalCloserActionType.MODAL_CLOSE,
+      payload: false,
+    });
   };
 
   const checkUpForm = yup.object({
@@ -115,13 +119,13 @@ const GoalAdd = () => {
             minDate={formattedDate}
             onDayPress={handleDayPress}
             firstDay={1}
+            theme={{ calendarBackground: "transparent" }}
             markedDates={{
               [selectedDay]: {
                 selected: true,
                 selectedColor: "rgba(126,76,215,.75)",
               },
             }}
-            theme={{ calendarBackground: "transparent" }}
           />
         </View>
       )}
@@ -138,10 +142,10 @@ const GoalAdd = () => {
         label="Enter goals' cost"
         field="cost"
         inputMode="numeric"
+        defaultValue=""
         keyboardType="number-pad"
         value={values.cost}
         onChange={handleChange("cost")}
-        onFocus={() => setFieldValue("cost", "")}
         clientSideError={errors.cost}
         touched={touched.cost}
       />
