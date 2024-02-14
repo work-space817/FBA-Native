@@ -34,10 +34,12 @@ const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({
 };
 const styles = StyleSheet.create({
   button: {
-    padding: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
     borderRadius: 16,
     borderWidth: 0,
     alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontFamily: "Quicksand_600SemiBold",

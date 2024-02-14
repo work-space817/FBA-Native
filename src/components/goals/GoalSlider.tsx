@@ -60,7 +60,7 @@ const GoalSlider = memo(() => {
                 expireDate={item.expireDate}
                 title={item.title}
                 selectedCategories={item.selectedCategories}
-                id={item.expireDate}
+                id={item.id}
               />
             )}
             ListFooterComponent={() => <GoalEmpty />}

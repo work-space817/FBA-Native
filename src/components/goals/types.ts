@@ -12,6 +12,6 @@ export interface IGoalAdd {
 
 export interface IGoalEdit {
   title: string;
-  cost: number;
+  cost: number | string;
   expireDate: string;
 }

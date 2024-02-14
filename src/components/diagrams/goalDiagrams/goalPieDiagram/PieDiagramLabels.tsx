@@ -4,14 +4,12 @@ import { IGoalByCategory, IGoalCircleStatisticList } from "../types";
 
 interface IPieDiagramLabels {
   labelState: "expired" | "active";
-  innerData: IGoalByCategory[];
   goalGroup: IGoalCircleStatisticList[];
   totalItems: number;
 }
 
 const PieDiagramLabels: FC<IPieDiagramLabels> = ({
   labelState,
-  innerData,
   goalGroup,
   totalItems,
 }) => {

@@ -20,7 +20,7 @@ const CustomButton: FC<ICustomButtom> = memo(
     return (
       <TouchableOpacity
         onPress={onPress}
-        style={[styles.button, style, buttonStyles]}
+        style={[styles.button, buttonStyles, style]}
       >
         {children}
         <Text style={[styles.text, textStyles]}>{title}</Text>
@@ -30,16 +30,20 @@ const CustomButton: FC<ICustomButtom> = memo(
 );
 const styles = StyleSheet.create({
   button: {
-    padding: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderRadius: 16,
     borderWidth: 0,
     alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontFamily: "Quicksand_600SemiBold",
   },
   none: {
     backgroundColor: "rgb(255,245,250)",
+    borderColor: "rgba(0,0,0,0.2)",
+    borderWidth: 1,
   },
   noneText: {
     color: "rgb(0,0,0)",
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
     color: "rgb(255,255,255)",
   },
   secondary: {
-    backgroundColor: "rgba(126,76,215,.75)",
+    backgroundColor: "rgba(110,115,125,1)",
   },
   secondaryText: {
     color: "rgb(255,255,255)",

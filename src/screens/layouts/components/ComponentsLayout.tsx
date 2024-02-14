@@ -1,11 +1,5 @@
 import { FC, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  ViewProps,
-  DimensionValue,
-  LayoutChangeEvent,
-} from "react-native";
+import { View, StyleSheet, ViewProps } from "react-native";
 
 interface IComponentsLayout extends ViewProps {}
 

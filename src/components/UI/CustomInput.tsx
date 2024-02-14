@@ -62,6 +62,7 @@ const CustomInput: FC<CustomInputProps> = memo(
 const styles = StyleSheet.create({
   layout: {
     marginBottom: 10,
+    width: "100%",
   },
   label: {
     marginBottom: 5,

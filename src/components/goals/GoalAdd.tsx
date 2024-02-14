@@ -92,7 +92,9 @@ const GoalAdd = () => {
     handleReset,
     setFieldValue,
   } = formik;
-
+  const handleFocus = useCallback(() => {
+    setFieldValue("cost", "");
+  }, [setFieldValue]);
   const iconsList = useMemo(
     () => [
       { id: "Transport" },
@@ -142,7 +144,7 @@ const GoalAdd = () => {
         label="Enter goals' cost"
         field="cost"
         inputMode="numeric"
-        defaultValue=""
+        onFocus={handleFocus}
         keyboardType="number-pad"
         value={values.cost}
         onChange={handleChange("cost")}

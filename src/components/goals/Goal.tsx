@@ -1,8 +1,16 @@
-import { FC, memo, useCallback } from "react";
+import { FC, memo, useCallback, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { IGoal } from "./types";
 import getGoalsData from "../../api/firebase/goals/getGoalsData";
-import { View, Text, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from "react-native";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
@@ -17,23 +25,23 @@ const Goal: FC<IGoal> = memo(
     const now = new Date().getTime();
     const formattedExpireDate = DateFormater(expireDate);
 
-    // const selectGoal = useCallback(async () => {
-    //   const fetchGoals = await getGoalsData();
-    //   const fetchCurrentGoal = fetchGoals.find((doc, docIndex) =>
-    //     docIndex + 1 === index ? doc.data() : null
-    //   );
-    //   const currentGoalData = { ...fetchCurrentGoal?.data(), id };
-    //   console.log("currentGoalData: ", currentGoalData);
-    //   if (id) {
-    //     dispatch({
-    //       type: GoalSelectActionType.GOAL_SELECT,
-    //       payload: currentGoalData,
-    //     });
-    //   }
-    //   // if (location.pathname !== "/transactions") {
-    //   //   navigate("/transactions");
-    //   // }
-    // }, [`navigate`, index, id, dispatch]);
+    const selectGoal = useCallback(async () => {
+      const fetchGoals = await getGoalsData();
+      const fetchCurrentGoal = fetchGoals.find((doc, docIndex) =>
+        id === doc.id ? doc.data() : null
+      );
+      const currentGoalData = { ...fetchCurrentGoal?.data(), id };
+      console.log("currentGoalData: ", currentGoalData);
+      if (id) {
+        dispatch({
+          type: GoalSelectActionType.GOAL_SELECT,
+          payload: currentGoalData,
+        });
+      }
+      // if (location.pathname !== "/transactions") {
+      //   navigate("/transactions");
+      // }
+    }, [`navigate`, id, dispatch]);
 
     const expiredLayout: StyleProp<ViewStyle> =
       now > formattedExpireDate ? styles.expiredLayout : null;
@@ -42,19 +50,23 @@ const Goal: FC<IGoal> = memo(
     const expiredClock = now > formattedExpireDate ? "red" : undefined;
 
     return (
-      <ComponentsLayout style={[styles.layout, expiredLayout]}>
-        <View style={styles.distance}>
-          <Text style={styles.cost}>{cost} UAH</Text>
-          <View style={styles.date}>
-            <Text style={[styles.dateText, expiredDateText]}>{expireDate}</Text>
-            <GoalSVG id="Clock" width="12" height="15" fill={expiredClock} />
+      <TouchableOpacity activeOpacity={1} onPress={selectGoal}>
+        <ComponentsLayout style={[styles.layout, expiredLayout]}>
+          <View style={styles.distance}>
+            <Text style={styles.cost}>{cost} UAH</Text>
+            <View style={styles.date}>
+              <Text style={[styles.dateText, expiredDateText]}>
+                {expireDate}
+              </Text>
+              <GoalSVG id="Clock" width="12" height="15" fill={expiredClock} />
+            </View>
           </View>
-        </View>
-        <View style={styles.distance}>
-          <SelectCategoriesSVG id={selectedCategories as string} />
-          <Text>{title}</Text>
-        </View>
-      </ComponentsLayout>
+          <View style={styles.distance}>
+            <SelectCategoriesSVG id={selectedCategories as string} />
+            <Text>{title}</Text>
+          </View>
+        </ComponentsLayout>
+      </TouchableOpacity>
     );
   }
 );

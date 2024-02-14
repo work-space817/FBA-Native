@@ -21,8 +21,7 @@ const PieDiagram = () => {
     "#00FF00",
     "#FFFF00",
     "#FF7F00",
-    "#fc9ea3",
-    "#ff00ff ",
+    "#FC9EA3",
     "#9400D3",
     "#4B0082",
     "#0000FF ",
@@ -58,13 +57,11 @@ const PieDiagram = () => {
         <>
           <PieDiagramLabels
             labelState={"active"}
-            innerData={innerData}
             goalGroup={activeGroup}
             totalItems={totalItems}
           />
           <PieDiagramLabels
             labelState={"expired"}
-            innerData={innerData}
             goalGroup={expireGroup}
             totalItems={totalItems}
           />
