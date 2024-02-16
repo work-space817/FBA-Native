@@ -2,17 +2,18 @@ import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import { AuthReducer } from "./reducers/userReducers/AuthReducer";
 import { UserBalanceReducer } from "./reducers/userReducers/UserBalanceReducer";
-import { GoalListReducer } from "./reducers/goalReducer/GoalListReducer";
+import { GoalListReducer } from "./reducers/goalReducers/GoalListReducer";
 import { SelectCategoriesReducer } from "./reducers/common/SelectCategoriesReducer";
 import { ModalCloserReducer } from "./reducers/common/ModalCloserReducer";
-import { SelectGoalReducer } from "./reducers/goalReducer/SelectGoalReducer";
+import { SelectGoalReducer } from "./reducers/goalReducers/SelectGoalReducer";
+import { TransactionListReducer } from "./reducers/transactionReducers/TransactionListReducer";
 export const rootReducer = combineReducers({
   auth: AuthReducer,
   selectCategories: SelectCategoriesReducer,
   modalClose: ModalCloserReducer,
   selectGoal: SelectGoalReducer,
   goalList: GoalListReducer,
-  //   transactionList: TransactionListReducer,
+  transactionList: TransactionListReducer,
   //   modalClose: ModalCloserReducer,
   userBalance: UserBalanceReducer,
   //   datesRange: DatesRange,

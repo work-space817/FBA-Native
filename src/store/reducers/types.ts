@@ -1,5 +1,6 @@
 import { IBalance } from "../../api/firebase/user/userBalance/types";
 import { IGoal } from "../../components/goals/types";
+import { ITransaction } from "../../components/transactions/types";
 
 export interface IAuthUser {
   isAuth: boolean;
@@ -47,14 +48,14 @@ export enum UserBalanceActionType {
   SET_OUTCOME_BALANCE = "SET_OUTCOME_BALANCE",
   UPDATE_BALANCE = "UPDATE_BALANCE",
 }
-// export interface ITransactionList {
-//   transactionList: ITransaction[];
-//   isUpdatedList: boolean;
-// }
-// export enum TransactionListActionType {
-//   TRANSACTION_LIST = "TRANSACTION_LIST",
-//   UPDATE_TRANSACTION_LIST = "UPDATE_TRANSACTION_LIST",
-// }
+export interface ITransactionList {
+  transactionList: ITransaction[];
+  isUpdatedList: boolean;
+}
+export enum TransactionListActionType {
+  TRANSACTION_LIST = "TRANSACTION_LIST",
+  UPDATE_TRANSACTION_LIST = "UPDATE_TRANSACTION_LIST",
+}
 // export interface IDatesRange {
 //   ranges: { from: number; to: number };
 // }

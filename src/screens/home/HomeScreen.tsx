@@ -56,7 +56,7 @@ export default function HomeScreen({ navigation }: any) {
       <OperationMenu />
       <GoalSlider />
       <Card />
-      <ExchangeRateLinear />
+      {/* <ExchangeRateLinear /> */}
       <GoalPieDiagram />
     </DefaultLayout>
   );

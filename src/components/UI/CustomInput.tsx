@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 interface CustomInputProps extends TextInputProps {
-  label: string;
+  label?: string;
   isSecureTextEntry?: boolean;
   field?: string;
   value?: any;
@@ -20,6 +20,7 @@ interface CustomInputProps extends TextInputProps {
 
 const CustomInput: FC<CustomInputProps> = memo(
   ({
+    style,
     label,
     field,
     inputMode = "text",
@@ -36,14 +37,15 @@ const CustomInput: FC<CustomInputProps> = memo(
   }) => {
     return (
       <View style={styles.layout}>
-        <Text style={styles.label}>{label}</Text>
+        {label && <Text style={styles.label}>{label}</Text>}
         <TextInput
           style={[
             styles.input,
             { borderColor: clientSideError && touched ? "red" : "gray" },
+            style,
           ]}
           inputMode={inputMode}
-          onChangeText={onChange}
+          onChange={onChange}
           onFocus={onFocus}
           value={value}
           placeholder={placeholder}

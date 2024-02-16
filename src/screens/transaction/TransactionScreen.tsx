@@ -7,6 +7,7 @@ import {
   GoalSelectActionType,
 } from "../../store/reducers/types";
 import GoalEdit from "../../components/goals/GoalEdit";
+import TransactionTable from "../../components/transactions/TransactionTable";
 
 export default function TransactionScreen({ navigation }: any) {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export default function TransactionScreen({ navigation }: any) {
     >
       <GoalSlider />
       <GoalEdit />
+      <TransactionTable />
     </DefaultLayout>
   );
 }
