@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { View, StyleSheet, ViewProps } from "react-native";
+import { View, StyleSheet, ViewProps, LayoutChangeEvent } from "react-native";
 
 interface IComponentsLayout extends ViewProps {}
 
@@ -8,14 +8,8 @@ const ComponentsLayout: FC<IComponentsLayout> = ({
   children,
   onLayout,
 }) => {
-  const handleLayout = (event: any) => {
-    const paramert = event.nativeEvent;
-    if (onLayout) {
-      onLayout(paramert);
-    }
-  };
   return (
-    <View onLayout={handleLayout} style={[styles.layout, [style]]}>
+    <View onLayout={onLayout} style={[styles.layout, [style]]}>
       {children}
     </View>
   );

@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { ITransaction } from "./types";
 import CustomButtonWithoutFeedback from "../UI/CustomButtonWithoutFeedback";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
-import CustomModal from "../UI/CustomModal";
 import TransactionSVG from "../../helpers/SVG/UI/TransactionSVG";
 
 const Transaction: FC<ITransaction> = ({
@@ -16,7 +15,6 @@ const Transaction: FC<ITransaction> = ({
   transactionType,
   id,
 }) => {
-  const dispatch = useDispatch();
   const transformTitle = () => {
     if (transactionTitle.length > 20) {
       return transactionTitle.substring(0, 10) + "...";
@@ -47,6 +45,7 @@ export default Transaction;
 const styles = StyleSheet.create({
   layout: {
     flexDirection: "row",
+    paddingHorizontal: 4,
   },
   titleLayout: {
     flexDirection: "row",

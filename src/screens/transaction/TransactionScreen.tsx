@@ -1,4 +1,3 @@
-import { Dimensions, Text, View } from "react-native";
 import DefaultLayout from "../layouts/default/DefaultLayout";
 import GoalSlider from "../../components/goals/GoalSlider";
 import { useDispatch } from "react-redux";
@@ -30,6 +29,7 @@ export default function TransactionScreen({ navigation }: any) {
     <DefaultLayout
       navigation={navigation}
       onRefreshComponents={onRefreshComponents}
+      innerStyle={{ paddingBottom: 0 }}
     >
       <GoalSlider />
       <GoalEdit />
