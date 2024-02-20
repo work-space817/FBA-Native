@@ -1,7 +1,30 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { ITransactionList } from "../../store/reducers/types";
+import {
+  Dimensions,
+  FlatList,
+  GestureResponderEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  SafeAreaView,
+  ScrollView,
+  SectionList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  ITransactionList,
+  ScrollEnableActionType,
+} from "../../store/reducers/types";
 import TransactionList from "./TransactionList";
 import { RootState } from "../../store";
 import Transaction from "./Transaction";
@@ -9,18 +32,21 @@ import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout"
 import CustomInput from "../UI/CustomInput";
 import { ITransaction } from "./types";
 import { parse } from "date-fns/parse";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
+import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
 
 const TransactionTable = () => {
-  const [searchTransactionList, setSearchTransactionList] = useState("");
-  const fetchTransactionsData = TransactionList();
+  const fetchTransactionsData = TransactionList(20);
   const { transactionList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
+  const dispatch = useDispatch();
+  const [requestLimit, setRequestLimit] = useState(1);
+  const [searchTransactionList, setSearchTransactionList] = useState("");
+  const [sortedList, setSortedList] = useState([...transactionList]);
   useEffect(() => {
     setSortedList(transactionList);
   }, [transactionList]);
-  const [sortedList, setSortedList] = useState([...transactionList]);
 
   const searchTransaction = useMemo(() => {
     return sortedList.filter((transaction) =>
@@ -30,7 +56,7 @@ const TransactionTable = () => {
     );
   }, [searchTransactionList, sortedList]);
 
-  const sortedTransactions = sortedList.sort(
+  const sortedTransactions = searchTransaction.sort(
     (a: ITransaction, b: ITransaction) => {
       const dateA = parse(a.transactionDate, "dd.MM.yyyy", new Date());
       const dateB = parse(b.transactionDate, "dd.MM.yyyy", new Date());
@@ -48,10 +74,6 @@ const TransactionTable = () => {
       return acc;
     },
     {}
-  );
-  console.log(
-    "groupedTransactions",
-    JSON.stringify(groupedTransactions, null, 2)
   );
 
   const visibleTransactionList = Object.entries(groupedTransactions).map(
@@ -76,21 +98,65 @@ const TransactionTable = () => {
       );
     }
   );
+  const totalHeight = 2000;
+  const [customLayoutHeight, setCustomLayouHeighth] = useState<number>(0);
+  const windowHeight = Dimensions.get("window").height;
+  const handleCustomLayout = useCallback((height: any) => {
+    setCustomLayouHeighth(height.layout.height);
+  }, []);
+  // useEffect(() => {
+  //   console.log("totalHeight: ", totalHeight);
+  //   console.log("customLayoutHeight: ", customLayoutHeight);
+  //   console.log("windowHeight", windowHeight);
+  // }, [customLayoutHeight]);
+  const { childrenScrolling } = useSelector(
+    (store: RootState) => store.scrollEnable
+  );
 
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const position = event.nativeEvent.contentOffset.y;
+    setScrollPosition(position);
+  };
+  useEffect(() => {
+    if (scrollPosition <= 5) {
+      dispatch({ type: ScrollEnableActionType.PARENTS_SCROLLING_TRUE });
+    } else {
+      dispatch({ type: ScrollEnableActionType.CHILDREN_SCROLLING_TRUE });
+    }
+  }, [scrollPosition]);
+  console.log("isScrolling in table", childrenScrolling);
+  console.log("scrollPosition in table", scrollPosition);
   return (
-    <ComponentsLayout>
+    <ComponentsLayout onLayout={handleCustomLayout}>
       <View style={styles.layout}>
         <Text style={styles.titleText}>Transaction History</Text>
         <View style={{ width: "30%" }}>
           <CustomInput
             style={{ height: 30 }}
             value={searchTransactionList}
-            onChange={(e) => setSearchTransactionList(e.text)}
+            onChangeText={(e) => setSearchTransactionList(e)}
             placeholder={"Search"}
           />
         </View>
       </View>
-      {visibleTransactionList}
+      {!fetchTransactionsData ? (
+        <ScrollView
+          style={{ height: 750 }}
+          // onScroll={handleScroll}
+          // onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
+          //   console.log(e.nativeEvent.contentOffset.y)
+          // }
+          // scrollEnabled={childrenScrolling}
+          nestedScrollEnabled={true}
+        >
+          {visibleTransactionList}
+        </ScrollView>
+      ) : (
+        <View style={{ justifyContent: "center", height: 100, width: 300 }}>
+          <CustomLoadingAnimation />
+        </View>
+      )}
     </ComponentsLayout>
   );
 };
@@ -98,6 +164,9 @@ const TransactionTable = () => {
 export default TransactionTable;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   layout: {
     flexDirection: "row",
     justifyContent: "space-between",

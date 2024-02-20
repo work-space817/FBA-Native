@@ -1,5 +1,7 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -8,6 +10,10 @@ import {
 } from "react-native";
 import DefaultHeader from "./DefaultHeader";
 import DefaultNavbar from "./DefaultNavbar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { useDispatch } from "react-redux";
+import { ScrollEnableActionType } from "../../../store/reducers/types";
 
 interface DefaultLayoutProps extends ViewProps {
   navigation: any;
@@ -26,6 +32,27 @@ const DefaultLayout = ({
     onRefreshComponents();
     setRefreshing(false);
   }, [onRefreshComponents]);
+
+  const dispatch = useDispatch();
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const position = event.nativeEvent.contentOffset.y;
+    setScrollPosition(position);
+  };
+  useEffect(() => {
+    if (scrollPosition < 600) {
+      dispatch({ type: ScrollEnableActionType.PARENTS_SCROLLING_TRUE });
+    } else {
+      dispatch({ type: ScrollEnableActionType.CHILDREN_SCROLLING_TRUE });
+    }
+  }, [scrollPosition]);
+
+  const { parentsScrolling } = useSelector(
+    (store: RootState) => store.scrollEnable
+  );
+  console.log("scrollPosition in layout", scrollPosition);
+  console.log("isScrolling in layout", parentsScrolling);
   return (
     <View style={styles.outerLayout}>
       <ScrollView
@@ -33,6 +60,8 @@ const DefaultLayout = ({
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        // onScroll={handleScroll}
+        // scrollEnabled={parentsScrolling}
       >
         <DefaultHeader />
         {children}

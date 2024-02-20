@@ -9,9 +9,9 @@ const ComponentsLayout: FC<IComponentsLayout> = ({
   onLayout,
 }) => {
   const handleLayout = (event: any) => {
-    const { width } = event.nativeEvent.layout;
+    const paramert = event.nativeEvent;
     if (onLayout) {
-      onLayout(width);
+      onLayout(paramert);
     }
   };
   return (

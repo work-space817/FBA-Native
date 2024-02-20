@@ -9,7 +9,7 @@ import {
   TransactionListActionType,
 } from "../../store/reducers/types";
 
-const TransactionList = () => {
+const TransactionList = (requestLimit: number) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const TransactionList = () => {
   const fetchUserTransactions = async () => {
     try {
       setLoading(true);
-      const fetchTransactions = await getTransactionData();
+      const fetchTransactions = await getTransactionData(requestLimit);
       const transactionData = fetchTransactions.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

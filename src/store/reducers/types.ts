@@ -1,3 +1,4 @@
+import { boolean } from "yup";
 import { IBalance } from "../../api/firebase/user/userBalance/types";
 import { IGoal } from "../../components/goals/types";
 import { ITransaction } from "../../components/transactions/types";
@@ -55,6 +56,15 @@ export interface ITransactionList {
 export enum TransactionListActionType {
   TRANSACTION_LIST = "TRANSACTION_LIST",
   UPDATE_TRANSACTION_LIST = "UPDATE_TRANSACTION_LIST",
+}
+
+export interface ScrollEnable {
+  parentsScrolling: boolean;
+  childrenScrolling: boolean;
+}
+export enum ScrollEnableActionType {
+  PARENTS_SCROLLING_TRUE = "PARENTS_SCROLLING_TRUE",
+  CHILDREN_SCROLLING_TRUE = "CHILDREN_SCROLLING_TRUE",
 }
 // export interface IDatesRange {
 //   ranges: { from: number; to: number };

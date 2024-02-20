@@ -12,7 +12,8 @@ interface CustomInputProps extends TextInputProps {
   isSecureTextEntry?: boolean;
   field?: string;
   value?: any;
-  onChange: (text: any) => void;
+  onChange?: (text: any) => void;
+  onChangeText?: (text: any) => void;
   clientSideError?: string;
   touched?: boolean;
   disabled?: boolean;
@@ -29,6 +30,7 @@ const CustomInput: FC<CustomInputProps> = memo(
     value,
     placeholder,
     onChange,
+    onChangeText,
     clientSideError,
     touched,
     onFocus,
@@ -46,6 +48,7 @@ const CustomInput: FC<CustomInputProps> = memo(
           ]}
           inputMode={inputMode}
           onChange={onChange}
+          onChangeText={onChangeText}
           onFocus={onFocus}
           value={value}
           placeholder={placeholder}
