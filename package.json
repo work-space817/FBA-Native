@@ -24,7 +24,7 @@
     "firebase": "^10.7.1",
     "formik": "^2.4.5",
     "react": "18.2.0",
-    "react-native": "0.72.6",
+    "react-native": "0.72.10",
     "react-native-calendars": "^1.1303.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-gifted-charts": "^1.4.3",

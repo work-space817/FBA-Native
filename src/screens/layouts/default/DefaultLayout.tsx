@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -24,19 +26,26 @@ const DefaultLayout = ({
   navigation,
   onRefreshComponents,
 }: DefaultLayoutProps) => {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     onRefreshComponents();
     setRefreshing(false);
   }, [onRefreshComponents]);
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setScrollPosition(event.nativeEvent.contentOffset.y);
+  };
 
   return (
     <View style={[styles.outerLayout, outterStyle]}>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.innerLayout, innerStyle]}
-        bounces={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        bounces={scrollPosition < 200 ? true : false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

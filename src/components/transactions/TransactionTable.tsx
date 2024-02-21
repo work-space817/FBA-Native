@@ -2,12 +2,16 @@ import {
   Dimensions,
   LayoutChangeEvent,
   LayoutRectangle,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { ITransactionList } from "../../store/reducers/types";
 import TransactionList from "./TransactionList";
@@ -20,12 +24,11 @@ import { parse } from "date-fns/parse";
 import { format } from "date-fns";
 import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
 
-const TransactionTable = () => {
-  const fetchTransactionsData = TransactionList(20);
+const TransactionTable = memo(() => {
+  const { loading, setLoading } = TransactionList(20);
   const { transactionList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
-  const [requestLimit, setRequestLimit] = useState(1);
   const [customLayoutDimensions, setCustomLayouDimensions] =
     useState<LayoutRectangle>();
   const [searchTransactionList, setSearchTransactionList] = useState("");
@@ -87,18 +90,22 @@ const TransactionTable = () => {
     <View style={styles.layoutStickyHeader}>
       <Text style={styles.titleText}>Transaction History</Text>
       <View style={{ width: "30%" }}>
-        <CustomInput
+        {/* <CustomInput
           style={{ height: 30 }}
           value={searchTransactionList}
           onChangeText={(e) => setSearchTransactionList(e)}
           placeholder={"Search"}
-        />
+        /> */}
       </View>
     </View>
   );
-
-  const totalHeight = 1400;
   const windowHeight = Dimensions.get("window").height;
+  console.log("windowHeight: ", windowHeight);
+  const statusBarHeight = StatusBar.currentHeight || 0;
+  const tableHeight =
+    Platform.OS === "ios"
+      ? windowHeight - 200
+      : windowHeight - statusBarHeight - 75;
   const handleCustomLayout = useCallback((event: LayoutChangeEvent) => {
     setCustomLayouDimensions(event.nativeEvent.layout);
   }, []);
@@ -108,22 +115,42 @@ const TransactionTable = () => {
   //   console.log("windowHeight", windowHeight);
   // }, [customLayoutHeight]);
 
+  const [requestLimit, setRequestLimit] = useState(1);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setScrollPosition(event.nativeEvent.contentOffset.y);
+    const tableHeight = event.nativeEvent.layoutMeasurement.height;
+    console.log("tableHeight: ", tableHeight);
+  };
+
+  // const tableLayout = (event: LayoutChangeEvent) => {
+  //   const tableHeight = event.nativeEvent.layout.height;
+
+  //   console.log("tableHeight", tableHeight);
+  // };
+
   console.log("customLayoutDimensions: ", customLayoutDimensions);
   return (
     <ComponentsLayout onLayout={handleCustomLayout} style={[styles.layoutEnd]}>
       <StickyHeaderComponent />
-      {!fetchTransactionsData ? (
-        <ScrollView style={[styles.layout]} nestedScrollEnabled={true}>
+      {!loading ? (
+        <ScrollView
+          style={[styles.layout, { height: tableHeight }]}
+          nestedScrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          onScroll={handleScroll}
+        >
           {visibleTransactionList}
         </ScrollView>
       ) : (
-        <View style={{ justifyContent: "center", height: 100, width: 300 }}>
+        <View style={{ height: tableHeight }}>
           <CustomLoadingAnimation />
         </View>
       )}
     </ComponentsLayout>
   );
-};
+});
 
 export default TransactionTable;
 
@@ -135,7 +162,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   layout: {
-    height: 650,
+    height: 850,
   },
   layoutEnd: {
     paddingHorizontal: 5,

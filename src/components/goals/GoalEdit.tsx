@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { updateDoc, deleteDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,7 @@ import { RootState } from "../../store";
 import { CalendarList } from "react-native-calendars";
 import { format } from "date-fns";
 
-const GoalEdit = () => {
+const GoalEdit = memo(() => {
   const dispatch = useDispatch();
   const { selectedGoal } = useSelector(
     (store: RootState) => store.selectGoal as IGoalSelect
@@ -199,7 +199,7 @@ const GoalEdit = () => {
       </View>
     </ComponentsLayout>
   );
-};
+});
 
 export default GoalEdit;
 

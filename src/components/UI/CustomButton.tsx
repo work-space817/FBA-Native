@@ -5,12 +5,13 @@ import {
   Text,
   ViewStyle,
   TouchableOpacityProps,
+  GestureResponderEvent,
 } from "react-native";
 
 interface ICustomButtom extends TouchableOpacityProps {
   title: string;
   theme?: "none" | "primary" | "secondary";
-  onPress?: (e: any) => void;
+  onPress?: (e: GestureResponderEvent) => void;
 }
 
 const CustomButton: FC<ICustomButtom> = memo(

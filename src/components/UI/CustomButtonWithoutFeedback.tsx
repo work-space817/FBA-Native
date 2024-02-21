@@ -6,12 +6,13 @@ import {
   TouchableWithoutFeedbackProps,
   TouchableWithoutFeedback,
   View,
+  GestureResponderEvent,
 } from "react-native";
 
 interface ICustomButtonWithoutFeedback extends TouchableWithoutFeedbackProps {
   title: string;
   theme?: "none" | "primary" | "secondary";
-  onPress?: (e: any) => void;
+  onPress?: (e: GestureResponderEvent) => void;
 }
 
 const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({

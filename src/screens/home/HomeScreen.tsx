@@ -7,16 +7,13 @@ import OperationMenu from "../../components/common/OperationMenu";
 import Card from "../../components/card/Card";
 import { BackHandler } from "react-native";
 import GoalSlider from "../../components/goals/GoalSlider";
-import GoalList from "../../components/goals/GoalList";
 import { useDispatch } from "react-redux";
 import {
   GoalListActionType,
   UserBalanceActionType,
 } from "../../store/reducers/types";
-import LineDiagram from "../../components/diagrams/exchangeRate/LineDiagram";
-import ExchangeRateLinear from "../../components/diagrams/exchangeRate/ExchangeRateLinear";
-import PieDiagram from "../../components/diagrams/goalDiagrams/goalPieDiagram/PieDiagram";
 import GoalPieDiagram from "../../components/diagrams/goalDiagrams/goalPieDiagram/GoalPieDiagram";
+
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
   const dispatch = useDispatch();

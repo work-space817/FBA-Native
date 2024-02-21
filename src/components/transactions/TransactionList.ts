@@ -41,7 +41,7 @@ const TransactionList = (requestLimit: number) => {
     fetchUserTransactions();
   }, [isUpdatedList]);
 
-  return loading;
+  return { loading, setLoading };
 };
 
 export default TransactionList;
