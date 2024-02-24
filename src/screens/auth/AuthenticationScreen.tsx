@@ -1,4 +1,10 @@
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 import AuthLayout from "../layouts/auth/AuthLayout";
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "../../components/UI/CustomButton";
@@ -11,6 +17,7 @@ import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 import CustomLoading from "../../components/UI/CustomLoadingAnimation";
+import { RootState } from "../../store";
 
 export default function AuthenticationScreen() {
   const [logInVisible, setLogInVisible] = useState(false);
@@ -59,8 +66,11 @@ export default function AuthenticationScreen() {
 
   const handleOnNavigate = () => navigate("HomeScreen");
 
+  const componentTransaction: ViewStyle =
+    signUpVisible || logInVisible ? { height: 650 } : { flex: 1 };
+
   return (
-    <AuthLayout>
+    <AuthLayout style={componentTransaction}>
       <TouchableOpacity onPress={handleOnNavigate}>
         <Text style={styles.authTitle}>Financial Budgeting App</Text>
       </TouchableOpacity>
@@ -92,6 +102,7 @@ const styles = StyleSheet.create({
     fontFamily: "Quicksand_700Bold",
     fontSize: 22,
   },
+
   buttonsLayout: {
     marginTop: 20,
     display: "flex",

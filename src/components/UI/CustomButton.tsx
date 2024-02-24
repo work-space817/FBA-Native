@@ -11,17 +11,18 @@ import {
 interface ICustomButtom extends TouchableOpacityProps {
   title: string;
   theme?: "none" | "primary" | "secondary";
-  onPress?: (e: GestureResponderEvent) => void;
+  onPress?: (e: any) => void;
 }
 
 const CustomButton: FC<ICustomButtom> = memo(
-  ({ children, title, style, theme = "none", onPress }) => {
+  ({ children, title, style, theme = "none", onPress, disabled }) => {
     const buttonStyles: ViewStyle = styles[theme] || styles.none;
     const textStyles = styles[`${theme}Text`] || styles.noneText;
     return (
       <TouchableOpacity
         onPress={onPress}
         style={[styles.button, buttonStyles, style]}
+        disabled={disabled}
       >
         {children}
         <Text style={[styles.text, textStyles]}>{title}</Text>

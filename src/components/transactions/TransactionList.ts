@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { ITransaction } from "./types";
 import { RootState } from "../../store";
 import getTransactionData from "../../api/firebase/transactions/getTransactionData";
@@ -11,7 +10,6 @@ import {
 
 const TransactionList = (requestLimit: number) => {
   const [loading, setLoading] = useState<boolean>(false);
-
   const dispatch = useDispatch();
   const { isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
@@ -19,8 +17,8 @@ const TransactionList = (requestLimit: number) => {
   const fetchUserTransactions = async () => {
     try {
       setLoading(true);
-      const fetchTransactions = await getTransactionData(requestLimit);
-      const transactionData = fetchTransactions.docs.map((doc) => ({
+      const fetchTransactionData = await getTransactionData(requestLimit);
+      const transactionData = fetchTransactionData.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as ITransaction[];
@@ -39,9 +37,9 @@ const TransactionList = (requestLimit: number) => {
 
   useEffect(() => {
     fetchUserTransactions();
-  }, [isUpdatedList]);
+  }, [isUpdatedList, requestLimit]);
 
-  return { loading, setLoading };
+  return loading;
 };
 
 export default TransactionList;

@@ -16,11 +16,10 @@ const GoalList = () => {
     try {
       setLoading(true);
       const fetchGoals = await getGoalsData();
-      const goalsData = fetchGoals.map((doc) => ({
+      const goalsData = fetchGoals.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as IGoal[];
-      //   console.log("goalsData: ", goalsData);
       const setGoalList = dispatch({
         type: GoalListActionType.GOAL_LIST,
         payload: goalsData,

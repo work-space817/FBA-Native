@@ -5,6 +5,7 @@ import { ITransaction } from "./types";
 import CustomButtonWithoutFeedback from "../UI/CustomButtonWithoutFeedback";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import TransactionSVG from "../../helpers/SVG/UI/TransactionSVG";
+import DateFormater from "../../helpers/functions/dateFormater";
 
 const Transaction: FC<ITransaction> = ({
   transactionTitle,
@@ -23,6 +24,7 @@ const Transaction: FC<ITransaction> = ({
   };
   const transactionValueType =
     transactionType === "Income transaction" ? "+" : "-";
+
   return (
     <CustomButtonWithoutFeedback title={""} style={styles.layout}>
       <View style={styles.titleLayout}>
@@ -39,7 +41,7 @@ const Transaction: FC<ITransaction> = ({
     </CustomButtonWithoutFeedback>
   );
 };
-
+//
 export default Transaction;
 
 const styles = StyleSheet.create({

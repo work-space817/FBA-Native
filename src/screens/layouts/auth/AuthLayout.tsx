@@ -1,15 +1,15 @@
 import React, { ReactNode } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ViewProps, ViewStyle } from "react-native";
 
-interface AuthLayoutProps {
+interface AuthLayoutProps extends ViewProps {
   children: ReactNode;
+  style?: ViewStyle;
 }
-const AuthLayout = ({ children }: AuthLayoutProps) => {
-  return <View style={styles.outterLayout}>{children}</View>;
+const AuthLayout = ({ children, style }: AuthLayoutProps) => {
+  return <View style={[styles.outterLayout, style]}>{children}</View>;
 };
 const styles = StyleSheet.create({
   outterLayout: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

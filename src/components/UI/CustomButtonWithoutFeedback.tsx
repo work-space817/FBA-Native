@@ -12,7 +12,7 @@ import {
 interface ICustomButtonWithoutFeedback extends TouchableWithoutFeedbackProps {
   title: string;
   theme?: "none" | "primary" | "secondary";
-  onPress?: (e: GestureResponderEvent) => void;
+  onPress?: (e: any) => void;
 }
 
 const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({
@@ -21,11 +21,12 @@ const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({
   style,
   theme = "none",
   onPress,
+  disabled,
 }) => {
   const buttonStyles: ViewStyle = styles[theme] || styles.none;
   const textStyles = styles[`${theme}Text`] || styles.noneText;
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <TouchableWithoutFeedback onPress={onPress} disabled={disabled}>
       <View style={[styles.button, style, buttonStyles]}>
         {children}
         <Text style={[styles.text, textStyles]}>{title}</Text>

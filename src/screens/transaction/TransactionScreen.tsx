@@ -13,18 +13,17 @@ export default function TransactionScreen({ navigation }: any) {
   const dispatch = useDispatch();
   const onRefreshComponents = () => {
     dispatch({
-      type: GoalListActionType.UPDATE_GOALS_LIST,
-    });
-    dispatch({
       type: GoalSelectActionType.GOAL_SELECT,
       selectedGoal: null,
+    });
+    dispatch({
+      type: GoalListActionType.UPDATE_GOALS_LIST,
     });
     dispatch({
       type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
     });
     console.log("Refreshing components...");
   };
-
   return (
     <DefaultLayout
       navigation={navigation}

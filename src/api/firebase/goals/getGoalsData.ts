@@ -1,13 +1,13 @@
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { firestore } from "../config";
 import getUserId from "../../../helpers/functions/getUserId";
 
 const getGoalsData = async () => {
   const userId = await getUserId();
 
-  const userGoalsRef = doc(collection(firestore, "goals"), `${userId}`);
-  const querySnapshot = await getDocs(collection(userGoalsRef, "goal"));
-  const goalsData = querySnapshot.docs;
+  const userGoalsRef = collection(firestore, `goals/${userId}/goal`);
+  const goalQuery = query(userGoalsRef, orderBy("expireDate", "desc"));
+  const goalsData = await getDocs(goalQuery);
 
   return goalsData;
 };

@@ -8,7 +8,6 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
-  TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
@@ -16,6 +15,7 @@ import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
 import { GoalSelectActionType } from "../../store/reducers/types";
 import DateFormater from "../../helpers/functions/dateFormater";
+import { format } from "date-fns";
 
 const Goal: FC<IGoal> = memo(
   ({ cost, expireDate, title, selectedCategories, id }) => {
@@ -23,11 +23,13 @@ const Goal: FC<IGoal> = memo(
     // const location = useLocation();
     // const navigate = useNavigate();
     const now = new Date().getTime();
-    const formattedExpireDate = DateFormater(expireDate);
+
+    const compareDate = DateFormater(expireDate);
+    const formattedDate = format(expireDate, "dd.MM.yyyy");
 
     const selectGoal = useCallback(async () => {
       const fetchGoals = await getGoalsData();
-      const fetchCurrentGoal = fetchGoals.find((doc, docIndex) =>
+      const fetchCurrentGoal = fetchGoals.docs.find((doc) =>
         id === doc.id ? doc.data() : null
       );
       const currentGoalData = { ...fetchCurrentGoal?.data(), id };
@@ -38,16 +40,17 @@ const Goal: FC<IGoal> = memo(
           payload: currentGoalData,
         });
       }
+      //
       // if (location.pathname !== "/transactions") {
       //   navigate("/transactions");
       // }
     }, [`navigate`, id, dispatch]);
 
     const expiredLayout: StyleProp<ViewStyle> =
-      now > formattedExpireDate ? styles.expiredLayout : null;
+      now > compareDate ? styles.expiredLayout : null;
     const expiredDateText: StyleProp<any> =
-      now > formattedExpireDate ? styles.expiredDateText : null;
-    const expiredClock = now > formattedExpireDate ? "red" : undefined;
+      now > compareDate ? styles.expiredDateText : null;
+    const expiredClock = now > compareDate ? "red" : undefined;
 
     return (
       <TouchableOpacity activeOpacity={1} onPress={selectGoal}>
@@ -56,7 +59,7 @@ const Goal: FC<IGoal> = memo(
             <Text style={styles.cost}>{cost} UAH</Text>
             <View style={styles.date}>
               <Text style={[styles.dateText, expiredDateText]}>
-                {expireDate}
+                {formattedDate}
               </Text>
               <GoalSVG id="Clock" width="12" height="15" fill={expiredClock} />
             </View>

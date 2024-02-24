@@ -34,7 +34,7 @@ const GoalEdit = memo(() => {
   const goalDoneDelete = async () => {
     try {
       const fetchGoals = await getGoalsData();
-      const fetchCurrentGoal = fetchGoals.map((doc) =>
+      const fetchCurrentGoal = fetchGoals.docs.map((doc) =>
         doc.id === selectedGoal?.id ? deleteDoc(doc.ref) : null
       );
       const updateGoalList = dispatch({
@@ -56,8 +56,10 @@ const GoalEdit = memo(() => {
     setShowCalendarList(false);
   }, []);
 
-  const formattedDate = format(today, "yyyy-MM-dd");
-  const expireDate = format(selectedDay, "dd.MM.yyyy");
+  const minDate = format(today, "yyyy-MM-dd");
+  const expireDate = format(selectedDay, "yyyy-MM-dd");
+  const formattedDate = format(expireDate, "dd.MM.yyyy");
+
   const onSubmitHandler = async (values: any) => {
     try {
       const fetchGoals = await getGoalsData();
@@ -66,7 +68,7 @@ const GoalEdit = memo(() => {
         expireDate: expireDate,
       };
       console.log(data);
-      const fetchCurrentGoal = fetchGoals.map((doc) =>
+      const fetchCurrentGoal = fetchGoals.docs.map((doc) =>
         doc.id === selectedGoal?.id ? updateDoc(doc.ref, data) : null
       );
       handleReset(values);
@@ -123,7 +125,7 @@ const GoalEdit = memo(() => {
             <Goal
               id={""}
               cost={0}
-              expireDate={"Expire date"}
+              expireDate={minDate}
               title={"Your title"}
               selectedCategories={<SelectCategoriesSVG id={""} />}
             />
@@ -132,8 +134,8 @@ const GoalEdit = memo(() => {
             <CustomButton
               style={{ borderRadius: 12, padding: 5 }}
               title={"Delete this goal"}
-              theme={selectedGoal === null ? "none" : "primary"}
-              disabled={selectedGoal === null}
+              theme={!selectedGoal ? "none" : "primary"}
+              disabled={!selectedGoal}
               onPress={goalDoneDelete}
             />
           </View>
@@ -146,7 +148,7 @@ const GoalEdit = memo(() => {
             onChange={handleChange("title")}
             clientSideError={errors.title}
             touched={touched.title}
-            disabled={selectedGoal === null}
+            disabled={!selectedGoal}
           />
           <CustomInput
             label="Change goals' cost"
@@ -159,13 +161,13 @@ const GoalEdit = memo(() => {
             onFocus={handleFocus}
             clientSideError={errors.cost}
             touched={touched.cost}
-            disabled={selectedGoal === null}
+            disabled={!selectedGoal}
           />
           <CustomButton
             style={styles.expireDateButton}
-            title={selectedGoal ? `${expireDate}` : "Change expire date"}
+            title={selectedGoal ? formattedDate : "Change expire date"}
             theme="none"
-            disabled={selectedGoal === null}
+            disabled={!selectedGoal}
             onPress={() => setShowCalendarList(true)}
           />
           {showCalendarList && (
@@ -176,7 +178,7 @@ const GoalEdit = memo(() => {
                 showScrollIndicator={true}
                 horizontal={true}
                 calendarWidth={240}
-                minDate={formattedDate}
+                minDate={minDate}
                 onDayPress={handleDayPress}
                 firstDay={1}
                 theme={{ calendarBackground: "transparent" }}
@@ -191,9 +193,9 @@ const GoalEdit = memo(() => {
           )}
           <CustomButton
             title={"Update goal"}
-            theme={selectedGoal === null ? "none" : "primary"}
+            theme={!selectedGoal ? "none" : "primary"}
             onPress={handleSubmit}
-            // disabled={selectedGoal === null}
+            disabled={!selectedGoal}
           />
         </View>
       </View>

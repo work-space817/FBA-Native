@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useRef, useState } from "react";
 import {
   TextInput,
   Text,
@@ -13,7 +13,6 @@ interface CustomInputProps extends TextInputProps {
   field?: string;
   value?: any;
   onChange?: (text: any) => void;
-  onChangeText?: (text: any) => void;
   clientSideError?: string;
   touched?: boolean;
   disabled?: boolean;
@@ -23,14 +22,12 @@ const CustomInput: FC<CustomInputProps> = memo(
   ({
     style,
     label,
-    field,
     inputMode = "text",
     keyboardType = "default",
     isSecureTextEntry,
     value,
     placeholder,
     onChange,
-    onChangeText,
     clientSideError,
     touched,
     onFocus,
@@ -47,14 +44,14 @@ const CustomInput: FC<CustomInputProps> = memo(
             style,
           ]}
           inputMode={inputMode}
-          onChange={onChange}
-          onChangeText={onChangeText}
+          onChangeText={onChange}
           onFocus={onFocus}
           value={value}
           placeholder={placeholder}
           secureTextEntry={isSecureTextEntry}
           keyboardType={keyboardType}
           editable={!disabled}
+          blurOnSubmit={true}
         />
         {clientSideError && touched && (
           <Text style={styles.errorText}>{clientSideError}</Text>

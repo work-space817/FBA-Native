@@ -38,9 +38,8 @@ const GoalAdd = () => {
   const handleDayPress = useCallback((day: any) => {
     setSelectedDay(day.dateString);
   }, []);
-
-  const formattedDate = format(today, "yyyy-MM-dd");
-  const expireDate = format(selectedDay, "dd.MM.yyyy");
+  const minDate = format(today, "yyyy-MM-dd");
+  const expireDate = format(selectedDay, "yyyy-MM-dd");
 
   const onSubmitHandler = async (values: IGoalAdd) => {
     try {
@@ -118,7 +117,7 @@ const GoalAdd = () => {
             showScrollIndicator={true}
             horizontal={true}
             calendarWidth={calendarWidth}
-            minDate={formattedDate}
+            minDate={minDate}
             onDayPress={handleDayPress}
             firstDay={1}
             theme={{ calendarBackground: "transparent" }}
