@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet,
   ViewStyle,
+  KeyboardAvoidingView,
 } from "react-native";
 import AuthLayout from "../layouts/auth/AuthLayout";
 import { useNavigation } from "@react-navigation/native";
@@ -66,11 +67,9 @@ export default function AuthenticationScreen() {
 
   const handleOnNavigate = () => navigate("HomeScreen");
 
-  const componentTransaction: ViewStyle =
-    signUpVisible || logInVisible ? { height: 650 } : { flex: 1 };
-
   return (
-    <AuthLayout style={componentTransaction}>
+    <AuthLayout>
+      {/* <KeyboardAvoidingView behavior="position"> */}
       <TouchableOpacity onPress={handleOnNavigate}>
         <Text style={styles.authTitle}>Financial Budgeting App</Text>
       </TouchableOpacity>
@@ -93,6 +92,7 @@ export default function AuthenticationScreen() {
 
       {signUpVisible && <SignUp />}
       {logInVisible && <LogIn />}
+      {/* </KeyboardAvoidingView> */}
     </AuthLayout>
   );
 }

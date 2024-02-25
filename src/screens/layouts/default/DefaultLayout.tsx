@@ -3,7 +3,6 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   View,
   ViewProps,
@@ -11,6 +10,9 @@ import {
 } from "react-native";
 import DefaultHeader from "./DefaultHeader";
 import DefaultNavbar from "./DefaultNavbar";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 interface DefaultLayoutProps extends ViewProps {
   outterStyle?: ViewStyle;
@@ -28,7 +30,6 @@ const DefaultLayout = ({
 }: DefaultLayoutProps) => {
   const [refreshing, setRefreshing] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     onRefreshComponents();
@@ -37,22 +38,30 @@ const DefaultLayout = ({
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setScrollPosition(event.nativeEvent.contentOffset.y);
   };
+  const { keyboardAwarePosition } = useSelector(
+    (store: RootState) => store.scrollViewPosition
+  );
 
   return (
     <View style={[styles.outerLayout, outterStyle]}>
-      <ScrollView
+      <KeyboardAwareScrollView
+        extraHeight={keyboardAwarePosition}
+        enableResetScrollToCoords={false}
+        enableOnAndroid={true}
+        keyboardOpeningTime={0}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.innerLayout, innerStyle]}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
+        scrollEventThrottle={8}
         bounces={scrollPosition < 200 ? true : false}
+        keyboardDismissMode={"on-drag"}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <DefaultHeader />
         {children}
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <DefaultNavbar navigation={navigation} />
     </View>
   );

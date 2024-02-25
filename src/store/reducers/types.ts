@@ -57,6 +57,13 @@ export enum TransactionListActionType {
   UPDATE_TRANSACTION_LIST = "UPDATE_TRANSACTION_LIST",
 }
 
+export interface IScrollViewPosition {
+  keyboardAwarePosition: number;
+}
+export enum ScrollViewPositionActionType {
+  SET_POSITION = "SET_POSITION",
+}
+
 // export interface IDatesRange {
 //   ranges: { from: number; to: number };
 // }

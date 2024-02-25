@@ -10,15 +10,19 @@ import {
 
 const TransactionList = (requestLimit: number) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [amountTransaction, setAmountTransaction] = useState<number>(0);
   const dispatch = useDispatch();
   const { isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
+
   const fetchUserTransactions = async () => {
     try {
       setLoading(true);
-      const fetchTransactionData = await getTransactionData(requestLimit);
-      const transactionData = fetchTransactionData.docs.map((doc) => ({
+      const { transactionsData, totalAmountTransaction } =
+        await getTransactionData(requestLimit);
+      setAmountTransaction(totalAmountTransaction);
+      const transactionData = transactionsData.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as ITransaction[];
@@ -39,7 +43,7 @@ const TransactionList = (requestLimit: number) => {
     fetchUserTransactions();
   }, [isUpdatedList, requestLimit]);
 
-  return loading;
+  return { loading, amountTransaction };
 };
 
 export default TransactionList;

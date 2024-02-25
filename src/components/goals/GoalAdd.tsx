@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { CalendarList } from "react-native-calendars";
 import setGoalsData from "../../api/firebase/goals/setGoalsData";
 import { RootState } from "../../store";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const GoalAdd = () => {
   const init: IGoalAdd = {
@@ -108,7 +109,13 @@ const GoalAdd = () => {
   );
 
   return (
-    <View onLayout={onLayout}>
+    <KeyboardAwareScrollView
+      extraHeight={100}
+      keyboardDismissMode="on-drag"
+      enableOnAndroid={true}
+      keyboardOpeningTime={0}
+      onLayout={onLayout}
+    >
       {calendarWidth > 0 && (
         <View style={{ height: 320 }}>
           <CalendarList
@@ -152,7 +159,7 @@ const GoalAdd = () => {
       />
       <SelectCategories title="Select category of goal" icons={iconsList} />
       <CustomButton title={"Add goal"} theme="primary" onPress={handleSubmit} />
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

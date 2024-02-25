@@ -11,7 +11,10 @@ import {
 } from "react-native";
 import React, { memo, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { ITransactionList } from "../../store/reducers/types";
+import {
+  ITransactionList,
+  ScrollViewPositionActionType,
+} from "../../store/reducers/types";
 import TransactionList from "./TransactionList";
 import { RootState } from "../../store";
 import Transaction from "./Transaction";
@@ -21,20 +24,30 @@ import { ITransaction } from "./types";
 import { parse } from "date-fns/parse";
 import { format } from "date-fns";
 import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
+import { useDispatch } from "react-redux";
 
 const TransactionTable = memo(() => {
-  const [requestLimit, setRequestLimit] = useState(15);
+  const defaulRequestLimit = 15;
+  const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
   console.log("requestLimit: ", requestLimit);
-  const fetchTransactionData = TransactionList(requestLimit);
-  const { transactionList } = useSelector(
+  const { loading, amountTransaction } = TransactionList(requestLimit);
+  const { transactionList, isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
   const [searchTransactionList, setSearchTransactionList] = useState("");
   const [sortedList, setSortedList] = useState([...transactionList]);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setSortedList(transactionList);
+    dispatch({ type: ScrollViewPositionActionType.SET_POSITION, payload: 350 });
   }, [transactionList]);
+  useEffect(() => {
+    setRequestLimit(defaulRequestLimit);
+  }, [isUpdatedList === true]);
+
   const searchTransaction = useMemo(() => {
     if (searchTransactionList) {
       setRequestLimit(999);
@@ -87,25 +100,24 @@ const TransactionTable = memo(() => {
 
   const windowHeight = Dimensions.get("window").height;
   const statusBarHeight = StatusBar.currentHeight || 0;
-  const tableHeight =
-    Platform.OS === "ios"
-      ? windowHeight - 275
-      : windowHeight - statusBarHeight - 150;
 
-  const [scrollPosition, setScrollPosition] = useState(0); //! 2.
-  const limitHeight = 2000; //! 3.
+  let tableHeight: number;
+  if (Platform.OS === "ios") {
+    tableHeight = windowHeight - 250;
+  } else {
+    tableHeight = windowHeight - statusBarHeight - 150;
+  }
+
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setScrollPosition(event.nativeEvent.contentOffset.y);
-    const tableHeight = event.nativeEvent.layoutMeasurement.height; //! 1.
-    console.log("tableHeight: ", tableHeight);
-    console.log("summary", tableHeight + scrollPosition);
   };
-  // console.log("scrollPosition: ", scrollPosition);
 
   useEffect(() => {
-    if (limitHeight - (tableHeight + scrollPosition) < 1250) {
+    const limitHeight = 63 * requestLimit;
+    // console.log("summary", limitHeight - (tableHeight + scrollPosition));
+    if (limitHeight - (tableHeight + scrollPosition) < 500) {
       console.log("LIMIT");
-      setRequestLimit(requestLimit + 1);
+      setRequestLimit(requestLimit + 5);
     }
   }, [scrollPosition]);
 
@@ -122,17 +134,24 @@ const TransactionTable = memo(() => {
           />
         </View>
       </View>
-      {/* {!fetchTransactionData ? ( */}
+
       <ScrollView
         style={{ height: tableHeight }}
         onScroll={handleScroll}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
-        // bounces={false}
         scrollEventThrottle={16}
       >
-        {visibleTransactionList}
-        <CustomLoadingAnimation />
+        {!isUpdatedList && <>{visibleTransactionList}</>}
+        {requestLimit > amountTransaction && !loading ? (
+          <View style={styles.layoutByDate}>
+            <Text style={styles.titleByDate}>
+              Transactions were not done before
+            </Text>
+          </View>
+        ) : (
+          <CustomLoadingAnimation />
+        )}
       </ScrollView>
     </ComponentsLayout>
   );
