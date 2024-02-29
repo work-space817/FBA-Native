@@ -29,7 +29,6 @@ import { useDispatch } from "react-redux";
 const TransactionTable = memo(() => {
   const defaulRequestLimit = 15;
   const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
-  console.log("requestLimit: ", requestLimit);
   const { loading, amountTransaction } = TransactionList(requestLimit);
   const { transactionList, isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList

@@ -5,10 +5,9 @@ import { IGoalAdd } from "./types";
 import React, { useCallback, useMemo, useState } from "react";
 import {
   GoalListActionType,
-  ISelectCategories,
   ModalCloserActionType,
 } from "../../store/reducers/types";
-import { View } from "react-native";
+import { View, StyleSheet, Text, ViewStyle } from "react-native";
 import CustomButton from "../UI/CustomButton";
 import CustomInput from "../UI/CustomInput";
 import SelectCategories from "../common/SelectCategories";
@@ -17,19 +16,25 @@ import { CalendarList } from "react-native-calendars";
 import setGoalsData from "../../api/firebase/goals/setGoalsData";
 import { RootState } from "../../store";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
+import Goal from "./Goal";
 
 const GoalAdd = () => {
   const init: IGoalAdd = {
     title: "",
     cost: "",
+    expireDate: "",
+    selectedCategories: "",
   };
   const { selectedCategories } = useSelector(
-    (store: RootState) => store.selectCategories as ISelectCategories
+    (store: RootState) => store.selectCategories
   );
+
   const dispatch = useDispatch();
   const today = new Date();
 
   const [calendarWidth, setCalendarWidth] = useState(0);
+  const [showCalendarList, setShowCalendarList] = useState(false);
   const [selectedDay, setSelectedDay] = useState<any>(today);
 
   const onLayout = useCallback((e: any) => {
@@ -38,17 +43,19 @@ const GoalAdd = () => {
   }, []);
   const handleDayPress = useCallback((day: any) => {
     setSelectedDay(day.dateString);
+    setShowCalendarList(false);
   }, []);
   const minDate = format(today, "yyyy-MM-dd");
   const expireDate = format(selectedDay, "yyyy-MM-dd");
+  const formattedDate = format(expireDate, "dd MMMM yyyy");
 
   const onSubmitHandler = async (values: IGoalAdd) => {
     try {
       const data = {
         ...values,
         cost: +values.cost,
-        selectedCategories,
-        expireDate,
+        expireDate: expireDate,
+        selectedCategories: selectedCategories,
       };
       console.log(data);
       setGoalsData(data);
@@ -63,11 +70,12 @@ const GoalAdd = () => {
       console.log("New goal was created");
     } catch (error: any) {
       console.log("Bad request", error);
+    } finally {
+      dispatch({
+        type: ModalCloserActionType.MODAL_CLOSE,
+        payload: false,
+      });
     }
-    dispatch({
-      type: ModalCloserActionType.MODAL_CLOSE,
-      payload: false,
-    });
   };
 
   const checkUpForm = yup.object({
@@ -83,18 +91,8 @@ const GoalAdd = () => {
     onSubmit: onSubmitHandler,
     validationSchema: checkUpForm,
   });
-  const {
-    values,
-    touched,
-    errors,
-    handleSubmit,
-    handleChange,
-    handleReset,
-    setFieldValue,
-  } = formik;
-  const handleFocus = useCallback(() => {
-    setFieldValue("cost", "");
-  }, [setFieldValue]);
+  const { values, touched, errors, handleSubmit, handleChange, handleReset } =
+    formik;
   const iconsList = useMemo(
     () => [
       { id: "Transport" },
@@ -108,6 +106,9 @@ const GoalAdd = () => {
     []
   );
 
+  const goalPosition: ViewStyle = showCalendarList
+    ? { alignItems: "flex-start" }
+    : { alignItems: "center" };
   return (
     <KeyboardAwareScrollView
       extraHeight={100}
@@ -116,27 +117,18 @@ const GoalAdd = () => {
       keyboardOpeningTime={0}
       onLayout={onLayout}
     >
-      {calendarWidth > 0 && (
-        <View style={{ height: 320 }}>
-          <CalendarList
-            pastScrollRange={0}
-            futureScrollRange={6}
-            showScrollIndicator={true}
-            horizontal={true}
-            calendarWidth={calendarWidth}
-            minDate={minDate}
-            onDayPress={handleDayPress}
-            firstDay={1}
-            theme={{ calendarBackground: "transparent" }}
-            markedDates={{
-              [selectedDay]: {
-                selected: true,
-                selectedColor: "rgba(126,76,215,.75)",
-              },
-            }}
-          />
-        </View>
-      )}
+      <Text style={styles.titleText}>Future goal</Text>
+      <View style={goalPosition}>
+        <Goal
+          style={[{ marginHorizontal: 3 }]}
+          title={values.title.length > 0 ? values.title : "Future title"}
+          cost={+values.cost}
+          expireDate={expireDate}
+          selectedCategories={selectedCategories}
+          id={""}
+        />
+      </View>
+
       <CustomInput
         label="Enter your title"
         field="title"
@@ -150,13 +142,41 @@ const GoalAdd = () => {
         label="Enter goals' cost"
         field="cost"
         inputMode="numeric"
-        onFocus={handleFocus}
         keyboardType="number-pad"
         value={values.cost}
         onChange={handleChange("cost")}
         clientSideError={errors.cost}
         touched={touched.cost}
       />
+
+      <Text style={{ marginBottom: 5, marginTop: 0 }}>Select expire date</Text>
+      <CustomButton
+        style={styles.expireDateButton}
+        title={formattedDate}
+        theme="none"
+        onPress={() => setShowCalendarList(true)}
+      />
+      {calendarWidth > 0 && showCalendarList && (
+        <ComponentsLayout style={styles.calendarLayout}>
+          <CalendarList
+            pastScrollRange={0}
+            futureScrollRange={6}
+            showScrollIndicator={true}
+            horizontal={true}
+            calendarWidth={255}
+            minDate={minDate}
+            onDayPress={handleDayPress}
+            firstDay={1}
+            theme={{ calendarBackground: "transparent" }}
+            markedDates={{
+              [selectedDay]: {
+                selected: true,
+                selectedColor: "rgba(126,76,215,.75)",
+              },
+            }}
+          />
+        </ComponentsLayout>
+      )}
       <SelectCategories title="Select category of goal" icons={iconsList} />
       <CustomButton title={"Add goal"} theme="primary" onPress={handleSubmit} />
     </KeyboardAwareScrollView>
@@ -164,3 +184,27 @@ const GoalAdd = () => {
 };
 
 export default GoalAdd;
+
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 18,
+    fontFamily: "Quicksand_700Bold",
+  },
+  expireDateButton: {
+    width: "100%",
+    borderRadius: 10,
+    borderColor: "rgba(0,0,0,0.5)",
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  calendarLayout: {
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    height: 320,
+    width: 250,
+    position: "absolute",
+    left: 115,
+    top: 10,
+    zIndex: 999,
+  },
+});

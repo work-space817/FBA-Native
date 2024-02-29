@@ -8,14 +8,12 @@ import GoalAdd from "./GoalAdd";
 const GoalEmpty = memo(() => {
   return (
     <ComponentsLayout style={styles.layout}>
-      <View>
-        <CustomModal
-          title={"New Goal"}
-          customActive={<GoalSVG id="Empty" width="40" height="40" />}
-        >
-          <GoalAdd />
-        </CustomModal>
-      </View>
+      <CustomModal
+        title={"New Goal"}
+        customActive={<GoalSVG id="Empty" width="40" height="40" />}
+      >
+        <GoalAdd />
+      </CustomModal>
       <View>
         <Text style={styles.title}>New goal</Text>
       </View>

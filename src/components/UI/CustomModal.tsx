@@ -49,6 +49,7 @@ const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
           onPress={() => setModalVisible(true)}
           title={""}
           theme="none"
+          style={{ borderWidth: 0 }}
         >
           {customActive}
         </CustomButton>
@@ -66,7 +67,6 @@ const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    // backgroundColor: "rgba(0,0,0,0.25)",
     backgroundColor: "rgba(115,0,245,.15)",
     justifyContent: "center",
     alignItems: "center",

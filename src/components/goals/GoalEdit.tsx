@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     width: "55%",
   },
   calendarLayout: {
+    paddingHorizontal: 0,
     height: 320,
     width: 250,
     position: "absolute",

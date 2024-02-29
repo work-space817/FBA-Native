@@ -18,12 +18,10 @@ import DateFormater from "../../helpers/functions/dateFormater";
 import { format } from "date-fns";
 
 const Goal: FC<IGoal> = memo(
-  ({ cost, expireDate, title, selectedCategories, id }) => {
+  ({ cost, expireDate, title, selectedCategories, id, style }) => {
     const dispatch = useDispatch();
-    // const location = useLocation();
-    // const navigate = useNavigate();
-    const now = new Date().getTime();
 
+    const now = new Date().getTime();
     const compareDate = DateFormater(expireDate);
     const formattedDate = format(expireDate, "dd.MM.yyyy");
 
@@ -40,11 +38,7 @@ const Goal: FC<IGoal> = memo(
           payload: currentGoalData,
         });
       }
-      //
-      // if (location.pathname !== "/transactions") {
-      //   navigate("/transactions");
-      // }
-    }, [`navigate`, id, dispatch]);
+    }, [id, dispatch]);
 
     const expiredLayout: StyleProp<ViewStyle> =
       now > compareDate ? styles.expiredLayout : null;
@@ -54,7 +48,7 @@ const Goal: FC<IGoal> = memo(
 
     return (
       <TouchableOpacity activeOpacity={1} onPress={selectGoal}>
-        <ComponentsLayout style={[styles.layout, expiredLayout]}>
+        <ComponentsLayout style={[styles.layout, style, expiredLayout]}>
           <View style={styles.distance}>
             <Text style={styles.cost}>{cost} UAH</Text>
             <View style={styles.date}>

@@ -15,6 +15,7 @@ const Transaction: FC<ITransaction> = ({
   selectedCategories,
   transactionType,
   id,
+  style,
 }) => {
   const transformTitle = () => {
     if (transactionTitle.length > 20) {
@@ -26,15 +27,15 @@ const Transaction: FC<ITransaction> = ({
     transactionType === "Income transaction" ? "+" : "-";
 
   return (
-    <CustomButtonWithoutFeedback title={""} style={styles.layout}>
+    <CustomButtonWithoutFeedback title={""} style={[styles.layout, style]}>
       <View style={styles.titleLayout}>
         <TransactionSVG id={transactionType} width={18} height={18} />
         <Text>{transactionTime}</Text>
         <SelectCategoriesSVG id={selectedCategories as string} />
-        <Text style={styles.transactionTitleText}>{transformTitle()}</Text>
+        <Text>{transformTitle()}</Text>
       </View>
       <View style={styles.valueLayout}>
-        <Text style={styles.transactionTitleText}>
+        <Text style={styles.transactionValueStyle}>
           {transactionValueType} {transactionValue} &#8372;
         </Text>
       </View>
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
   },
-  transactionTitleText: {
+  transactionValueStyle: {
     fontSize: 14,
     fontFamily: "Quicksand_600SemiBold",
   },

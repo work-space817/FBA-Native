@@ -9,7 +9,7 @@ const ComponentsLayout: FC<IComponentsLayout> = ({
   onLayout,
 }) => {
   return (
-    <View onLayout={onLayout} style={[styles.layout, [style]]}>
+    <View onLayout={onLayout} style={[styles.layout, style]}>
       {children}
     </View>
   );

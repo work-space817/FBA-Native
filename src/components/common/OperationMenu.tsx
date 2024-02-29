@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 import CustomButton from "../UI/CustomButton";
 import CustomModal from "../UI/CustomModal";
 import GoalAdd from "../goals/GoalAdd";
+import TransactionAdd from "../transactions/TransactionAdd";
 
 const OperationMenu = () => {
   return (
@@ -15,10 +16,10 @@ const OperationMenu = () => {
       </View>
       <View style={styles.children}>
         <CustomModal title={"Add income"}>
-          <Text>Next</Text>
+          <TransactionAdd transactionType={"Income transaction"} />
         </CustomModal>
         <CustomModal title={"Add outcome"}>
-          <Text>Next</Text>
+          <TransactionAdd transactionType={"Outcome transaction"} />
         </CustomModal>
       </View>
     </View>
