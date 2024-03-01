@@ -5,6 +5,7 @@ export interface ITransactionAdd {
   transactionValue: number | string;
   transactionTime: string;
   transactionDate: string;
+  transactionType: string;
   selectedCategories: string;
 }
 

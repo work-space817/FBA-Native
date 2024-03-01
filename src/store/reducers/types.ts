@@ -43,9 +43,6 @@ export interface IUserBalance {
 }
 export enum UserBalanceActionType {
   SET_BALANCE = "SET_BALANCE",
-  SET_CURRENT_BALANCE = "SET_CURRENT_BALANCE",
-  SET_INCOME_BALANCE = "SET_INCOME_BALANCE",
-  SET_OUTCOME_BALANCE = "SET_OUTCOME_BALANCE",
   UPDATE_BALANCE = "UPDATE_BALANCE",
 }
 export interface ITransactionList {

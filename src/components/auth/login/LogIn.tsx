@@ -35,6 +35,7 @@ const LogIn = () => {
       await setAuthToken(logInResult);
       dispatch({ type: AuthUserActionType.LOGIN_USER });
       navigate("HomeScreen");
+      handleReset(values);
     } catch (error: any) {
       console.log(error);
       const code = error.code;
@@ -68,8 +69,15 @@ const LogIn = () => {
     onSubmit: onSubmitHandler,
     validationSchema: checkUpForm,
   });
-  const { touched, errors, values, handleSubmit, handleChange, setFieldError } =
-    formik;
+  const {
+    touched,
+    errors,
+    values,
+    handleSubmit,
+    handleChange,
+    handleReset,
+    setFieldError,
+  } = formik;
 
   return (
     <View style={styles.container}>
@@ -84,6 +92,7 @@ const LogIn = () => {
           clientSideError={errors.email}
           touched={touched.email}
           placeholder="exampleMail@mail.com"
+          autoCapitalize={"none"}
         />
         <CustomInput
           label="Password"

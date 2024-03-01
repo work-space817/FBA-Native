@@ -4,8 +4,9 @@ import { PieChart } from "react-native-gifted-charts";
 import PieDiagramLabels from "./PieDiagramLabels";
 import GoalPieDiagramLegend from "./GoalPieDiagramLegend";
 import CustomLoadingAnimation from "../../../UI/CustomLoadingAnimation";
+import { memo } from "react";
 
-const PieDiagram = () => {
+const PieDiagram = memo(() => {
   const {
     fetchGoalsData,
     outterData,
@@ -55,59 +56,69 @@ const PieDiagram = () => {
     <>
       {!fetchGoalsData ? (
         <>
-          <PieDiagramLabels
-            labelState={"active"}
-            goalGroup={activeGroup}
-            totalItems={totalItems}
-          />
-          <PieDiagramLabels
-            labelState={"expired"}
-            goalGroup={expireGroup}
-            totalItems={totalItems}
-          />
-          <View style={styles.outterPieLayout}>
-            <PieChart
-              data={outterPieData}
-              donut
-              showGradient
-              focusOnPress
-              radius={95}
-              strokeWidth={5}
-              strokeColor="white"
-              innerRadius={70}
-              centerLabelComponent={() => {
-                return (
-                  <View style={styles.innerPieLayout}>
-                    <PieChart
-                      data={innerPieData}
-                      onPress={() => {}}
-                      focusOnPress
-                      radius={63}
-                      showText
-                      textColor="black"
-                      textSize={8}
-                      strokeWidth={5}
-                      strokeColor="white"
-                    />
-                  </View>
-                );
-              }}
-            />
-          </View>
-
-          <GoalPieDiagramLegend
-            activeGroupByCategory={activeGroupByCategory}
-            expireGroupByCategory={expireGroupByCategory}
-          />
+          {outterData.length > 0 ? (
+            <>
+              <PieDiagramLabels
+                labelState={"active"}
+                goalGroup={activeGroup}
+                totalItems={totalItems}
+              />
+              <PieDiagramLabels
+                labelState={"expired"}
+                goalGroup={expireGroup}
+                totalItems={totalItems}
+              />
+              <View style={styles.outterPieLayout}>
+                <PieChart
+                  data={outterPieData}
+                  donut
+                  showGradient
+                  focusOnPress
+                  radius={95}
+                  strokeWidth={5}
+                  strokeColor="white"
+                  innerRadius={70}
+                  centerLabelComponent={() => {
+                    return (
+                      <View style={styles.innerPieLayout}>
+                        <PieChart
+                          data={innerPieData}
+                          onPress={() => {}}
+                          focusOnPress
+                          radius={63}
+                          showText
+                          textColor="black"
+                          textSize={8}
+                          strokeWidth={5}
+                          strokeColor="white"
+                        />
+                      </View>
+                    );
+                  }}
+                />
+              </View>
+              <GoalPieDiagramLegend
+                activeGroupByCategory={activeGroupByCategory}
+                expireGroupByCategory={expireGroupByCategory}
+              />
+            </>
+          ) : (
+            <View style={styles.loadingLayout}>
+              <Text style={styles.textDiagram}>
+                Please, create at least 1 goal
+              </Text>
+              <CustomLoadingAnimation />
+            </View>
+          )}
         </>
       ) : (
-        <View style={{ justifyContent: "center", height: 300, width: 300 }}>
+        <View style={styles.loadingLayout}>
           <CustomLoadingAnimation />
         </View>
       )}
     </>
   );
-};
+});
 
 export default PieDiagram;
 
@@ -119,5 +130,14 @@ const styles = StyleSheet.create({
   innerPieLayout: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  loadingLayout: {
+    justifyContent: "center",
+    height: 200,
+  },
+  textDiagram: {
+    fontSize: 18,
+    fontFamily: "Quicksand_700Bold",
+    textAlign: "center",
   },
 });

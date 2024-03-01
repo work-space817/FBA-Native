@@ -30,7 +30,6 @@ const SignUp = () => {
         values.email,
         values.password
       );
-      console.log(values);
       await setUserAuth(values, SignUpResult);
       dispatch({ type: AuthUserActionType.LOGIN_USER });
       const userBalance: IBalance = {
@@ -39,7 +38,9 @@ const SignUp = () => {
         outcomingBalance: 0,
       };
       await setUserBalance(userBalance);
+      console.log("userBalance: ", userBalance);
       navigate("HomeScreen");
+      handleReset(values);
     } catch (error: any) {
       console.log("error: ", error);
       const code = error.code;
@@ -93,6 +94,7 @@ const SignUp = () => {
     values,
     handleSubmit,
     handleChange,
+    handleReset,
     setFieldValue,
     setFieldError,
   } = formik;
@@ -110,6 +112,7 @@ const SignUp = () => {
           clientSideError={errors.email}
           touched={touched.email}
           placeholder="exampleMail@mail.com"
+          autoCapitalize={"none"}
         />
         <CustomInput
           label="Password"

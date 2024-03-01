@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { auth } from "../../api/firebase/config";
 import getUserInformation from "../../api/firebase/user/userInfo/getUserInformation";
 import { ISignUp } from "../auth/registration/types";
+import { format } from "date-fns";
 
 const CardUI = () => {
-  const [userData, setUserData] = useState<ISignUp>();
+  const [userData, setUserData] = useState<ISignUp>({
+    email: "",
+    password: "",
+    currentBalance: "",
+  });
 
   useEffect(() => {
     const userInfo = async () => {
@@ -15,14 +19,7 @@ const CardUI = () => {
     userInfo();
   }, []);
 
-  const currentDate = () => {
-    const date = new Date();
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString();
-    const formattedDate = `${day}.${month}.${year}`;
-    return formattedDate;
-  };
+  const today = format(new Date(), "dd.MM.yyyy");
   const randomDigit = () => {
     let digitArray = [];
     for (let i = 0; i < 16; i++) {
@@ -33,6 +30,13 @@ const CardUI = () => {
       }
     }
     return digitArray;
+  };
+
+  const limitedUserEmail = () => {
+    if (userData.email.length > 18) {
+      return userData?.email.substring(0, 18) + "...";
+    }
+    return userData?.email;
   };
   return (
     <>
@@ -49,11 +53,11 @@ const CardUI = () => {
         <View style={styles.infoLayout}>
           <View style={styles.columnLayout}>
             <Text style={styles.textSmall}>Card holder</Text>
-            <Text style={styles.textMedium}>{userData?.email}</Text>
+            <Text style={styles.textMedium}>{limitedUserEmail()}</Text>
           </View>
           <View style={styles.columnLayout}>
             <Text style={styles.textSmall}>Current date</Text>
-            <Text style={styles.textMedium}>{currentDate()}</Text>
+            <Text style={styles.textMedium}>{today}</Text>
           </View>
         </View>
       </View>

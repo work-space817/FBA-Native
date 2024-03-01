@@ -29,11 +29,6 @@ const UserBalance = () => {
         "Сталася помилка при отриманні балансу користувача:",
         error
       );
-    } finally {
-      dispatch({
-        type: UserBalanceActionType.UPDATE_BALANCE,
-        payload: false,
-      });
     }
   };
   useEffect(() => {

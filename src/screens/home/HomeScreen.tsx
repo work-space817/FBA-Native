@@ -13,6 +13,7 @@ import {
   UserBalanceActionType,
 } from "../../store/reducers/types";
 import GoalPieDiagram from "../../components/diagrams/goalDiagrams/goalPieDiagram/GoalPieDiagram";
+import ExchangeRateLinear from "../../components/diagrams/exchangeRate/ExchangeRateLinear";
 
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
@@ -53,7 +54,7 @@ export default function HomeScreen({ navigation }: any) {
       <OperationMenu />
       <GoalSlider />
       <Card />
-      {/* <ExchangeRateLinear /> */}
+      <ExchangeRateLinear />
       <GoalPieDiagram />
     </DefaultLayout>
   );

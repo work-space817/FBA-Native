@@ -8,6 +8,7 @@ import {
   ISelectCategories,
   IUserBalance,
   ModalCloserActionType,
+  SelectCategoriesActionType,
   TransactionListActionType,
   UserBalanceActionType,
 } from "../../store/reducers/types";
@@ -36,6 +37,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
     transactionTime: "",
     transactionDate: "",
     selectedCategories: "",
+    transactionType: transactionType,
   };
   const { selectedCategories } = useSelector(
     (store: any) => store.selectCategories as ISelectCategories
@@ -53,8 +55,8 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
 
   const [selectedDay, setSelectedDay] = useState<any>(today);
 
+  const [currentTimeIOS, setCurrentTimeIOS] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(defaultTime);
-  const [currentTime, setCurrentTime] = useState(new Date());
 
   const onLayout = useCallback((e: any) => {
     const { width } = e.nativeEvent.layout;
@@ -65,45 +67,50 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
     setShowCalendarList(false);
   }, []);
 
-  const handleTimePress = useCallback(
+  const handleTimePressIOS = useCallback(
     (event: DateTimePickerEvent, time: any) => {
-      setCurrentTime(time);
+      setCurrentTimeIOS(time);
     },
     []
   );
-  const handleConfirmTime = () => {
+  const handleConfirmTimeIOS = () => {
     setShowTimePicker(false);
-    const formattedTime = format(currentTime, "HH:mm");
+    const formattedTime = format(currentTimeIOS, "HH:mm");
     setSelectedTime(formattedTime);
   };
-
+  const handleConfirmTimeAndroid = (
+    event: DateTimePickerEvent,
+    selectedTime: Date | undefined
+  ) => {
+    setShowTimePicker(false);
+    if (selectedTime !== undefined) {
+      const formattedTime = format(selectedTime, "HH:mm");
+      setSelectedTime(formattedTime);
+    }
+  };
   const maxDate = format(today, "yyyy-MM-dd");
+  const transactionDate = format(selectedDay, "yyyy-MM-dd");
   const formattedDate = format(selectedDay, "dd MMMM yyyy");
 
-  const onSubmitHandler = async (values: ITransactionAdd) => {};
-  const checkUpForm = yup.object({
-    transactionTitle: yup.string().required("Field should not be empty"),
-    transactionValue: yup
-      .number()
-      .positive("Value can not be less than 0")
-      .required("Field should not be empty"),
-    transactionTime: yup.string().required("Field should not be empty"),
-    transactionDate: yup.string().required("Field should not be empty"),
-  });
-  const formik = useFormik({
-    initialValues: init,
-    onSubmit: onSubmitHandler,
-    validationSchema: checkUpForm,
-  });
-  const {
-    values,
-    touched,
-    errors,
-    handleSubmit,
-    handleChange,
-    handleReset,
-    setFieldValue,
-  } = formik;
+  const userBalance = () => {
+    if (transactionType === "Income transaction") {
+      const changedBalance = {
+        currentBalance: balance.currentBalance + +values.transactionValue,
+        incomingBalance: balance.incomingBalance + +values.transactionValue,
+        outcomingBalance: balance.outcomingBalance,
+      };
+      setUserBalance(changedBalance);
+    }
+    if (transactionType === "Outcome transaction") {
+      const changedBalance = {
+        currentBalance: balance.currentBalance - +values.transactionValue,
+        incomingBalance: balance.incomingBalance,
+        outcomingBalance: balance.outcomingBalance + +values.transactionValue,
+      };
+      setUserBalance(changedBalance);
+    }
+  };
+
   const iconsIncomeList = useMemo(
     () => [
       { item: <SelectCategoriesSVG id={"Salary"} />, id: "Salary" },
@@ -129,7 +136,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         item: <SelectCategoriesSVG id={"Entertainment"} />,
         id: "Entertainment",
       },
-      { item: <SelectCategoriesSVG id={"Other"} />, id: "Other" },
+      { item: <SelectCategoriesSVG id={""} />, id: "Other" },
     ],
     []
   );
@@ -141,22 +148,18 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
           <DateTimePicker
             themeVariant="light"
             mode="time"
-            value={currentTime}
-            onChange={handleTimePress}
             display="spinner"
+            value={currentTimeIOS}
+            onChange={handleTimePressIOS}
+            minuteInterval={5}
             style={{
               width: "100%",
             }}
           />
           <CustomButton
             title="Confirm"
-            onPress={handleConfirmTime}
-            style={{
-              width: "100%",
-              paddingVertical: 10,
-              borderTopRightRadius: 0,
-              borderTopLeftRadius: 0,
-            }}
+            onPress={handleConfirmTimeIOS}
+            style={styles.timePickerButton}
             theme="primary"
           />
         </View>
@@ -164,13 +167,63 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
     ) : (
       <DateTimePicker
         mode="time"
-        value={currentTime}
-        onChange={handleTimePress}
         display="spinner"
+        value={new Date()}
+        onChange={handleConfirmTimeAndroid}
+        minuteInterval={5}
         negativeButton={{ label: "Cancel" }}
       />
     );
+  const onSubmitHandler = (values: ITransactionAdd) => {
+    try {
+      userBalance();
+      const transactionData = {
+        ...values,
+        transactionValue: +values.transactionValue,
+        transactionTime: selectedTime,
+        transactionDate: transactionDate,
+        selectedCategories: selectedCategories,
+      };
+      setTransactionData(transactionData);
+      console.log("Нова транзакція успішно створена: ", transactionData);
+      const updateTransactionList = dispatch({
+        type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
+      });
+      const updateBalance = dispatch({
+        type: UserBalanceActionType.UPDATE_BALANCE,
+      });
+      const modalCloser = dispatch({
+        type: ModalCloserActionType.MODAL_CLOSE,
+        payload: true,
+      });
+      const unselectedCategory = dispatch({
+        type: SelectCategoriesActionType.SELECT_CATEGORIES,
+        payload: null,
+      });
 
+      handleReset(values);
+    } catch (error: any) {
+      console.log("Bad request", error);
+    }
+    const modalCloser = dispatch({
+      type: ModalCloserActionType.MODAL_CLOSE,
+      payload: false,
+    });
+  };
+  const checkUpForm = yup.object({
+    transactionTitle: yup.string().required("Field should not be empty"),
+    transactionValue: yup
+      .number()
+      .positive("Value can not be less than 0")
+      .required("Field should not be empty"),
+  });
+  const formik = useFormik({
+    initialValues: init,
+    onSubmit: onSubmitHandler,
+    validationSchema: checkUpForm,
+  });
+  const { values, touched, errors, handleSubmit, handleChange, handleReset } =
+    formik;
   return (
     <KeyboardAwareScrollView
       extraHeight={75}
@@ -273,7 +326,11 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
           icons={iconsOutcomeList}
         />
       )}
-      <CustomButton title={"Add goal"} theme="primary" onPress={handleSubmit} />
+      <CustomButton
+        title={"Add transaction"}
+        theme="primary"
+        onPress={handleSubmit}
+      />
     </KeyboardAwareScrollView>
   );
 };
@@ -316,6 +373,12 @@ const styles = StyleSheet.create({
     left: 5,
     top: 85,
     zIndex: 999,
+  },
+  timePickerButton: {
+    width: "100%",
+    paddingVertical: 10,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
   },
   transactionView: {
     borderColor: "grey",

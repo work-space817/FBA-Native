@@ -6,7 +6,6 @@ import {
   Quicksand_700Bold,
 } from "@expo-google-fonts/quicksand";
 import { useFonts } from "expo-font";
-import { Text } from "react-native";
 
 const AndroidFont = () => {
   const [fontsLoaded] = useFonts({

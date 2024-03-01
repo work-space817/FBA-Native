@@ -17,14 +17,14 @@ const PieDiagramLabels: FC<IPieDiagramLabels> = ({
     labelState === "expired" ? styles.labelExpired : styles.labelActive;
 
   const amountItems = goalGroup.length > 0 ? goalGroup[0].summaryCount : 0;
-  const percent = ((amountItems / totalItems) * 100).toFixed(2);
-
+  const percent = (amountItems / totalItems) * 100;
+  const isPercent = isNaN(percent) ? 0 : percent.toFixed(2);
   return (
     <View style={[styles.labels, goalStateStyle]}>
       <Text
         style={styles.titleText}
       >{`${amountItems} ${labelState} goals`}</Text>
-      <Text style={styles.percent}>({percent} %)</Text>
+      <Text style={styles.percent}>({isPercent} %)</Text>
     </View>
   );
 };

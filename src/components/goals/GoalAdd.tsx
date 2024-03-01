@@ -6,6 +6,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import {
   GoalListActionType,
   ModalCloserActionType,
+  SelectCategoriesActionType,
 } from "../../store/reducers/types";
 import { View, StyleSheet, Text, ViewStyle } from "react-native";
 import CustomButton from "../UI/CustomButton";
@@ -67,13 +68,17 @@ const GoalAdd = () => {
         type: ModalCloserActionType.MODAL_CLOSE,
         payload: true,
       });
+      const unselectedCategory = dispatch({
+        type: SelectCategoriesActionType.SELECT_CATEGORIES,
+        payload: null,
+      });
       console.log("New goal was created");
     } catch (error: any) {
       console.log("Bad request", error);
     } finally {
       dispatch({
         type: ModalCloserActionType.MODAL_CLOSE,
-        payload: false,
+        payload: true,
       });
     }
   };

@@ -16,6 +16,7 @@ interface CustomInputProps extends TextInputProps {
   clientSideError?: string;
   touched?: boolean;
   disabled?: boolean;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
 }
 
 const CustomInput: FC<CustomInputProps> = memo(
@@ -33,6 +34,7 @@ const CustomInput: FC<CustomInputProps> = memo(
     onFocus,
     autoComplete = "",
     disabled,
+    autoCapitalize,
   }) => {
     return (
       <View style={styles.layout}>
@@ -51,7 +53,7 @@ const CustomInput: FC<CustomInputProps> = memo(
           secureTextEntry={isSecureTextEntry}
           keyboardType={keyboardType}
           editable={!disabled}
-          blurOnSubmit={true}
+          autoCapitalize={autoCapitalize}
         />
         {clientSideError && touched && (
           <Text style={styles.errorText}>{clientSideError}</Text>
