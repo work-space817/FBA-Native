@@ -1,5 +1,12 @@
 import * as yup from "yup";
-import { Platform, StyleSheet, Text, View, ViewStyle } from "react-native";
+import {
+  LayoutChangeEvent,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { ITransactionAdd } from "./types";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,7 +65,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
   const [currentTimeIOS, setCurrentTimeIOS] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(defaultTime);
 
-  const onLayout = useCallback((e: any) => {
+  const onLayout = useCallback((e: LayoutChangeEvent) => {
     const { width } = e.nativeEvent.layout;
     setCalendarWidth(width);
   }, []);

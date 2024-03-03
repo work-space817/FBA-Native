@@ -3,12 +3,11 @@ import AndroidFont from "./src/helpers/functions/AndroidFont";
 import Navigation from "./src/navigation/Navigation";
 import { Provider } from "react-redux";
 import { store } from "./src/store";
-import { enableScreens } from "react-native-screens";
 
 export default function App() {
   const fontsLoaded = AndroidFont();
   if (!fontsLoaded) {
-    return <Text>Loading...</Text>;
+    return <Text></Text>;
   }
 
   return (

@@ -1,15 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
 import getExchangeRate from "../../../api/currencyBeacon/getExchangeRate";
 import ComponentsLayout from "../../../screens/layouts/components/ComponentsLayout";
-import { DimensionValue, StyleSheet, Text, View } from "react-native";
+import {
+  DimensionValue,
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import LineDiagram from "./LineDiagram";
 import ExchangeRateList from "./ExchangeRateList";
 
 const ExchangeRateLinear = () => {
   const { loading, rateUSD, rateEUR } = ExchangeRateList();
-  console.log("loading: ", loading);
   const [customLayoutWidth, setCustomLayoutWidth] = useState<number>(0);
-  const handleCustomLayout = useCallback((width: any) => {
+  const handleCustomLayout = useCallback((e: LayoutChangeEvent) => {
+    const { width } = e.nativeEvent.layout;
     setCustomLayoutWidth(width);
   }, []);
   return (
