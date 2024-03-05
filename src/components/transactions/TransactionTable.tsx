@@ -25,6 +25,7 @@ import { parse } from "date-fns/parse";
 import { format } from "date-fns";
 import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
 import { useDispatch } from "react-redux";
+import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
 
 const TransactionTable = memo(() => {
   const defaulRequestLimit = 15;
@@ -113,7 +114,7 @@ const TransactionTable = memo(() => {
 
   useEffect(() => {
     const limitHeight = 63 * requestLimit;
-    // console.log("summary", limitHeight - (tableHeight + scrollPosition));
+    //! console.log("summary", limitHeight - (tableHeight + scrollPosition));
     if (limitHeight - (tableHeight + scrollPosition) < 500) {
       console.log("LIMIT");
       setRequestLimit(requestLimit + 5);
@@ -124,12 +125,17 @@ const TransactionTable = memo(() => {
     <ComponentsLayout style={[styles.layoutEnd]}>
       <View style={styles.layoutStickyHeader}>
         <Text style={styles.titleText}>Transaction History</Text>
-        <View style={{ width: "30%" }}>
+        <View style={{ width: "30%", flexDirection: "row", gap: 5 }}>
           <CustomInput
             style={{ height: 30 }}
             value={searchTransactionList}
             onChange={(e) => setSearchTransactionList(e)}
             placeholder={"Search"}
+          />
+          <CalendarWithRange
+            calendarWidth={350}
+            style={styles.calendarLayout}
+            buttonStyle={{ marginBottom: 10 }}
           />
         </View>
       </View>
@@ -161,9 +167,11 @@ export default TransactionTable;
 const styles = StyleSheet.create({
   layoutStickyHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
+    gap: 40,
     paddingTop: 5,
-    paddingHorizontal: 12,
+    paddingHorizontal: 5,
+    zIndex: 999,
   },
   layoutEnd: {
     paddingHorizontal: 5,
@@ -188,5 +196,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "rgba(0,0,0,0.2)",
     borderStyle: "solid",
+  },
+  calendarLayout: {
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    width: 250,
+    position: "absolute",
+    left: -100,
+    top: 20,
+    zIndex: 999,
   },
 });

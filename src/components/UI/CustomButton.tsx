@@ -25,7 +25,7 @@ const CustomButton: FC<ICustomButtom> = memo(
         disabled={disabled}
       >
         {children}
-        <Text style={[styles.text, textStyles]}>{title}</Text>
+        {title ? <Text style={[styles.text, textStyles]}>{title}</Text> : null}
       </TouchableOpacity>
     );
   }

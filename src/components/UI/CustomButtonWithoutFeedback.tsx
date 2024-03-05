@@ -29,7 +29,7 @@ const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({
     <TouchableWithoutFeedback onPress={onPress} disabled={disabled}>
       <View style={[styles.button, style, buttonStyles]}>
         {children}
-        <Text style={[styles.text, textStyles]}>{title}</Text>
+        {title ? <Text style={[styles.text, textStyles]}>{title}</Text> : null}
       </View>
     </TouchableWithoutFeedback>
   );

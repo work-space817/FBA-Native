@@ -8,6 +8,7 @@ import { ModalCloserReducer } from "./reducers/common/ModalCloserReducer";
 import { SelectGoalReducer } from "./reducers/goalReducers/SelectGoalReducer";
 import { TransactionListReducer } from "./reducers/transactionReducers/TransactionListReducer";
 import { ScrollViewPositionReducer } from "./reducers/common/ScrollViewPositionReducer";
+import { CalendarDatesRangeReducer } from "./reducers/calendarReducers/CalendarDatesRangeReducer";
 export const rootReducer = combineReducers({
   auth: AuthReducer,
   selectCategories: SelectCategoriesReducer,
@@ -16,9 +17,8 @@ export const rootReducer = combineReducers({
   goalList: GoalListReducer,
   transactionList: TransactionListReducer,
   scrollViewPosition: ScrollViewPositionReducer,
-  //   modalClose: ModalCloserReducer,
   userBalance: UserBalanceReducer,
-  //   datesRange: DatesRange,
+  datesRange: CalendarDatesRangeReducer,
   //   monthAndYearRange: MonthAndYearRange,
 });
 

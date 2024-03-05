@@ -13,7 +13,7 @@ import CustomButton from "../UI/CustomButton";
 import CustomInput from "../UI/CustomInput";
 import SelectCategories from "../common/SelectCategories";
 import { format } from "date-fns";
-import { CalendarList } from "react-native-calendars";
+import { CalendarList, DateData } from "react-native-calendars";
 import setGoalsData from "../../api/firebase/goals/setGoalsData";
 import { RootState } from "../../store";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -42,7 +42,7 @@ const GoalAdd = () => {
     const { width } = e.nativeEvent.layout;
     setCalendarWidth(width);
   }, []);
-  const handleDayPress = useCallback((day: any) => {
+  const handleDayPress = useCallback((day: DateData) => {
     setSelectedDay(day.dateString);
     setShowCalendarList(false);
   }, []);

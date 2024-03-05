@@ -61,13 +61,12 @@ export enum ScrollViewPositionActionType {
   SET_POSITION = "SET_POSITION",
 }
 
-// export interface IDatesRange {
-//   ranges: { from: number; to: number };
-// }
-// export enum DatesRangeActionType {
-//   SET_DATES_RANGE = "SET_DATES_RANGE",
-//   SET_MONTH_AND_YEAR = "SET_MONTH_AND_YEAR",
-// }
+export interface ICalendarDatesRangeReducer {
+  datesRange: { startDate: string; endDate: string };
+}
+export enum ICalendarDatesRangeActionType {
+  SET_DATES_RANGE = "SET_DATES_RANGE",
+}
 // export interface IMonthAndYearRange {
 //   selectedMonthAndYear: { month: number; year: number };
 // }
