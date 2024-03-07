@@ -22,6 +22,9 @@ export const CalendarDatesRangeReducer = (
         datesRange: action.payload,
       };
     }
+    case ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE: {
+      return state;
+    }
     default:
       return state;
   }

@@ -28,13 +28,18 @@ import { useDispatch } from "react-redux";
 import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
 
 const TransactionTable = memo(() => {
-  const defaulRequestLimit = 15;
-  const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
-  const { loading, amountTransaction } = TransactionList(requestLimit);
   const { transactionList, isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
+  const { datesRange } = useSelector((store: RootState) => store.datesRange);
+  console.log("datesRange: ", datesRange);
+  const defaulRequestLimit = 15;
+  const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
+  const { loading, amountTransaction } = TransactionList(requestLimit);
   const [searchTransactionList, setSearchTransactionList] = useState("");
+  const [searchTransactionByDates, setSearchTransactionByDates] =
+    useState(false);
+  console.log("searchTransactionByDates: ", searchTransactionByDates);
   const [sortedList, setSortedList] = useState([...transactionList]);
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -52,6 +57,7 @@ const TransactionTable = memo(() => {
     if (searchTransactionList) {
       setRequestLimit(999);
     }
+    console.log("first");
     return sortedList.filter((transaction) =>
       transaction.transactionTitle
         .toLowerCase()
@@ -133,7 +139,6 @@ const TransactionTable = memo(() => {
             placeholder={"Search"}
           />
           <CalendarWithRange
-            calendarWidth={350}
             style={styles.calendarLayout}
             buttonStyle={{ marginBottom: 10 }}
           />

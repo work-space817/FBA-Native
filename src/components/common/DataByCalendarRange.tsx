@@ -8,17 +8,21 @@ import { format } from "date-fns";
 
 const DataByCalendarRange = () => {
   const { datesRange } = useSelector((store: RootState) => store.datesRange);
-  console.log("datesRange: ", datesRange.startDate);
+  // console.log("datesRange: ", datesRange);
+
+  const isEndDate = datesRange.endDate ? datesRange.endDate : 0;
+  console.log("isEndDate: ", isEndDate);
 
   const startingDate = format(datesRange.startDate, "d MMMM yyyy");
-  const endingDate = format(datesRange.endDate, "d MMMM yyyy");
+  const endingDate = format(isEndDate, "d MMMM yyyy");
+
+  const isEndingDate =
+    isEndDate !== 0 ? `${startingDate} - ${endingDate}` : `${startingDate}`;
 
   return (
     <ComponentsLayout style={styles.layout}>
-      <Text style={styles.titleText}>
-        {startingDate} - {endingDate}
-      </Text>
-      <CalendarWithRange calendarWidth={350} style={styles.calendarLayout} />
+      <Text style={styles.titleText}>{isEndingDate}</Text>
+      <CalendarWithRange style={styles.calendarLayout} />
     </ComponentsLayout>
   );
 };

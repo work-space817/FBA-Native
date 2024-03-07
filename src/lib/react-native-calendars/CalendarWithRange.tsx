@@ -8,27 +8,22 @@ import CustomButton from "../../components/UI/CustomButton";
 import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
 import { useDispatch } from "react-redux";
 import { ICalendarDatesRangeActionType } from "../../store/reducers/types";
+import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 
 interface ICalendarWithRange {
   buttonStyle?: ViewStyle;
   style: ViewStyle;
-  calendarWidth: number;
 }
 
-const CalendarWithRange: FC<ICalendarWithRange> = ({
-  buttonStyle,
-  style,
-  calendarWidth,
-}) => {
+const CalendarWithRange: FC<ICalendarWithRange> = ({ buttonStyle, style }) => {
   const dispatch = useDispatch();
   const today = new Date();
   const maxDate = format(today, "yyyy-MM-dd");
 
   const [selectedDates, setSelectedDates] = useState<MarkedDates>({});
   const [boundaryDates, setBoundaryDates] = useState({});
-  const [minDate, setMinDate] = useState<string>("");
-
   const [showCalendarList, setShowCalendarList] = useState(false);
+  // console.log("boundaryDates: ", boundaryDates);
   // console.log("selectedDates: ", selectedDates);
 
   let updatedSelectedDates = { ...selectedDates };
@@ -37,29 +32,42 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
   const onActive = () => {
     setShowCalendarList(true);
   };
-  const handleDayPress = (day: DateData) => {
-    const { dateString } = day;
-    setMinDate(dateString);
 
-    if (selectedKeys.length > 1) {
-      updatedSelectedDates = {};
-    }
+  const handleDayPress = (day: DateData) => {
+    updatedSelectedDates = {};
+    const { dateString } = day;
+    const startDate = dateString;
+    setBoundaryDates({ startDate });
+
     if (selectedKeys.length === 1) {
-      setMinDate("");
-      const startDate = selectedKeys[0];
-      const endDate = dateString;
-      setBoundaryDates({ startDate, endDate });
-      const datesBetween = getDatesBetweenRange(startDate, endDate);
+      const [existingDate] = selectedKeys;
+      if (new Date(existingDate) < new Date(dateString)) {
+        const startDate = existingDate;
+        const endDate = dateString;
+        addDatesBetweenRange(existingDate, dateString);
+        setBoundaryDates({ startDate, endDate });
+      } else {
+        const startDate = dateString;
+        const endDate = existingDate;
+        addDatesBetweenRange(dateString, existingDate);
+        setBoundaryDates({ startDate, endDate });
+      }
+    } else {
+      addSingleDate(dateString);
     }
-    updatedSelectedDates[dateString] = {
-      color: "rgba(126,76,215,.99)",
-      textColor: "rgba(255,255,255,.7)",
-      endingDay: true,
-    };
+
     setSelectedDates(updatedSelectedDates);
   };
 
-  const getDatesBetweenRange = (startDate: string, endDate: string) => {
+  const addSingleDate = (dateString: string) => {
+    updatedSelectedDates[dateString] = {
+      ...getMarkedDateObject,
+      startingDay: true,
+      endingDay: true,
+    };
+  };
+
+  const addDatesBetweenRange = (startDate: string, endDate: string) => {
     const dates: any[] = [];
     let currentDate = new Date(startDate);
 
@@ -68,18 +76,19 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    const rangeDates = dates.forEach((date) => {
-      updatedSelectedDates[date] = getMarkedDateObject();
+    dates.forEach((date) => {
+      updatedSelectedDates[date] = { ...getMarkedDateObject };
     });
     updatedSelectedDates[startDate].startingDay = true;
     updatedSelectedDates[endDate].endingDay = true;
     setSelectedDates(updatedSelectedDates);
+    return dates;
   };
 
-  const getMarkedDateObject = () => ({
+  const getMarkedDateObject: MarkingProps = {
     color: "rgba(126,76,215,.99)",
     textColor: "rgba(255,255,255,.7)",
-  });
+  };
 
   const onConfirm = () => {
     dispatch({
@@ -98,7 +107,7 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
       >
         <CalendarSVG id="Calendar" width={18} height={18} />
       </CustomButton>
-      {calendarWidth > 0 && showCalendarList && (
+      {showCalendarList && (
         <ComponentsLayout style={style}>
           <CalendarList
             pastScrollRange={6}
@@ -109,7 +118,6 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
             calendarHeight={320}
             onDayPress={handleDayPress}
             firstDay={1}
-            minDate={minDate}
             maxDate={maxDate}
             markingType={"period"}
             markedDates={selectedDates}
@@ -118,9 +126,9 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
           <CustomButton
             style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
             title={"Confirm"}
-            theme={Object.keys(boundaryDates).length < 2 ? "none" : "primary"}
+            theme={Object.keys(boundaryDates).length < 1 ? "none" : "primary"}
             onPress={onConfirm}
-            disabled={Object.keys(boundaryDates).length < 2}
+            disabled={Object.keys(boundaryDates).length < 1}
           />
         </ComponentsLayout>
       )}
