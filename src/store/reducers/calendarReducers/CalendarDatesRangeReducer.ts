@@ -5,11 +5,11 @@ import {
 } from "../types";
 
 const today = new Date();
-const defaultStartedDate = format(today, "yyyy-MM-01");
+const defaultStartedDate = format(0, "yyyy-MM-dd");
 const defaultEndedDate = format(today, "yyyy-MM-dd");
 
 const initState: ICalendarDatesRangeReducer = {
-  datesRange: { startDate: defaultStartedDate, endDate: defaultEndedDate },
+  datesRange: { startDate: 0, endDate: 0 },
 };
 export const CalendarDatesRangeReducer = (
   state = initState,
@@ -23,7 +23,13 @@ export const CalendarDatesRangeReducer = (
       };
     }
     case ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE: {
-      return state;
+      return {
+        ...state,
+        datesRange: {
+          startDate: defaultStartedDate,
+          endDate: defaultEndedDate,
+        },
+      };
     }
     default:
       return state;

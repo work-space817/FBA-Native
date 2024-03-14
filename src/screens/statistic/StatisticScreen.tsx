@@ -2,11 +2,8 @@ import DefaultLayout from "../layouts/default/DefaultLayout";
 import ComponentsLayout from "../layouts/components/ComponentsLayout";
 import DataByCalendarRange from "../../components/common/DataByCalendarRange";
 import { useDispatch } from "react-redux";
-import {
-  GoalSelectActionType,
-  GoalListActionType,
-  TransactionListActionType,
-} from "../../store/reducers/types";
+import { View } from "react-native";
+import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
 
 export default function StatisticScreen({ navigation }: any) {
   const dispatch = useDispatch();
@@ -19,7 +16,9 @@ export default function StatisticScreen({ navigation }: any) {
       onRefreshComponents={onRefreshComponents}
     >
       <DataByCalendarRange />
-      <ComponentsLayout style={{ height: 300, width: 300 }} />
+      <ComponentsLayout
+        style={{ height: 500, width: 350, zIndex: 1 }}
+      ></ComponentsLayout>
     </DefaultLayout>
   );
 }

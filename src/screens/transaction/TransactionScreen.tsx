@@ -4,10 +4,12 @@ import { useDispatch } from "react-redux";
 import {
   GoalListActionType,
   GoalSelectActionType,
+  ICalendarDatesRangeActionType,
   TransactionListActionType,
 } from "../../store/reducers/types";
 import GoalEdit from "../../components/goals/GoalEdit";
 import TransactionTable from "../../components/transactions/TransactionTable";
+import { useEffect } from "react";
 
 export default function TransactionScreen({ navigation }: any) {
   const dispatch = useDispatch();
@@ -22,8 +24,17 @@ export default function TransactionScreen({ navigation }: any) {
     dispatch({
       type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
     });
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
+    });
     console.log("Refreshing components...");
   };
+  useEffect(() => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
+    });
+  }, []);
+
   return (
     <DefaultLayout
       navigation={navigation}

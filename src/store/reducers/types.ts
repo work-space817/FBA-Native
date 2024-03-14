@@ -62,7 +62,7 @@ export enum ScrollViewPositionActionType {
 }
 
 export interface ICalendarDatesRangeReducer {
-  datesRange: { startDate: string; endDate?: string };
+  datesRange: { startDate: string | 0; endDate?: string | 0 };
 }
 export enum ICalendarDatesRangeActionType {
   SET_DEFAULT_DATES_RANGE = "SET_DEFAULT_DATES_RANGE",

@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -7,11 +8,14 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TextInputFocusEventData,
   View,
+  ViewStyle,
 } from "react-native";
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
+  ICalendarDatesRangeActionType,
   ITransactionList,
   ScrollViewPositionActionType,
 } from "../../store/reducers/types";
@@ -26,24 +30,26 @@ import { format } from "date-fns";
 import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
 import { useDispatch } from "react-redux";
 import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
+import GeneralSVG from "../../helpers/SVG/common/GeneralSVG";
+import CustomButton from "../UI/CustomButton";
+import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
 
 const TransactionTable = memo(() => {
   const { transactionList, isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
   const { datesRange } = useSelector((store: RootState) => store.datesRange);
-  console.log("datesRange: ", datesRange);
-  const defaulRequestLimit = 15;
+  // console.log("datesRange 1: ", datesRange);
+  const dispatch = useDispatch();
+  const defaulRequestLimit = 25;
   const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
   const { loading, amountTransaction } = TransactionList(requestLimit);
-  const [searchTransactionList, setSearchTransactionList] = useState("");
-  const [searchTransactionByDates, setSearchTransactionByDates] =
-    useState(false);
-  console.log("searchTransactionByDates: ", searchTransactionByDates);
+  const [searchTransactionTitle, setSearchTransactionTitle] = useState("");
+  const [searchedList, setSearchedList] = useState<ITransaction[]>([
+    ...transactionList,
+  ]);
   const [sortedList, setSortedList] = useState([...transactionList]);
   const [scrollPosition, setScrollPosition] = useState(0);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setSortedList(transactionList);
@@ -53,19 +59,39 @@ const TransactionTable = memo(() => {
     setRequestLimit(defaulRequestLimit);
   }, [isUpdatedList === true]);
 
-  const searchTransaction = useMemo(() => {
-    if (searchTransactionList) {
+  const searchTransactionByDates = () => {
+    setRequestLimit(999);
+    const searchedByDates = sortedList.filter((transaction) => {
+      if (datesRange.endDate) {
+        return (
+          transaction.transactionDate >= datesRange.startDate &&
+          transaction.transactionDate <= datesRange?.endDate
+        );
+      } else {
+        return transaction.transactionDate === datesRange.startDate;
+      }
+    });
+    console.log("datesRange 2: ", datesRange);
+    setSearchedList(searchedByDates);
+  };
+
+  const searchTransactionByTitle = useMemo(() => {
+    if (searchTransactionTitle) {
       setRequestLimit(999);
     }
-    console.log("first");
-    return sortedList.filter((transaction) =>
+    const searchedByTitle = sortedList.filter((transaction) =>
       transaction.transactionTitle
         .toLowerCase()
-        .includes(searchTransactionList.toLowerCase())
+        .includes(searchTransactionTitle.toLowerCase())
     );
-  }, [searchTransactionList, sortedList]);
+    setSearchedList(searchedByTitle);
+  }, [searchTransactionTitle, sortedList]);
 
-  const sortedTransactions = searchTransaction.sort(
+  useEffect(() => {
+    searchTransactionByDates();
+  }, [datesRange]);
+
+  const sortedTransactions = searchedList.sort(
     (a: ITransaction, b: ITransaction) => {
       const dateA = parse(a.transactionDate, "dd.MM.yyyy", new Date());
       const dateB = parse(b.transactionDate, "dd.MM.yyyy", new Date());
@@ -126,27 +152,68 @@ const TransactionTable = memo(() => {
       setRequestLimit(requestLimit + 5);
     }
   }, [scrollPosition]);
+  const onPress = (e: GestureResponderEvent) => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
+    });
+  };
+
+  let isDate;
+  const isStartDate =
+    datesRange.startDate !== "1970-01-01" ? datesRange.startDate : 0;
+  const isEndDate = datesRange.endDate ? datesRange.endDate : 0;
+  const startingDate = format(isStartDate, "dd.MM.yyyy");
+  const endingDate = format(isEndDate, "dd.MM.yyyy");
+
+  if (isStartDate !== 0 && isEndDate !== 0) {
+    isDate = `${startingDate} - ${endingDate}`;
+  } else if (isStartDate !== 0 && isEndDate == 0) {
+    isDate = `${startingDate}`;
+  } else {
+    isDate = `All time`;
+  }
 
   return (
     <ComponentsLayout style={[styles.layoutEnd]}>
-      <View style={styles.layoutStickyHeader}>
-        <Text style={styles.titleText}>Transaction History</Text>
-        <View style={{ width: "30%", flexDirection: "row", gap: 5 }}>
+      <CalendarWithRange
+        style={styles.calendarLayout}
+        onDismiss={searchTransactionByDates}
+      />
+      <View style={[styles.headerLayout, { zIndex: 1 }]}>
+        <View style={styles.headerFilters}>
+          <Text style={styles.titleText}>Transaction History</Text>
+          <View style={[styles.headerFilters, { gap: 5 }]}>
+            <CustomButton style={styles.searchButton}>
+              <GeneralSVG id={"Hash"} width={22} height={16} />
+            </CustomButton>
+            <CustomButton
+              theme="none"
+              onPress={() => {}}
+              style={[{ borderRadius: 10, padding: 10 }]}
+            >
+              <CalendarSVG id="Calendar" width={15} height={15} />
+            </CustomButton>
+            <CustomButton style={styles.searchButton} onPress={onPress}>
+              <Text style={[styles.titleColor, { paddingHorizontal: 5 }]}>
+                Clear
+              </Text>
+            </CustomButton>
+          </View>
+        </View>
+        <View style={styles.headerFilters}>
+          <Text style={[styles.titleByDate, styles.titleColor]}>{isDate}</Text>
           <CustomInput
+            layoutStyle={{ width: "50%", marginBottom: 0 }}
             style={{ height: 30 }}
-            value={searchTransactionList}
-            onChange={(e) => setSearchTransactionList(e)}
+            value={searchTransactionTitle}
+            onChange={(e) => setSearchTransactionTitle(e)}
             placeholder={"Search"}
-          />
-          <CalendarWithRange
-            style={styles.calendarLayout}
-            buttonStyle={{ marginBottom: 10 }}
           />
         </View>
       </View>
 
       <ScrollView
-        style={{ height: tableHeight }}
+        style={{ height: tableHeight, zIndex: 1 }}
         onScroll={handleScroll}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -170,15 +237,18 @@ const TransactionTable = memo(() => {
 export default TransactionTable;
 
 const styles = StyleSheet.create({
-  layoutStickyHeader: {
-    flexDirection: "row",
-    // justifyContent: "space-between",
-    gap: 40,
+  headerLayout: {
     paddingTop: 5,
+    gap: 10,
     paddingHorizontal: 5,
-    zIndex: 999,
+  },
+  headerFilters: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   layoutEnd: {
+    flex: 1,
     paddingHorizontal: 5,
     marginBottom: 0,
     borderBottomLeftRadius: 0,
@@ -197,6 +267,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Quicksand_700Bold",
   },
+  titleColor: {
+    color: "rgba(0,0, 0, 0.6)",
+  },
   layoutTransactionByDate: {
     borderTopWidth: 1,
     borderTopColor: "rgba(0,0,0,0.2)",
@@ -206,9 +279,17 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 0,
     width: 250,
-    position: "absolute",
-    left: -100,
-    top: 20,
-    zIndex: 999,
+    // position: "absolute",
+    // left: -100,
+    right: 0,
+    top: 30,
+  },
+  searchButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+    borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
 });

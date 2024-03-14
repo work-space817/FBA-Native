@@ -1,4 +1,4 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useCallback } from "react";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
@@ -13,7 +13,7 @@ const DataByCalendarRange = () => {
   const isEndDate = datesRange.endDate ? datesRange.endDate : 0;
   console.log("isEndDate: ", isEndDate);
 
-  const startingDate = format(datesRange.startDate, "d MMMM yyyy");
+  const startingDate = format(datesRange?.startDate, "d MMMM yyyy");
   const endingDate = format(isEndDate, "d MMMM yyyy");
 
   const isEndingDate =
@@ -22,7 +22,12 @@ const DataByCalendarRange = () => {
   return (
     <ComponentsLayout style={styles.layout}>
       <Text style={styles.titleText}>{isEndingDate}</Text>
-      <CalendarWithRange style={styles.calendarLayout} />
+      <CalendarWithRange
+        style={styles.calendarLayout}
+        onDismiss={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </ComponentsLayout>
   );
 };
@@ -31,10 +36,10 @@ export default DataByCalendarRange;
 
 const styles = StyleSheet.create({
   layout: {
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    zIndex: 999,
+    zIndex: 100,
   },
   titleText: {
     fontSize: 16,
@@ -44,9 +49,9 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 0,
     width: 250,
-    position: "absolute",
+    // position: "absolute",
     left: 115,
     top: 10,
-    zIndex: 999,
+    zIndex: 3,
   },
 });

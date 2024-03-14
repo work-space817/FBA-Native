@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 interface ICustomButtom extends TouchableOpacityProps {
-  title: string;
+  title?: string;
   theme?: "none" | "primary" | "secondary";
   onPress?: (e: any) => void;
 }

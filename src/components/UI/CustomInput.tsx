@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   TextInputProps,
+  ViewStyle,
 } from "react-native";
 
 interface CustomInputProps extends TextInputProps {
@@ -17,10 +18,12 @@ interface CustomInputProps extends TextInputProps {
   touched?: boolean;
   disabled?: boolean;
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  layoutStyle?: ViewStyle;
 }
 
 const CustomInput: FC<CustomInputProps> = memo(
   ({
+    layoutStyle,
     style,
     label,
     inputMode = "text",
@@ -37,7 +40,7 @@ const CustomInput: FC<CustomInputProps> = memo(
     autoCapitalize,
   }) => {
     return (
-      <View style={styles.layout}>
+      <View style={[styles.layout, layoutStyle]}>
         {label && <Text style={styles.label}>{label}</Text>}
         <TextInput
           style={[
