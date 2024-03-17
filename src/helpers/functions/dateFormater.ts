@@ -3,7 +3,7 @@ import { parse } from "date-fns";
 const DateFormater = (transactionDate: string) => {
   const dateInMilliseconds = parse(
     transactionDate,
-    "dd.MM.yyyy",
+    "yyyy-MM-dd",
     new Date()
   ).getTime();
   return dateInMilliseconds;

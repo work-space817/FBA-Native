@@ -34,7 +34,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 interface ITransactionType {
-  transactionType: string;
+  transactionType: "Income transaction" | "Outcome transaction";
 }
 
 const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
@@ -117,36 +117,6 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
       setUserBalance(changedBalance);
     }
   };
-
-  const iconsIncomeList = useMemo(
-    () => [
-      { item: <SelectCategoriesSVG id={"Salary"} />, id: "Salary" },
-      {
-        item: <SelectCategoriesSVG id={"Social payment"} />,
-        id: "Social payment",
-      },
-      { item: <SelectCategoriesSVG id={""} />, id: "Other" },
-    ],
-    []
-  );
-  const iconsOutcomeList = useMemo(
-    () => [
-      { item: <SelectCategoriesSVG id={"Transport"} />, id: "Transport" },
-      { item: <SelectCategoriesSVG id={"Shopping"} />, id: "Shopping" },
-      { item: <SelectCategoriesSVG id={"Travels"} />, id: "Travels" },
-      {
-        item: <SelectCategoriesSVG id={"Renovation"} />,
-        id: "Renovation",
-      },
-      { item: <SelectCategoriesSVG id={"Holidays"} />, id: "Holidays" },
-      {
-        item: <SelectCategoriesSVG id={"Entertainment"} />,
-        id: "Entertainment",
-      },
-      { item: <SelectCategoriesSVG id={""} />, id: "Other" },
-    ],
-    []
-  );
 
   const timePickerByPlatform =
     Platform.OS === "ios" ? (
@@ -321,18 +291,10 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
           />
         </ComponentsLayout>
       )}
-
-      {transactionType === "Income transaction" ? (
-        <SelectCategories
-          title="Select category of transanction"
-          icons={iconsIncomeList}
-        />
-      ) : (
-        <SelectCategories
-          title="Select category of transaction"
-          icons={iconsOutcomeList}
-        />
-      )}
+      <SelectCategories
+        title="Select category of transanction"
+        categoriesList={transactionType}
+      />
       <CustomButton
         title={"Add transaction"}
         theme="primary"
@@ -392,7 +354,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderRadius: 8,
-    marginTop: 10,
+    marginTop: 8,
     marginBottom: 30,
   },
 });

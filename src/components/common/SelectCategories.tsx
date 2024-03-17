@@ -1,4 +1,4 @@
-import { FC, memo, useState } from "react";
+import { FC, memo, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ISelectCategories,
@@ -8,15 +8,27 @@ import { View, Text, StyleSheet } from "react-native";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import CustomButtonWithoutFeedback from "../UI/CustomButtonWithoutFeedback";
 import { RootState } from "../../store";
+import CategoriesList from "../../helpers/functions/UI/CategoriesList";
 
+enum Categories {
+  incomeTransaction = "Income transaction",
+  outcomeTransaction = "Outcome transaction",
+  allCategories = "All categories",
+}
 interface ISelectCategoriesProps {
-  icons: any[];
   title: string;
+  categoriesList?:
+    | "Income transaction"
+    | "Outcome transaction"
+    | "All categories";
 }
 const SelectCategories: FC<ISelectCategoriesProps> = memo(
-  ({ icons, title }) => {
+  ({ title, categoriesList }) => {
+    console.log("categoriesList: ", categoriesList);
+    const { incomeCategoriesList, outcomeCategoriesList, allCategoriesList } =
+      CategoriesList();
     const { isSelected } = useSelector(
-      (store: RootState) => store.selectCategories as ISelectCategories
+      (store: RootState) => store.selectCategories
     );
     const [isActive, setisActive] = useState<number | null>(null);
     const dispatch = useDispatch();
@@ -29,11 +41,27 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
       });
     };
 
+    let categoryId: any[] = [];
+
+    switch (categoriesList) {
+      case Categories.incomeTransaction:
+        categoryId = incomeCategoriesList;
+        break;
+      case Categories.outcomeTransaction:
+        categoryId = outcomeCategoriesList;
+        break;
+      case Categories.allCategories:
+        categoryId = allCategoriesList;
+        break;
+      default:
+        break;
+    }
+
     return (
       <>
         <Text>{title}</Text>
         <View style={styles.itemsList}>
-          {icons.map((icon, index) => (
+          {categoryId.map((icon, index) => (
             <CustomButtonWithoutFeedback
               onPress={() => selectIcon(icon.id, index)}
               style={styles.items}

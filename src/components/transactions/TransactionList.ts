@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ITransaction } from "./types";
 import { RootState } from "../../store";
@@ -41,6 +41,9 @@ const TransactionList = (requestLimit: number) => {
 
   useEffect(() => {
     fetchUserTransactions();
+    return () => {
+      fetchUserTransactions();
+    };
   }, [isUpdatedList, requestLimit]);
 
   return { loading, amountTransaction };

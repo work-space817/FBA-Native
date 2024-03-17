@@ -1,4 +1,4 @@
-import React, { FC, memo, useRef, useState } from "react";
+import React, { FC, memo } from "react";
 import {
   TextInput,
   Text,
@@ -68,6 +68,7 @@ const CustomInput: FC<CustomInputProps> = memo(
 
 const styles = StyleSheet.create({
   layout: {
+    paddingRight: 1,
     marginBottom: 10,
     width: "100%",
   },

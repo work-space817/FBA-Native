@@ -22,7 +22,9 @@ const Goal: FC<IGoal> = memo(
     const dispatch = useDispatch();
 
     const now = new Date().getTime();
+    console.log("now: ", now);
     const compareDate = DateFormater(expireDate);
+    console.log("compareDate: ", compareDate);
     const formattedDate = format(expireDate, "dd.MM.yyyy");
 
     const selectGoal = useCallback(async () => {

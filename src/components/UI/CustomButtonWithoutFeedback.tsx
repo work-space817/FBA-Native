@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,11 +6,10 @@ import {
   TouchableWithoutFeedbackProps,
   TouchableWithoutFeedback,
   View,
-  GestureResponderEvent,
 } from "react-native";
 
 interface ICustomButtonWithoutFeedback extends TouchableWithoutFeedbackProps {
-  title: string;
+  title?: string;
   theme?: "none" | "primary" | "secondary";
   onPress?: (e: any) => void;
 }

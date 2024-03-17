@@ -8,11 +8,9 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInputFocusEventData,
   View,
-  ViewStyle,
 } from "react-native";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   ICalendarDatesRangeActionType,
@@ -33,14 +31,16 @@ import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRang
 import GeneralSVG from "../../helpers/SVG/common/GeneralSVG";
 import CustomButton from "../UI/CustomButton";
 import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
+import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
 
 const TransactionTable = memo(() => {
+  const dispatch = useDispatch();
+
   const { transactionList, isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList as ITransactionList
   );
   const { datesRange } = useSelector((store: RootState) => store.datesRange);
-  // console.log("datesRange 1: ", datesRange);
-  const dispatch = useDispatch();
+
   const defaulRequestLimit = 25;
   const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
   const { loading, amountTransaction } = TransactionList(requestLimit);
@@ -86,10 +86,6 @@ const TransactionTable = memo(() => {
     );
     setSearchedList(searchedByTitle);
   }, [searchTransactionTitle, sortedList]);
-
-  useEffect(() => {
-    searchTransactionByDates();
-  }, [datesRange]);
 
   const sortedTransactions = searchedList.sort(
     (a: ITransaction, b: ITransaction) => {
@@ -146,40 +142,33 @@ const TransactionTable = memo(() => {
 
   useEffect(() => {
     const limitHeight = 63 * requestLimit;
-    //! console.log("summary", limitHeight - (tableHeight + scrollPosition));
+    //? console.log("summary", limitHeight - (tableHeight + scrollPosition));
     if (limitHeight - (tableHeight + scrollPosition) < 500) {
       console.log("LIMIT");
       setRequestLimit(requestLimit + 5);
     }
   }, [scrollPosition]);
-  const onPress = (e: GestureResponderEvent) => {
+
+  const onDefaultRange = (e: GestureResponderEvent) => {
     dispatch({
       type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
     });
   };
-
-  let isDate;
-  const isStartDate =
-    datesRange.startDate !== "1970-01-01" ? datesRange.startDate : 0;
-  const isEndDate = datesRange.endDate ? datesRange.endDate : 0;
-  const startingDate = format(isStartDate, "dd.MM.yyyy");
-  const endingDate = format(isEndDate, "dd.MM.yyyy");
-
-  if (isStartDate !== 0 && isEndDate !== 0) {
-    isDate = `${startingDate} - ${endingDate}`;
-  } else if (isStartDate !== 0 && isEndDate == 0) {
-    isDate = `${startingDate}`;
-  } else {
-    isDate = `All time`;
-  }
+  const onOpenCalendar = () => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
+      payload: true,
+    });
+  };
 
   return (
-    <ComponentsLayout style={[styles.layoutEnd]}>
+    <ComponentsLayout style={styles.layout}>
       <CalendarWithRange
+        maskStyle={styles.maskStyle}
         style={styles.calendarLayout}
         onDismiss={searchTransactionByDates}
       />
-      <View style={[styles.headerLayout, { zIndex: 1 }]}>
+      <View style={[styles.headerLayout]}>
         <View style={styles.headerFilters}>
           <Text style={styles.titleText}>Transaction History</Text>
           <View style={[styles.headerFilters, { gap: 5 }]}>
@@ -188,12 +177,15 @@ const TransactionTable = memo(() => {
             </CustomButton>
             <CustomButton
               theme="none"
-              onPress={() => {}}
-              style={[{ borderRadius: 10, padding: 10 }]}
+              onPress={onOpenCalendar}
+              style={styles.calendarButton}
             >
               <CalendarSVG id="Calendar" width={15} height={15} />
             </CustomButton>
-            <CustomButton style={styles.searchButton} onPress={onPress}>
+            <CustomButton
+              style={[styles.searchButton]}
+              onPress={onDefaultRange}
+            >
               <Text style={[styles.titleColor, { paddingHorizontal: 5 }]}>
                 Clear
               </Text>
@@ -201,9 +193,15 @@ const TransactionTable = memo(() => {
           </View>
         </View>
         <View style={styles.headerFilters}>
-          <Text style={[styles.titleByDate, styles.titleColor]}>{isDate}</Text>
+          <ShowSelectedDates
+            dates={{
+              startDate: datesRange.startDate,
+              endDate: datesRange.endDate,
+            }}
+            style={[styles.titleByDate, styles.titleColor]}
+          />
           <CustomInput
-            layoutStyle={{ width: "50%", marginBottom: 0 }}
+            layoutStyle={styles.inputLayoutStyle}
             style={{ height: 30 }}
             value={searchTransactionTitle}
             onChange={(e) => setSearchTransactionTitle(e)}
@@ -213,7 +211,7 @@ const TransactionTable = memo(() => {
       </View>
 
       <ScrollView
-        style={{ height: tableHeight, zIndex: 1 }}
+        style={{ height: tableHeight }}
         onScroll={handleScroll}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -237,6 +235,13 @@ const TransactionTable = memo(() => {
 export default TransactionTable;
 
 const styles = StyleSheet.create({
+  layout: {
+    flex: 1,
+    paddingHorizontal: 5,
+    marginBottom: 0,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
   headerLayout: {
     paddingTop: 5,
     gap: 10,
@@ -246,13 +251,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  layoutEnd: {
-    flex: 1,
-    paddingHorizontal: 5,
-    marginBottom: 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
   },
   titleText: {
     fontSize: 18,
@@ -276,13 +274,20 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
   },
   calendarLayout: {
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-    width: 250,
-    // position: "absolute",
-    // left: -100,
-    right: 0,
     top: 30,
+  },
+  calendarButton: {
+    borderRadius: 10,
+    padding: 10,
+  },
+  maskStyle: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    zIndex: 2,
+    borderRadius: 18,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    alignItems: "flex-end",
   },
   searchButton: {
     flexDirection: "row",
@@ -291,5 +296,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 5,
     paddingHorizontal: 5,
+  },
+  inputLayoutStyle: {
+    width: "50%",
+    marginBottom: 0,
   },
 });

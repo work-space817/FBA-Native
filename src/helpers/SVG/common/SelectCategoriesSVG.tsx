@@ -1,8 +1,17 @@
 import { memo } from "react";
 import Svg, { Circle, G, Path, SvgProps } from "react-native-svg";
 
-interface ISelectCategoriesProps extends SvgProps {
-  id: string;
+export interface ISelectCategoriesProps extends SvgProps {
+  id:
+    | "Shopping"
+    | "Transport"
+    | "Travels"
+    | "Renovation"
+    | "Entertainment"
+    | "Holidays"
+    | "Salary"
+    | "Social payment"
+    | any;
 }
 
 const SelectCategoriesSVG = memo(

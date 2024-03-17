@@ -1,24 +1,30 @@
 import DefaultLayout from "../layouts/default/DefaultLayout";
-import ComponentsLayout from "../layouts/components/ComponentsLayout";
 import DataByCalendarRange from "../../components/common/DataByCalendarRange";
 import { useDispatch } from "react-redux";
-import { View } from "react-native";
-import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
+import { useEffect } from "react";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/types";
 
 export default function StatisticScreen({ navigation }: any) {
   const dispatch = useDispatch();
   const onRefreshComponents = () => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
+      payload: false,
+    });
     console.log("Refreshing components...");
   };
+  useEffect(() => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
+      payload: false,
+    });
+  }, []);
   return (
     <DefaultLayout
       navigation={navigation}
       onRefreshComponents={onRefreshComponents}
     >
       <DataByCalendarRange />
-      <ComponentsLayout
-        style={{ height: 500, width: 350, zIndex: 1 }}
-      ></ComponentsLayout>
     </DefaultLayout>
   );
 }

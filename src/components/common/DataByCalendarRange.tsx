@@ -1,33 +1,45 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useCallback } from "react";
+import { StyleSheet, View } from "react-native";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { format } from "date-fns";
+import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
+import CustomButton from "../UI/CustomButton";
+import { useDispatch } from "react-redux";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/types";
+import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
 
 const DataByCalendarRange = () => {
+  const dispatch = useDispatch();
   const { datesRange } = useSelector((store: RootState) => store.datesRange);
-  // console.log("datesRange: ", datesRange);
 
-  const isEndDate = datesRange.endDate ? datesRange.endDate : 0;
-  console.log("isEndDate: ", isEndDate);
-
-  const startingDate = format(datesRange?.startDate, "d MMMM yyyy");
-  const endingDate = format(isEndDate, "d MMMM yyyy");
-
-  const isEndingDate =
-    isEndDate !== 0 ? `${startingDate} - ${endingDate}` : `${startingDate}`;
+  const onOpenCalendar = () => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
+      payload: true,
+    });
+  };
 
   return (
-    <ComponentsLayout style={styles.layout}>
-      <Text style={styles.titleText}>{isEndingDate}</Text>
-      <CalendarWithRange
-        style={styles.calendarLayout}
-        onDismiss={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
+    <ComponentsLayout>
+      <View style={styles.layout}>
+        <ShowSelectedDates
+          dates={{
+            startDate: datesRange.startDate,
+            endDate: datesRange.endDate,
+          }}
+          style={styles.titleText}
+          dateFormat="d MMMM yyyy"
+        />
+        <CustomButton
+          theme="none"
+          onPress={onOpenCalendar}
+          style={styles.calendarButton}
+        >
+          <CalendarSVG id="Calendar" width={16} height={16} />
+        </CustomButton>
+      </View>
+      <CalendarWithRange onDismiss={() => {}} maskStyle={styles.maskStyle} />
     </ComponentsLayout>
   );
 };
@@ -36,7 +48,7 @@ export default DataByCalendarRange;
 
 const styles = StyleSheet.create({
   layout: {
-    // flexDirection: "row",
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     zIndex: 100,
@@ -45,13 +57,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Quicksand_700Bold",
   },
-  calendarLayout: {
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-    width: 250,
-    // position: "absolute",
-    left: 115,
-    top: 10,
-    zIndex: 3,
+  calendarButton: {
+    borderRadius: 10,
+    padding: 10,
+  },
+  maskStyle: {
+    width: "100%",
+    alignItems: "center",
   },
 });

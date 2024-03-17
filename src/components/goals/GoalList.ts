@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IGoal } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import getGoalsData from "../../api/firebase/goals/getGoalsData";
@@ -31,6 +31,9 @@ const GoalList = () => {
   };
   useEffect(() => {
     fetchUserGoals();
+    return () => {
+      fetchUserGoals();
+    };
   }, [isUpdatedGoaliList]);
   return loading;
 };

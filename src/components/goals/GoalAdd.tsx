@@ -98,19 +98,6 @@ const GoalAdd = () => {
   });
   const { values, touched, errors, handleSubmit, handleChange, handleReset } =
     formik;
-  const iconsList = useMemo(
-    () => [
-      { id: "Transport" },
-      { id: "Shopping" },
-      { id: "Travels" },
-      { id: "Entertainment" },
-      { id: "Renovation" },
-      { id: "Holidays" },
-      { id: "Other" },
-    ],
-    []
-  );
-
   const goalPosition: ViewStyle = showCalendarList
     ? { alignItems: "flex-start" }
     : { alignItems: "center" };
@@ -182,7 +169,10 @@ const GoalAdd = () => {
           />
         </ComponentsLayout>
       )}
-      <SelectCategories title="Select category of goal" icons={iconsList} />
+      <SelectCategories
+        title="Select category of goal"
+        categoriesList={"All categories"}
+      />
       <CustomButton title={"Add goal"} theme="primary" onPress={handleSubmit} />
     </KeyboardAwareScrollView>
   );

@@ -27,11 +27,20 @@ export default function TransactionScreen({ navigation }: any) {
     dispatch({
       type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
     });
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
+      payload: false,
+    });
     console.log("Refreshing components...");
   };
+
   useEffect(() => {
     dispatch({
       type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
+    });
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
+      payload: false,
     });
   }, []);
 
