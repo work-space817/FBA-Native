@@ -104,6 +104,13 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
     });
   };
   useEffect(() => {
+    if (isCalendarOpen) {
+      dispatch({
+        type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
+      });
+    }
+  }, [isCalendarOpen]);
+  useEffect(() => {
     onDismiss();
   }, [datesRange]);
 

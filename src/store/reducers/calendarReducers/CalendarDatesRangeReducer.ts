@@ -37,7 +37,6 @@ export const CalendarDatesRangeReducer = (
           startDate: defaultStartedDate,
           endDate: defaultEndedDate,
         },
-        isCalendarOpen: false,
       };
     }
     default:

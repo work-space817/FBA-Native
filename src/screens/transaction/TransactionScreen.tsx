@@ -36,9 +36,6 @@ export default function TransactionScreen({ navigation }: any) {
 
   useEffect(() => {
     dispatch({
-      type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
-    });
-    dispatch({
       type: ICalendarDatesRangeActionType.SET_CALENDAR_OPEN,
       payload: false,
     });

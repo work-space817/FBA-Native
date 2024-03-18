@@ -20,7 +20,6 @@ const CategoriesList = () => {
     () => [...incomeCategoriesList, ...outcomeCategoriesList],
     []
   );
-  console.log("allCategoriesList: ", allCategoriesList);
   return { incomeCategoriesList, outcomeCategoriesList, allCategoriesList };
 };
 

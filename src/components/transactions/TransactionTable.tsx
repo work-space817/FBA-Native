@@ -10,7 +10,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   ICalendarDatesRangeActionType,
@@ -43,6 +43,7 @@ const TransactionTable = memo(() => {
 
   const defaulRequestLimit = 25;
   const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
+  console.log("requestLimit: ", requestLimit);
   const { loading, amountTransaction } = TransactionList(requestLimit);
   const [searchTransactionTitle, setSearchTransactionTitle] = useState("");
   const [searchedList, setSearchedList] = useState<ITransaction[]>([
@@ -60,6 +61,11 @@ const TransactionTable = memo(() => {
   }, [isUpdatedList === true]);
 
   const searchTransactionByDates = () => {
+    // if (isCalendarOpen) {
+    //   setRequestLimit(999);
+    // } else {
+    //   setRequestLimit(defaulRequestLimit);
+    // }
     setRequestLimit(999);
     const searchedByDates = sortedList.filter((transaction) => {
       if (datesRange.endDate) {
@@ -71,7 +77,6 @@ const TransactionTable = memo(() => {
         return transaction.transactionDate === datesRange.startDate;
       }
     });
-    console.log("datesRange 2: ", datesRange);
     setSearchedList(searchedByDates);
   };
 
