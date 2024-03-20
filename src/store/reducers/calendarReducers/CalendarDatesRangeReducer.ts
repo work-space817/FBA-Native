@@ -9,7 +9,7 @@ const defaultStartedDate = format(0, "yyyy-MM-dd");
 const defaultEndedDate = format(today, "yyyy-MM-dd");
 
 const initState: ICalendarDatesRangeReducer = {
-  datesRange: { startDate: 0, endDate: 0 },
+  datesRange: { startDate: defaultStartedDate, endDate: defaultEndedDate },
   isCalendarOpen: false,
 };
 export const CalendarDatesRangeReducer = (

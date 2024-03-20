@@ -14,7 +14,6 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   ICalendarDatesRangeActionType,
-  ITransactionList,
   ScrollViewPositionActionType,
 } from "../../store/reducers/types";
 import TransactionList from "./TransactionList";
@@ -36,20 +35,27 @@ import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
 const TransactionTable = memo(() => {
   const dispatch = useDispatch();
 
-  const { transactionList, isUpdatedList } = useSelector(
-    (store: RootState) => store.transactionList as ITransactionList
+  const { isUpdatedList } = useSelector(
+    (store: RootState) => store.transactionList
   );
   const { datesRange } = useSelector((store: RootState) => store.datesRange);
+  console.log("datesRange: ", datesRange);
 
   const defaulRequestLimit = 25;
-  const [requestLimit, setRequestLimit] = useState(defaulRequestLimit);
+  const [requestLimit, setRequestLimit] = useState<any>(defaulRequestLimit);
   console.log("requestLimit: ", requestLimit);
-  const { loading, amountTransaction } = TransactionList(requestLimit);
+
+  const { loading, transactionList, amountTransaction } = TransactionList(
+    datesRange.startDate,
+    datesRange.endDate,
+    requestLimit
+  );
+  console.log("transactionList: ", transactionList.length);
   const [searchTransactionTitle, setSearchTransactionTitle] = useState("");
-  const [searchedList, setSearchedList] = useState<ITransaction[]>([
-    ...transactionList,
-  ]);
   const [sortedList, setSortedList] = useState([...transactionList]);
+  const [searchedList, setSearchedList] = useState<ITransaction[]>([
+    ...sortedList,
+  ]);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
@@ -60,13 +66,8 @@ const TransactionTable = memo(() => {
     setRequestLimit(defaulRequestLimit);
   }, [isUpdatedList === true]);
 
-  const searchTransactionByDates = () => {
-    // if (isCalendarOpen) {
-    //   setRequestLimit(999);
-    // } else {
-    //   setRequestLimit(defaulRequestLimit);
-    // }
-    setRequestLimit(999);
+  const searchTransactionByDates = useCallback(() => {
+    setRequestLimit(undefined);
     const searchedByDates = sortedList.filter((transaction) => {
       if (datesRange.endDate) {
         return (
@@ -78,11 +79,11 @@ const TransactionTable = memo(() => {
       }
     });
     setSearchedList(searchedByDates);
-  };
+  }, [datesRange.startDate && requestLimit]);
 
   const searchTransactionByTitle = useMemo(() => {
     if (searchTransactionTitle) {
-      setRequestLimit(999);
+      setRequestLimit(undefined);
     }
     const searchedByTitle = sortedList.filter((transaction) =>
       transaction.transactionTitle
@@ -158,6 +159,7 @@ const TransactionTable = memo(() => {
     dispatch({
       type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
     });
+    setRequestLimit(defaulRequestLimit);
   };
   const onOpenCalendar = () => {
     dispatch({
@@ -223,7 +225,9 @@ const TransactionTable = memo(() => {
         scrollEventThrottle={16}
       >
         {!isUpdatedList && <>{visibleTransactionList}</>}
-        {requestLimit > amountTransaction && !loading ? (
+        {(!requestLimit && searchTransactionTitle) ||
+        !requestLimit ||
+        (requestLimit >= amountTransaction && !loading) ? (
           <View style={styles.layoutByDate}>
             <Text style={styles.titleByDate}>
               Transactions were not done before

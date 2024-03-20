@@ -97,12 +97,6 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
     textColor: "rgba(255,255,255,.7)",
   };
 
-  const onConfirm = () => {
-    dispatch({
-      type: ICalendarDatesRangeActionType.SET_DATES_RANGE,
-      payload: boundaryDates,
-    });
-  };
   useEffect(() => {
     if (isCalendarOpen) {
       dispatch({
@@ -110,9 +104,14 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
       });
     }
   }, [isCalendarOpen]);
-  useEffect(() => {
+  const onConfirm = () => {
+    dispatch({
+      type: ICalendarDatesRangeActionType.SET_DATES_RANGE,
+      payload: boundaryDates,
+    });
     onDismiss();
-  }, [datesRange]);
+  };
+  useEffect(() => {}, [datesRange]);
 
   const onDismissByBackground = () => {
     dispatch({
