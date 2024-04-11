@@ -23,6 +23,7 @@ export default function TransactionScreen({ navigation }: any) {
     });
     dispatch({
       type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
+      payload: false,
     });
     dispatch({
       type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,

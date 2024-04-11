@@ -4,14 +4,13 @@ import {
   limit,
   orderBy,
   query,
-  startAt,
   where,
 } from "firebase/firestore";
 import { firestore } from "../config";
 import getUserId from "../../../helpers/functions/getUserId";
 
 const getTransactionData = async (
-  startDate: string,
+  startDate?: string,
   endDate?: string,
   requestLimit?: number
 ) => {
@@ -23,16 +22,15 @@ const getTransactionData = async (
   );
   const transactionsQueryArgs = [orderBy("transactionDate", "desc")] as any[];
 
-  if (requestLimit) {
-    transactionsQueryArgs.push(limit(requestLimit));
-  }
   if (startDate && endDate) {
     transactionsQueryArgs.push(where("transactionDate", ">=", startDate));
     transactionsQueryArgs.push(where("transactionDate", "<=", endDate));
   } else if (startDate) {
     transactionsQueryArgs.push(where("transactionDate", "==", startDate));
   }
-
+  if (requestLimit) {
+    transactionsQueryArgs.push(limit(requestLimit));
+  }
   const transactionsQuery = query(
     userTransactionsRef,
     ...transactionsQueryArgs

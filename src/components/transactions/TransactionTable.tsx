@@ -1,6 +1,7 @@
+import React, { memo, useEffect, useMemo, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Dimensions,
-  GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -10,27 +11,24 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { format } from "date-fns";
+import TransactionList from "./TransactionList";
+import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
+import CustomInput from "../UI/CustomInput";
+import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
+import CustomButton from "../UI/CustomButton";
+import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
+import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
+import Transaction from "./Transaction";
+import GeneralSVG from "../../helpers/SVG/common/GeneralSVG";
+import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
 import {
   ICalendarDatesRangeActionType,
   ScrollViewPositionActionType,
+  TransactionListActionType,
 } from "../../store/reducers/types";
-import TransactionList from "./TransactionList";
 import { RootState } from "../../store";
-import Transaction from "./Transaction";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
-import CustomInput from "../UI/CustomInput";
 import { ITransaction } from "./types";
-import { parse } from "date-fns/parse";
-import { format } from "date-fns";
-import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
-import { useDispatch } from "react-redux";
-import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
-import GeneralSVG from "../../helpers/SVG/common/GeneralSVG";
-import CustomButton from "../UI/CustomButton";
-import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
-import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
 
 const TransactionTable = memo(() => {
   const dispatch = useDispatch();
@@ -38,79 +36,61 @@ const TransactionTable = memo(() => {
   const { isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList
   );
-  const { datesRange } = useSelector((store: RootState) => store.datesRange);
-  console.log("datesRange: ", datesRange);
 
   const defaulRequestLimit = 25;
   const [requestLimit, setRequestLimit] = useState<any>(defaulRequestLimit);
-  console.log("requestLimit: ", requestLimit);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [searchTransactionTitle, setSearchTransactionTitle] = useState("");
+  const [dateRange, setDateRange] = useState<any[]>([undefined, undefined]);
 
   const { loading, transactionList, amountTransaction } = TransactionList(
-    datesRange.startDate,
-    datesRange.endDate,
+    ...dateRange,
     requestLimit
   );
+  const [searchedList, setSearchedList] =
+    useState<ITransaction[]>(transactionList);
+
+  console.log("requestLimit: ", requestLimit);
+  console.log("isUpdatedList: ", isUpdatedList);
   console.log("transactionList: ", transactionList.length);
-  const [searchTransactionTitle, setSearchTransactionTitle] = useState("");
-  const [sortedList, setSortedList] = useState([...transactionList]);
-  const [searchedList, setSearchedList] = useState<ITransaction[]>([
-    ...sortedList,
-  ]);
-  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    setSortedList(transactionList);
     dispatch({ type: ScrollViewPositionActionType.SET_POSITION, payload: 350 });
-  }, [transactionList]);
+  }, []);
   useEffect(() => {
-    setRequestLimit(defaulRequestLimit);
-  }, [isUpdatedList === true]);
+    setSearchedList(transactionList);
+  }, [transactionList]);
 
-  const searchTransactionByDates = useCallback(() => {
-    setRequestLimit(undefined);
-    const searchedByDates = sortedList.filter((transaction) => {
-      if (datesRange.endDate) {
-        return (
-          transaction.transactionDate >= datesRange.startDate &&
-          transaction.transactionDate <= datesRange?.endDate
-        );
-      } else {
-        return transaction.transactionDate === datesRange.startDate;
-      }
+  const searchTransactionByDates = (e: any) => {
+    const transactionList = dispatch({
+      type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
+      payload: false,
     });
-    setSearchedList(searchedByDates);
-  }, [datesRange.startDate && requestLimit]);
+    setRequestLimit(undefined);
+    setDateRange([e.startDate, e.endDate]);
+  };
 
   const searchTransactionByTitle = useMemo(() => {
     if (searchTransactionTitle) {
       setRequestLimit(undefined);
+      setDateRange([undefined, undefined]);
     }
-    const searchedByTitle = sortedList.filter((transaction) =>
+    const searchedByTitle = searchedList.filter((transaction) =>
       transaction.transactionTitle
         .toLowerCase()
         .includes(searchTransactionTitle.toLowerCase())
     );
     setSearchedList(searchedByTitle);
-  }, [searchTransactionTitle, sortedList]);
+  }, [searchTransactionTitle, transactionList]);
 
-  const sortedTransactions = searchedList.sort(
-    (a: ITransaction, b: ITransaction) => {
-      const dateA = parse(a.transactionDate, "dd.MM.yyyy", new Date());
-      const dateB = parse(b.transactionDate, "dd.MM.yyyy", new Date());
-      return dateB.getTime() - dateA.getTime();
+  const groupedTransactions = searchedList.reduce((acc: any, transaction) => {
+    const date = transaction.transactionDate;
+    if (!acc[date]) {
+      acc[date] = [];
     }
-  );
-  const groupedTransactions = sortedTransactions.reduce(
-    (acc: any, transaction) => {
-      const date = transaction.transactionDate;
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(transaction);
-      return acc;
-    },
-    {}
-  );
+    acc[date].push(transaction);
+    return acc;
+  }, {});
   const visibleTransactionList = Object.entries(groupedTransactions).map(
     ([date, transactionsInDay]: any) => {
       const sortedByTime = transactionsInDay.sort((a: any, b: any) => {
@@ -131,10 +111,8 @@ const TransactionTable = memo(() => {
       );
     }
   );
-
   const windowHeight = Dimensions.get("window").height;
   const statusBarHeight = StatusBar.currentHeight || 0;
-
   let tableHeight: number;
   if (Platform.OS === "ios") {
     tableHeight = windowHeight - 250;
@@ -143,9 +121,10 @@ const TransactionTable = memo(() => {
   }
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollPosition(event.nativeEvent.contentOffset.y);
+    if (event.nativeEvent.contentOffset.y >= scrollPosition) {
+      setScrollPosition(event.nativeEvent.contentOffset.y);
+    }
   };
-
   useEffect(() => {
     const limitHeight = 63 * requestLimit;
     //? console.log("summary", limitHeight - (tableHeight + scrollPosition));
@@ -155,11 +134,13 @@ const TransactionTable = memo(() => {
     }
   }, [scrollPosition]);
 
-  const onDefaultRange = (e: GestureResponderEvent) => {
+  const onDefaultRange = () => {
     dispatch({
       type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
     });
+    setSearchTransactionTitle("");
     setRequestLimit(defaulRequestLimit);
+    setDateRange([undefined, undefined, defaulRequestLimit]);
   };
   const onOpenCalendar = () => {
     dispatch({
@@ -167,13 +148,13 @@ const TransactionTable = memo(() => {
       payload: true,
     });
   };
-
+  console.log(dateRange);
   return (
     <ComponentsLayout style={styles.layout}>
       <CalendarWithRange
         maskStyle={styles.maskStyle}
         style={styles.calendarLayout}
-        onDismiss={searchTransactionByDates}
+        onConfirm={searchTransactionByDates}
       />
       <View style={[styles.headerLayout]}>
         <View style={styles.headerFilters}>
@@ -202,8 +183,8 @@ const TransactionTable = memo(() => {
         <View style={styles.headerFilters}>
           <ShowSelectedDates
             dates={{
-              startDate: datesRange.startDate,
-              endDate: datesRange.endDate,
+              startDate: dateRange[0],
+              endDate: dateRange[1],
             }}
             style={[styles.titleByDate, styles.titleColor]}
           />
@@ -211,6 +192,7 @@ const TransactionTable = memo(() => {
             layoutStyle={styles.inputLayoutStyle}
             style={{ height: 30 }}
             value={searchTransactionTitle}
+            onFocus={() => setRequestLimit(undefined)}
             onChange={(e) => setSearchTransactionTitle(e)}
             placeholder={"Search"}
           />
@@ -224,17 +206,15 @@ const TransactionTable = memo(() => {
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
       >
-        {!isUpdatedList && <>{visibleTransactionList}</>}
-        {(!requestLimit && searchTransactionTitle) ||
-        !requestLimit ||
-        (requestLimit >= amountTransaction && !loading) ? (
+        {isUpdatedList && <>{visibleTransactionList}</>}
+        {loading || requestLimit < amountTransaction ? (
+          <CustomLoadingAnimation />
+        ) : (
           <View style={styles.layoutByDate}>
             <Text style={styles.titleByDate}>
               Transactions were not done before
             </Text>
           </View>
-        ) : (
-          <CustomLoadingAnimation />
         )}
       </ScrollView>
     </ComponentsLayout>

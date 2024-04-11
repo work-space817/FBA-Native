@@ -3,32 +3,38 @@ import { useDispatch, useSelector } from "react-redux";
 import { ITransaction } from "./types";
 import { RootState } from "../../store";
 import getTransactionData from "../../api/firebase/transactions/getTransactionData";
+import { TransactionListActionType } from "../../store/reducers/types";
 
 const TransactionList = (
-  startDate: string,
+  startDate?: string,
   endDate?: string,
   requestLimit?: number
 ) => {
-  console.log("startDate: ", startDate);
   const [loading, setLoading] = useState<boolean>(false);
-  const [amountTransaction, setAmountTransaction] = useState<number>(0);
   const [transactionList, setTransactionList] = useState<ITransaction[]>([]);
+  const [amountTransaction, setAmountTransaction] = useState<number>(0);
   const { isUpdatedList } = useSelector(
     (store: RootState) => store.transactionList
   );
+  const dispatch = useDispatch();
 
   const fetchUserTransactions = async () => {
     try {
+      console.log("efirst");
       setLoading(true);
       const { transactionsData, totalAmountTransaction } =
         await getTransactionData(startDate, endDate, requestLimit);
-      setAmountTransaction(totalAmountTransaction);
       const transactionData = transactionsData.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as ITransaction[];
       setTransactionList(transactionData);
+      setAmountTransaction(totalAmountTransaction);
       setLoading(false);
+      dispatch({
+        type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
+        payload: true,
+      });
     } catch (error) {
       console.error(
         "Сталася помилка при отриманні транзакцій користувача:",
@@ -39,10 +45,7 @@ const TransactionList = (
 
   useEffect(() => {
     fetchUserTransactions();
-    return () => {
-      fetchUserTransactions();
-    };
-  }, [isUpdatedList, startDate, endDate, requestLimit !== undefined]);
+  }, [isUpdatedList, startDate, endDate, requestLimit]);
 
   return { loading, transactionList, amountTransaction };
 };

@@ -4,8 +4,8 @@ import { format } from "date-fns/format";
 
 interface IShowSelectedDates {
   dates: {
-    startDate: string | 0;
-    endDate?: string | 0 | undefined;
+    startDate: string | 0 | undefined;
+    endDate: string | 0 | undefined;
   };
   style: StyleProp<TextStyle>;
   dateFormat?: string;
@@ -17,7 +17,7 @@ const ShowSelectedDates: FC<IShowSelectedDates> = ({
   dateFormat = "dd.MM.yyyy",
 }) => {
   let isDate;
-  const isStartDate = dates.startDate !== "1970-01-01" ? dates.startDate : 0;
+  const isStartDate = dates.startDate ? dates.startDate : 0;
   const isEndDate = dates.endDate ? dates.endDate : 0;
   const startingDate = format(isStartDate, dateFormat);
   const endingDate = format(isEndDate, dateFormat);

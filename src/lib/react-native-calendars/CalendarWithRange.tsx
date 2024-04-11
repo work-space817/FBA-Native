@@ -4,10 +4,10 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { CalendarList } from "react-native-calendars";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CustomButton from "../../components/UI/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,19 +18,19 @@ import { RootState } from "../../store";
 interface ICalendarWithRange {
   maskStyle?: ViewStyle;
   style?: ViewStyle;
-  onDismiss: () => void;
+  onConfirm: (e: any) => void;
 }
 
 const CalendarWithRange: FC<ICalendarWithRange> = ({
   maskStyle,
   style,
-  onDismiss,
+  onConfirm,
 }) => {
   const dispatch = useDispatch();
   const today = new Date();
   const maxDate = format(today, "yyyy-MM-dd");
 
-  const { datesRange, isCalendarOpen } = useSelector(
+  const { isCalendarOpen } = useSelector(
     (store: RootState) => store.datesRange
   );
 
@@ -62,7 +62,6 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
     } else {
       addSingleDate(dateString);
     }
-
     setSelectedDates(updatedSelectedDates);
   };
 
@@ -76,10 +75,10 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
 
   const addDatesBetweenRange = (startDate: string, endDate: string) => {
     const dates: any[] = [];
-    let currentDate = new Date(startDate);
+    let currentDate = parseISO(startDate);
 
-    while (currentDate <= new Date(endDate)) {
-      dates.push(currentDate.toISOString().split("T")[0]);
+    while (currentDate <= parseISO(endDate)) {
+      dates.push(format(currentDate, "yyyy-MM-dd"));
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
@@ -96,22 +95,6 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
     color: "rgba(126,76,215,.99)",
     textColor: "rgba(255,255,255,.7)",
   };
-
-  useEffect(() => {
-    if (isCalendarOpen) {
-      dispatch({
-        type: ICalendarDatesRangeActionType.SET_DEFAULT_DATES_RANGE,
-      });
-    }
-  }, [isCalendarOpen]);
-  const onConfirm = () => {
-    dispatch({
-      type: ICalendarDatesRangeActionType.SET_DATES_RANGE,
-      payload: boundaryDates,
-    });
-    onDismiss();
-  };
-  useEffect(() => {}, [datesRange]);
 
   const onDismissByBackground = () => {
     dispatch({
@@ -148,7 +131,7 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
                 theme={
                   Object.keys(boundaryDates).length < 1 ? "none" : "primary"
                 }
-                onPress={onConfirm}
+                onPress={() => onConfirm(boundaryDates)}
                 disabled={Object.keys(boundaryDates).length < 1}
               />
             </TouchableOpacity>
