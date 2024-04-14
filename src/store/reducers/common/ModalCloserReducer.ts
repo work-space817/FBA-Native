@@ -1,4 +1,4 @@
-import { IModalCloser, ModalCloserActionType } from "../types";
+import { IModalCloser, ModalCloserActionType } from "./types";
 
 const initState: IModalCloser = {
   isModalClose: false,

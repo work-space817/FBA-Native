@@ -11,9 +11,9 @@ import { format, parseISO } from "date-fns";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CustomButton from "../../components/UI/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
-import { ICalendarDatesRangeActionType } from "../../store/reducers/types";
 import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 import { RootState } from "../../store";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
 
 interface ICalendarWithRange {
   maskStyle?: ViewStyle;

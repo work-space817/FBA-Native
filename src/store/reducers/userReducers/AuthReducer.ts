@@ -1,4 +1,4 @@
-import { IAuthUser, AuthUserActionType } from "../types";
+import { IAuthUser, AuthUserActionType } from "./types";
 
 const initState: IAuthUser = {
   isAuth: false,

@@ -1,41 +1,35 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import UserBalance from "./UserBalance";
-import { useSelector } from "react-redux";
-import { IUserBalance } from "../../store/reducers/types";
-import { RootState } from "../../store";
 
-const BalanceUI = () => {
-  const fetchUserBalanceData = UserBalance();
-  const { balance } = useSelector(
-    (store: RootState) => store.userBalance as IUserBalance
-  );
+const BalanceUI = memo(() => {
+  const { balance } = UserBalance();
 
   return (
     <View style={styles.layout}>
       <View style={styles.column}>
         <Text style={styles.currentBalanceText}>
-          &#8372; {balance?.currentBalance}
+          &#8372; {balance.currentBalance}
         </Text>
         <Text style={styles.descriptionText}>Current balance</Text>
       </View>
 
       <View style={styles.column}>
         <Text style={styles.incomeBalanceText}>
-          &#8372; {balance?.incomingBalance}
+          &#8372; {balance.incomeBalance}
         </Text>
         <Text style={styles.descriptionText}>Income balance</Text>
       </View>
 
       <View style={styles.column}>
         <Text style={styles.outcomeBalanceText}>
-          &#8372; {balance?.outcomingBalance}
+          &#8372; {balance.outcomeBalance}
         </Text>
         <Text style={styles.descriptionText}>Outcome balance</Text>
       </View>
     </View>
   );
-};
+});
 const styles = StyleSheet.create({
   layout: {
     paddingLeft: 16,

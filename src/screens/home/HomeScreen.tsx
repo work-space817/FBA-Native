@@ -8,12 +8,10 @@ import Card from "../../components/card/Card";
 import { BackHandler } from "react-native";
 import GoalSlider from "../../components/goals/GoalSlider";
 import { useDispatch } from "react-redux";
-import {
-  GoalListActionType,
-  UserBalanceActionType,
-} from "../../store/reducers/types";
 import GoalPieDiagram from "../../components/diagrams/goalDiagrams/goalPieDiagram/GoalPieDiagram";
 import ExchangeRateLinear from "../../components/diagrams/exchangeRate/ExchangeRateLinear";
+import { GoalListActionType } from "../../store/reducers/goalReducers/types";
+import { UserBalanceActionType } from "../../store/reducers/userReducers/types";
 
 export default function HomeScreen({ navigation }: any) {
   const { navigate } = useNavigation<StackNavigation>();
@@ -54,7 +52,7 @@ export default function HomeScreen({ navigation }: any) {
       <OperationMenu />
       <GoalSlider />
       <Card />
-      <ExchangeRateLinear />
+      {/* <ExchangeRateLinear /> */}
       <GoalPieDiagram />
     </DefaultLayout>
   );

@@ -10,15 +10,7 @@ import {
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { ITransactionAdd } from "./types";
 import { useDispatch, useSelector } from "react-redux";
-import setUserBalance from "../../api/firebase/user/userBalance/setUserBalance";
-import {
-  ISelectCategories,
-  IUserBalance,
-  ModalCloserActionType,
-  SelectCategoriesActionType,
-  TransactionListActionType,
-  UserBalanceActionType,
-} from "../../store/reducers/types";
+
 import { useFormik } from "formik";
 import setTransactionData from "../../api/firebase/transactions/setTransactionData";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
@@ -33,6 +25,14 @@ import Transaction from "./Transaction";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
+import updateUserInformation from "../../api/firebase/user/userInfo/updateUserInformation";
+import { RootState } from "../../store";
+import { UserBalanceActionType } from "../../store/reducers/userReducers/types";
+import {
+  ModalCloserActionType,
+  SelectCategoriesActionType,
+} from "../../store/reducers/common/types";
+import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 interface ITransactionType {
   transactionType: "Income transaction" | "Outcome transaction";
 }
@@ -47,11 +47,9 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
     transactionType: transactionType,
   };
   const { selectedCategories } = useSelector(
-    (store: any) => store.selectCategories as ISelectCategories
+    (store: RootState) => store.selectCategories
   );
-  const { balance } = useSelector(
-    (store: any) => store.userBalance as IUserBalance
-  );
+  const { userBalance } = useSelector((store: RootState) => store.userBalance);
   const dispatch = useDispatch();
   const today = new Date();
   const defaultTime = format(today, "HH:mm");
@@ -98,26 +96,6 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
   const maxDate = format(today, "yyyy-MM-dd");
   const transactionDate = format(selectedDay, "yyyy-MM-dd");
   const formattedDate = format(selectedDay, "dd MMMM yyyy");
-
-  const userBalance = () => {
-    if (transactionType === "Income transaction") {
-      const changedBalance = {
-        currentBalance: balance.currentBalance + +values.transactionValue,
-        incomingBalance: balance.incomingBalance + +values.transactionValue,
-        outcomingBalance: balance.outcomingBalance,
-      };
-      setUserBalance(changedBalance);
-    }
-    if (transactionType === "Outcome transaction") {
-      const changedBalance = {
-        currentBalance: balance.currentBalance - +values.transactionValue,
-        incomingBalance: balance.incomingBalance,
-        outcomingBalance: balance.outcomingBalance + +values.transactionValue,
-      };
-      setUserBalance(changedBalance);
-    }
-  };
-
   const timePickerByPlatform =
     Platform.OS === "ios" ? (
       <ComponentsLayout style={styles.timePickerLayout}>
@@ -151,9 +129,9 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         negativeButton={{ label: "Cancel" }}
       />
     );
+
   const onSubmitHandler = (values: ITransactionAdd) => {
     try {
-      userBalance();
       const transactionData = {
         ...values,
         transactionValue: +values.transactionValue,
@@ -161,19 +139,28 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         transactionDate: transactionDate,
         selectedCategories: selectedCategories,
       };
+      if (values.transactionType === "Income transaction") {
+        updateUserInformation({
+          currentBalance: userBalance + +values.transactionValue,
+        });
+      } else if (values.transactionType === "Outcome transaction") {
+        updateUserInformation({
+          currentBalance: userBalance - +values.transactionValue,
+        });
+      }
       setTransactionData(transactionData);
       console.log("Нова транзакція успішно створена: ", transactionData);
-      const updateTransactionList = dispatch({
+      dispatch({
         type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
       });
-      const updateBalance = dispatch({
+      dispatch({
         type: UserBalanceActionType.UPDATE_BALANCE,
       });
-      const modalCloser = dispatch({
+      dispatch({
         type: ModalCloserActionType.MODAL_CLOSE,
         payload: true,
       });
-      const unselectedCategory = dispatch({
+      dispatch({
         type: SelectCategoriesActionType.SELECT_CATEGORIES,
         payload: null,
       });
@@ -239,7 +226,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         touched={touched.transactionTitle}
       />
       <CustomInput
-        label="Enter goals' cost"
+        label="Enter transactions' cost"
         field="transactionValue"
         inputMode="numeric"
         keyboardType="number-pad"

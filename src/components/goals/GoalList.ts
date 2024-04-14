@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { IGoal } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import getGoalsData from "../../api/firebase/goals/getGoalsData";
-import { GoalListActionType, IGoalList } from "../../store/reducers/types";
 import { RootState } from "../../store";
+import { GoalListActionType } from "../../store/reducers/goalReducers/types";
 
 const GoalList = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { isUpdatedGoaliList } = useSelector(
-    (store: RootState) => store.goalList as IGoalList
+    (store: RootState) => store.goalList
   );
 
   const fetchUserGoals = async () => {
@@ -20,7 +20,7 @@ const GoalList = () => {
         id: doc.id,
         ...doc.data(),
       })) as IGoal[];
-      const setGoalList = dispatch({
+      dispatch({
         type: GoalListActionType.GOAL_LIST,
         payload: goalsData,
       });

@@ -10,7 +10,6 @@ import {
 import CustomButton from "./CustomButton";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { useSelector } from "react-redux";
-import { IModalCloser } from "../../store/reducers/types";
 import { RootState } from "../../store";
 
 interface ICustomModal extends ModalProps {
@@ -20,9 +19,7 @@ interface ICustomModal extends ModalProps {
 }
 const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { isModalClose } = useSelector(
-    (store: RootState) => store.modalClose as IModalCloser
-  );
+  const { isModalClose } = useSelector((store: RootState) => store.modalClose);
   useEffect(() => {
     if (isModalClose) {
       setModalVisible(false);

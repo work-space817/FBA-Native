@@ -13,12 +13,12 @@ import { useEffect, useState } from "react";
 import SignUp from "../../components/auth/registration/SignUp";
 import LogIn from "../../components/auth/login/LogIn";
 import { StackNavigation } from "../../navigation/Navigation";
-import { AuthUserActionType, IAuthUser } from "../../store/reducers/types";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 import CustomLoading from "../../components/UI/CustomLoadingAnimation";
 import { RootState } from "../../store";
+import { AuthUserActionType } from "../../store/reducers/userReducers/types";
 
 export default function AuthenticationScreen() {
   const [logInVisible, setLogInVisible] = useState(false);
@@ -26,7 +26,7 @@ export default function AuthenticationScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((store: RootState) => store.auth as IAuthUser);
+  const { isAuth } = useSelector((store: RootState) => store.auth);
   const { navigate } = useNavigation<StackNavigation>();
 
   useEffect(() => {

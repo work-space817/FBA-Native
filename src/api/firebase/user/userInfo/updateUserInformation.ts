@@ -7,8 +7,9 @@ import {
 } from "firebase/firestore";
 import { auth, firestore } from "../../config";
 import { User, updatePassword } from "firebase/auth";
+import { IUpdateUserInformation } from "../types";
 
-const updateUserInformation = async (values: any) => {
+const updateUserInformation = async (values: IUpdateUserInformation) => {
   console.log("values: ", values);
   const userId = await getUserId();
   const userRef = collection(firestore, "users");
@@ -17,15 +18,18 @@ const updateUserInformation = async (values: any) => {
     user.id == userId ? user : null
   );
   const userData = userInfo?.ref as DocumentReference;
-  const updateUserPassword = await updatePassword(
-    auth.currentUser as User,
-    values.newPassword
-  );
-  console.log("updateUserPassword: ", updateUserPassword);
-  const updateProfle = await updateDoc(userData, {
-    password: values.newPassword,
-    photo: values.photo,
+
+  if (values.password) {
+    const updateUserPassword = await updatePassword(
+      auth.currentUser as User,
+      values.password
+    );
+    console.log("updateUserPassword: ", updateUserPassword);
+  }
+  const updateUserInfo = await updateDoc(userData, {
+    currentBalance: values.currentBalance,
   });
+  console.log("updateUserInfo: ", updateUserInfo);
 };
 
 export default updateUserInformation;

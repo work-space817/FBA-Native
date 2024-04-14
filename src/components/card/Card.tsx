@@ -10,7 +10,7 @@ const Card = memo(() => {
     <ComponentsLayout>
       <View style={styles.cardAndBalace}>
         <Text style={styles.titleText}>Card</Text>
-        <CustomCalendarHeader />
+        {/* <CustomCalendarHeader /> */}
       </View>
       <View style={styles.cardAndBalace}>
         <CardUI />

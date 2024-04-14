@@ -2,8 +2,8 @@ import DefaultLayout from "../layouts/default/DefaultLayout";
 import DataByCalendarRange from "../../components/common/DataByCalendarRange";
 import { useDispatch } from "react-redux";
 import React, { useEffect } from "react";
-import { ICalendarDatesRangeActionType } from "../../store/reducers/types";
 import CustomCalendarHeader from "../../lib/react-native-calendars/CustomCalendarHeader";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
 
 export default function StatisticScreen({ navigation }: any) {
   const dispatch = useDispatch();

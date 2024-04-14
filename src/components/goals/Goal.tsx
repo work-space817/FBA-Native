@@ -13,9 +13,9 @@ import {
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
-import { GoalSelectActionType } from "../../store/reducers/types";
 import DateFormater from "../../helpers/functions/dateFormater";
 import { format } from "date-fns";
+import { GoalSelectActionType } from "../../store/reducers/goalReducers/types";
 
 const Goal: FC<IGoal> = memo(
   ({ cost, expireDate, title, selectedCategories, id, style }) => {

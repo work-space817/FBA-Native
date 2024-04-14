@@ -6,11 +6,6 @@ import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout"
 import { updateDoc, deleteDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import getGoalsData from "../../api/firebase/goals/getGoalsData";
-import {
-  IGoalSelect,
-  GoalListActionType,
-  GoalSelectActionType,
-} from "../../store/reducers/types";
 import { IGoalEdit } from "./types";
 import Goal from "./Goal";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
@@ -19,12 +14,14 @@ import CustomInput from "../UI/CustomInput";
 import { RootState } from "../../store";
 import { CalendarList } from "react-native-calendars";
 import { format } from "date-fns";
+import {
+  GoalListActionType,
+  GoalSelectActionType,
+} from "../../store/reducers/goalReducers/types";
 
 const GoalEdit = memo(() => {
   const dispatch = useDispatch();
-  const { selectedGoal } = useSelector(
-    (store: RootState) => store.selectGoal as IGoalSelect
-  );
+  const { selectedGoal } = useSelector((store: RootState) => store.selectGoal);
   const [showCalendarList, setShowCalendarList] = useState(false);
   const init: IGoalEdit = {
     title: "",
@@ -37,7 +34,7 @@ const GoalEdit = memo(() => {
       const fetchCurrentGoal = fetchGoals.docs.map((doc) =>
         doc.id === selectedGoal?.id ? deleteDoc(doc.ref) : null
       );
-      const updateGoalList = dispatch({
+      dispatch({
         type: GoalListActionType.UPDATE_GOALS_LIST,
       });
       dispatch({
@@ -72,7 +69,7 @@ const GoalEdit = memo(() => {
         doc.id === selectedGoal?.id ? updateDoc(doc.ref, data) : null
       );
       handleReset(values);
-      const updateGoalList = dispatch({
+      dispatch({
         type: GoalListActionType.UPDATE_GOALS_LIST,
       });
       dispatch({

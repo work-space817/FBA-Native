@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import {
   ICalendarDatesRangeActionType,
   ICalendarDatesRangeReducer,
-} from "../types";
+} from "./types";
 
 const today = new Date();
 const defaultStartedDate = format(0, "yyyy-MM-dd");

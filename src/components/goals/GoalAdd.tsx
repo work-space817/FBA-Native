@@ -3,11 +3,7 @@ import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { IGoalAdd } from "./types";
 import React, { useCallback, useMemo, useState } from "react";
-import {
-  GoalListActionType,
-  ModalCloserActionType,
-  SelectCategoriesActionType,
-} from "../../store/reducers/types";
+
 import { View, StyleSheet, Text, ViewStyle } from "react-native";
 import CustomButton from "../UI/CustomButton";
 import CustomInput from "../UI/CustomInput";
@@ -19,6 +15,11 @@ import { RootState } from "../../store";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import Goal from "./Goal";
+import {
+  ModalCloserActionType,
+  SelectCategoriesActionType,
+} from "../../store/reducers/common/types";
+import { GoalListActionType } from "../../store/reducers/goalReducers/types";
 
 const GoalAdd = () => {
   const init: IGoalAdd = {
@@ -61,14 +62,14 @@ const GoalAdd = () => {
       console.log(data);
       setGoalsData(data);
       handleReset(values);
-      const updateGoalList = dispatch({
+      dispatch({
         type: GoalListActionType.UPDATE_GOALS_LIST,
       });
-      const modalCloser = dispatch({
+      dispatch({
         type: ModalCloserActionType.MODAL_CLOSE,
         payload: true,
       });
-      const unselectedCategory = dispatch({
+      dispatch({
         type: SelectCategoriesActionType.SELECT_CATEGORIES,
         payload: null,
       });

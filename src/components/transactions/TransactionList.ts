@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ITransaction } from "./types";
 import { RootState } from "../../store";
 import getTransactionData from "../../api/firebase/transactions/getTransactionData";
-import { TransactionListActionType } from "../../store/reducers/types";
+import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 
 const TransactionList = (
   startDate?: string,

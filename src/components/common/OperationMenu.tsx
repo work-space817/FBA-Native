@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import CustomButton from "../UI/CustomButton";
 import CustomModal from "../UI/CustomModal";
 import GoalAdd from "../goals/GoalAdd";
 import TransactionAdd from "../transactions/TransactionAdd";

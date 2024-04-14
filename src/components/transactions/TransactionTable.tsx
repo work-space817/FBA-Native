@@ -22,13 +22,12 @@ import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
 import Transaction from "./Transaction";
 import GeneralSVG from "../../helpers/SVG/common/GeneralSVG";
 import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
-import {
-  ICalendarDatesRangeActionType,
-  ScrollViewPositionActionType,
-  TransactionListActionType,
-} from "../../store/reducers/types";
+
 import { RootState } from "../../store";
 import { ITransaction } from "./types";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
+import { ScrollViewPositionActionType } from "../../store/reducers/common/types";
+import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 
 const TransactionTable = memo(() => {
   const dispatch = useDispatch();
@@ -50,9 +49,9 @@ const TransactionTable = memo(() => {
   const [searchedList, setSearchedList] =
     useState<ITransaction[]>(transactionList);
 
-  console.log("requestLimit: ", requestLimit);
-  console.log("isUpdatedList: ", isUpdatedList);
-  console.log("transactionList: ", transactionList.length);
+  //? console.log("requestLimit: ", requestLimit);
+  //? console.log("isUpdatedList: ", isUpdatedList);
+  //? console.log("transactionList: ", transactionList.length);
 
   useEffect(() => {
     dispatch({ type: ScrollViewPositionActionType.SET_POSITION, payload: 350 });
@@ -62,7 +61,7 @@ const TransactionTable = memo(() => {
   }, [transactionList]);
 
   const searchTransactionByDates = (e: any) => {
-    const transactionList = dispatch({
+    dispatch({
       type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
       payload: false,
     });

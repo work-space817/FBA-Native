@@ -1,26 +1,22 @@
-import { IUserBalance, UserBalanceActionType } from "../types";
+import { IUserBalance, UserBalanceActionType } from "./types";
 
 const initState: IUserBalance = {
   isUpdatedBalance: false,
-  balance: {
-    currentBalance: 0,
-    incomingBalance: 0,
-    outcomingBalance: 0,
-  },
+  userBalance: 0,
 };
 export const UserBalanceReducer = (
   state = initState,
   action: any
 ): IUserBalance => {
   switch (action.type) {
-    case "SET_BALANCE": {
+    case UserBalanceActionType.SET_BALANCE: {
       return {
         ...state,
         isUpdatedBalance: false,
-        balance: action.payload,
+        userBalance: action.payload,
       };
     }
-    case "UPDATE_BALANCE":
+    case UserBalanceActionType.UPDATE_BALANCE:
       return {
         ...state,
         isUpdatedBalance: true,

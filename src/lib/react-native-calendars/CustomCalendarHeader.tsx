@@ -7,6 +7,7 @@ const CustomCalendarHeader = memo(() => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const currentMonth = format(currentDate, "MMMM yyyy");
+  console.log("currentMonth: ", currentMonth);
 
   const handlePrevMonth = () => {
     setCurrentDate((prevDate) => subMonths(prevDate, 1));

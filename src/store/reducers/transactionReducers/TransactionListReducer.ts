@@ -1,4 +1,4 @@
-import { ITransactionList, TransactionListActionType } from "../types";
+import { ITransactionList, TransactionListActionType } from "./types";
 
 const initState: ITransactionList = {
   isUpdatedList: false,

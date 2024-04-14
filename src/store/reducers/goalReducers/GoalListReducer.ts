@@ -1,4 +1,4 @@
-import { IGoalList, GoalListActionType } from "../types";
+import { GoalListActionType, IGoalList } from "./types";
 
 const initState: IGoalList = {
   isUpdatedGoaliList: false,

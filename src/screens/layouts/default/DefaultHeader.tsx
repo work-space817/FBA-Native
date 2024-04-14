@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigation } from "../../../navigation/Navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import { AuthUserActionType } from "../../../store/reducers/types";
+import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
 
 const DefaultHeader = () => {
   const dispatch = useDispatch();

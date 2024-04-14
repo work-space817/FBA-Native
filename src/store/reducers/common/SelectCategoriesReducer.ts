@@ -1,4 +1,4 @@
-import { SelectCategoriesActionType, ISelectCategories } from "../types";
+import { ISelectCategories, SelectCategoriesActionType } from "./types";
 
 const initState: ISelectCategories = {
   selectedCategories: null,

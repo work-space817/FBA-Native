@@ -1,15 +1,16 @@
 import DefaultLayout from "../layouts/default/DefaultLayout";
 import GoalSlider from "../../components/goals/GoalSlider";
 import { useDispatch } from "react-redux";
-import {
-  GoalListActionType,
-  GoalSelectActionType,
-  ICalendarDatesRangeActionType,
-  TransactionListActionType,
-} from "../../store/reducers/types";
+
 import GoalEdit from "../../components/goals/GoalEdit";
 import TransactionTable from "../../components/transactions/TransactionTable";
 import { useEffect } from "react";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
+import {
+  GoalSelectActionType,
+  GoalListActionType,
+} from "../../store/reducers/goalReducers/types";
+import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 
 export default function TransactionScreen({ navigation }: any) {
   const dispatch = useDispatch();

@@ -13,9 +13,9 @@ import { auth } from "../../../api/firebase/config";
 import setAuthToken from "../../../helpers/functions/setAuthToken";
 import { ILogIn } from "./types";
 import { useDispatch } from "react-redux";
-import { AuthUserActionType } from "../../../store/reducers/types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../navigation/Navigation";
+import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
 
 const LogIn = () => {
   const init: ILogIn = {

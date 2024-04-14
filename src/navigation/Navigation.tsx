@@ -1,8 +1,4 @@
-import {
-  NavigationContainer,
-  NavigationProp,
-  useNavigation,
-} from "@react-navigation/native";
+import { NavigationContainer, NavigationProp } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "../screens/settings/SettingsScreen";
 import HomeScreen from "../screens/home/HomeScreen";

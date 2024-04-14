@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -10,10 +10,8 @@ import CustomButton from "../../UI/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../navigation/Navigation";
 import { auth } from "../../../api/firebase/config";
-import setUserBalance from "../../../api/firebase/user/userBalance/setUserBalance";
-import { IBalance } from "../../../api/firebase/user/userBalance/types";
 import { useDispatch } from "react-redux";
-import { AuthUserActionType } from "../../../store/reducers/types";
+import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
 const SignUp = () => {
   const init: ISignUp = {
     email: "",
@@ -32,13 +30,6 @@ const SignUp = () => {
       );
       await setUserAuth(values, SignUpResult);
       dispatch({ type: AuthUserActionType.LOGIN_USER });
-      const userBalance: IBalance = {
-        currentBalance: +values.currentBalance,
-        incomingBalance: 0,
-        outcomingBalance: 0,
-      };
-      await setUserBalance(userBalance);
-      console.log("userBalance: ", userBalance);
       navigate("HomeScreen");
       handleReset(values);
     } catch (error: any) {

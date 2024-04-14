@@ -1,4 +1,4 @@
-import { IScrollViewPosition, ScrollViewPositionActionType } from "./../types";
+import { IScrollViewPosition, ScrollViewPositionActionType } from "./types";
 
 const initState: IScrollViewPosition = {
   keyboardAwarePosition: 75,

@@ -1,14 +1,12 @@
-import { FC, memo, useMemo, useState } from "react";
+import { FC, memo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ISelectCategories,
-  SelectCategoriesActionType,
-} from "../../store/reducers/types";
+
 import { View, Text, StyleSheet } from "react-native";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import CustomButtonWithoutFeedback from "../UI/CustomButtonWithoutFeedback";
 import { RootState } from "../../store";
 import CategoriesList from "../../helpers/functions/UI/CategoriesList";
+import { SelectCategoriesActionType } from "../../store/reducers/common/types";
 
 enum Categories {
   incomeTransaction = "Income transaction",
@@ -35,7 +33,7 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
 
     const selectIcon = (iconId: string, index: number) => {
       setisActive(index);
-      const selectedCategory = dispatch({
+      dispatch({
         type: SelectCategoriesActionType.SELECT_CATEGORIES,
         payload: iconId,
       });

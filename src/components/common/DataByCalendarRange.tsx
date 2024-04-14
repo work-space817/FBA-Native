@@ -6,8 +6,8 @@ import { RootState } from "../../store";
 import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
 import CustomButton from "../UI/CustomButton";
 import { useDispatch } from "react-redux";
-import { ICalendarDatesRangeActionType } from "../../store/reducers/types";
 import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
+import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
 
 const DataByCalendarRange = () => {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const DataByCalendarRange = () => {
           <CalendarSVG id="Calendar" width={16} height={16} />
         </CustomButton>
       </View>
-      <CalendarWithRange onDismiss={() => {}} maskStyle={styles.maskStyle} />
+      <CalendarWithRange onConfirm={() => {}} maskStyle={styles.maskStyle} />
     </ComponentsLayout>
   );
 };
