@@ -16,10 +16,10 @@ interface AuthLayoutProps extends ViewProps {
 const AuthLayout = ({ children, style }: AuthLayoutProps) => {
   return (
     <KeyboardAwareScrollView
-      extraHeight={100}
-      keyboardDismissMode="on-drag"
+      // extraHeight={100}
+      keyboardDismissMode="interactive"
       // enableResetScrollToCoords={false}
-      enableOnAndroid={true}
+      enableOnAndroid={false}
       keyboardOpeningTime={0}
       contentContainerStyle={[styles.outterLayout, style]}
     >

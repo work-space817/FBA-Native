@@ -1,11 +1,4 @@
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  ViewStyle,
-  KeyboardAvoidingView,
-} from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import AuthLayout from "../layouts/auth/AuthLayout";
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "../../components/UI/CustomButton";
@@ -69,7 +62,6 @@ export default function AuthenticationScreen() {
 
   return (
     <AuthLayout>
-      {/* <KeyboardAvoidingView behavior="position"> */}
       <TouchableOpacity onPress={handleOnNavigate}>
         <Text style={styles.authTitle}>Financial Budgeting App</Text>
       </TouchableOpacity>
@@ -92,7 +84,6 @@ export default function AuthenticationScreen() {
 
       {signUpVisible && <SignUp />}
       {logInVisible && <LogIn />}
-      {/* </KeyboardAvoidingView> */}
     </AuthLayout>
   );
 }

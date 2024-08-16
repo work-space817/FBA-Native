@@ -1,8 +1,21 @@
-import { Animated, PanResponder, StyleSheet, Text, View } from "react-native";
+import {
+  Animated,
+  PanResponder,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { ITransaction } from "./types";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import TransactionSVG from "../../helpers/SVG/UI/TransactionSVG";
+import getTransactionData from "../../api/firebase/transactions/getTransactionData";
+import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteDoc, doc } from "firebase/firestore";
+import updateUserInformation from "../../api/firebase/user/userInfo/updateUserInformation";
+import { RootState } from "../../store";
 
 const Transaction: FC<ITransaction> = ({
   transactionTitle,
@@ -23,9 +36,10 @@ const Transaction: FC<ITransaction> = ({
   const transactionValueType =
     transactionType === "Income transaction" ? "+" : "-";
 
+  const { userBalance } = useSelector((store: RootState) => store.userBalance);
   const [startPosition, setStartPosition] = useState({ x: 0 });
   const [tapPosition, setTapPosition] = useState({ x: 0 });
-
+  const dispatch = useDispatch();
   const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = React.useRef(
@@ -62,7 +76,34 @@ const Transaction: FC<ITransaction> = ({
       }).start();
     }
   }, [tapPosition]);
+  const transactionDelete = async () => {
+    try {
+      const fetchTransactions = await getTransactionData();
 
+      const selectedTransaction = fetchTransactions.transactionsData.docs.find(
+        (doc) => (doc.id === id ? doc : null)
+      );
+      const selectedData = selectedTransaction?.data() as ITransaction;
+
+      if (selectedData.transactionType === "Income transaction") {
+        updateUserInformation({
+          currentBalance: userBalance - selectedData.transactionValue,
+        });
+      } else if (selectedData.transactionType === "Outcome transaction") {
+        updateUserInformation({
+          currentBalance: userBalance + selectedData.transactionValue,
+        });
+      }
+
+      deleteDoc(selectedTransaction?.ref as any);
+      dispatch({
+        type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
+        payload: false,
+      });
+    } catch (error) {
+      console.error("Сталася помилка при видаленні цілі:", error);
+    }
+  };
   return (
     <View>
       <Animated.View
@@ -88,12 +129,18 @@ const Transaction: FC<ITransaction> = ({
           </View>
         </View>
       </Animated.View>
-      <View style={[styles.optionalView, styles.leftViewStyle]}>
+      <TouchableOpacity
+        onPress={transactionDelete}
+        style={[styles.optionalView, styles.leftViewStyle]}
+      >
         <TransactionSVG id={"Delete"} />
-      </View>
-      <View style={[styles.optionalView, styles.rightViewStyle]}>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={transactionDelete}
+        style={[styles.optionalView, styles.rightViewStyle]}
+      >
         <TransactionSVG id={"Delete"} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

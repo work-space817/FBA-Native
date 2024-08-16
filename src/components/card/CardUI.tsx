@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import getUserInformation from "../../api/firebase/user/userInfo/getUserInformation";
 import { ISignUp } from "../auth/registration/types";
 import { format } from "date-fns";
 
-const CardUI = () => {
+const CardUI = memo(() => {
   const [userData, setUserData] = useState<ISignUp>({
     email: "",
     password: "",
@@ -63,7 +63,7 @@ const CardUI = () => {
       </View>
     </>
   );
-};
+});
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "rgba(126,76,215,.75)",

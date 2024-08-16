@@ -5,6 +5,7 @@ import getUserInformation from "../../api/firebase/user/userInfo/getUserInformat
 import { format } from "date-fns/format";
 import TransactionList from "../transactions/TransactionList";
 import { UserBalanceActionType } from "../../store/reducers/userReducers/types";
+import { ITransaction } from "../transactions/types";
 
 const UserBalance = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const UserBalance = () => {
     incomeBalance: 0,
     outcomeBalance: 0,
   });
+
   const { isUpdatedBalance } = useSelector(
     (store: RootState) => store.userBalance
   );
@@ -48,6 +50,10 @@ const UserBalance = () => {
       dispatch({
         type: UserBalanceActionType.SET_BALANCE,
         payload: currentBalance,
+      });
+      dispatch({
+        type: UserBalanceActionType.UPDATE_BALANCE,
+        payload: false,
       });
     } catch (error) {
       console.error(

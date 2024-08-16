@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f5f5f5",
-    paddingBottom: 25,
+    // paddingBottom: 25,
   },
   sidebarItem: {
     padding: 2,

@@ -40,6 +40,7 @@ export default function HomeScreen({ navigation }: any) {
     });
     dispatch({
       type: UserBalanceActionType.UPDATE_BALANCE,
+      payload: true,
     });
     console.log("Refreshing components...");
   };
