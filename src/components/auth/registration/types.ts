@@ -1,5 +1,5 @@
 export interface ISignUp {
   email: string;
   password: string;
-  currentBalance: number | string;
+  currentBalance: string;
 }

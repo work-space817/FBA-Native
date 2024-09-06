@@ -1,5 +1,5 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { memo, useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -8,20 +8,25 @@ import { ISignUp } from "./types";
 import CustomInput from "../../UI/CustomInput";
 import CustomButton from "../../UI/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../../navigation/Navigation";
 import { auth } from "../../../api/firebase/config";
 import { useDispatch } from "react-redux";
 import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
-const SignUp = () => {
+import { StackNavigation } from "../../../core/navigation/Navigation";
+import { ScreenNames } from "../../../core/navigation/routes";
+
+const SignUp = memo(() => {
   const init: ISignUp = {
     email: "",
     password: "",
     currentBalance: "0",
   };
 
+  const [loading, setLoading] = useState<boolean>(false);
   const { navigate } = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const onSubmitHandler = async (values: ISignUp) => {
+    setLoading(true);
+    console.log("values: ", values);
     try {
       const SignUpResult = await createUserWithEmailAndPassword(
         auth,
@@ -30,12 +35,12 @@ const SignUp = () => {
       );
       await setUserAuth(values, SignUpResult);
       dispatch({ type: AuthUserActionType.LOGIN_USER });
-      navigate("HomeScreen");
+      navigate(ScreenNames.HomeScreen);
       handleReset(values);
+      setLoading(false);
     } catch (error: any) {
       console.log("error: ", error);
-      const code = error.code;
-      switch (code) {
+      switch (error.code) {
         case "auth/email-already-in-use":
           setFieldError("email", "Account is already exist");
           break;
@@ -54,6 +59,7 @@ const SignUp = () => {
         default:
           break;
       }
+      setLoading(false);
     }
   };
 
@@ -91,15 +97,15 @@ const SignUp = () => {
   } = formik;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.formContainer}>
+    <View style={styles.layout}>
+      <View style={styles.formLayout}>
         <CustomInput
           label="Email"
           field="email"
           inputMode="email"
           value={values.email}
           keyboardType="email-address"
-          onChange={handleChange("email")}
+          onChangeText={handleChange("email")}
           clientSideError={errors.email}
           touched={touched.email}
           placeholder="exampleMail@mail.com"
@@ -109,9 +115,9 @@ const SignUp = () => {
           label="Password"
           field="password"
           value={values.password}
-          isSecureTextEntry={true}
+          secureTextEntry={true}
           autoComplete="current-password"
-          onChange={handleChange("password")}
+          onChangeText={handleChange("password")}
           clientSideError={errors.password}
           touched={touched.password}
         />
@@ -121,51 +127,65 @@ const SignUp = () => {
           inputMode="numeric"
           keyboardType="number-pad"
           value={values.currentBalance}
-          onChange={handleChange("currentBalance")}
+          onChangeText={handleChange("currentBalance")}
           onFocus={() => setFieldValue("currentBalance", "")}
           clientSideError={errors.currentBalance}
           touched={touched.currentBalance}
         />
         <CustomButton
           title={"Sign up"}
-          theme="primary"
+          theme={loading ? "secondary" : "primary"}
           onPress={handleSubmit}
+          disabled={loading}
+          style={styles.button}
+          titleStyle={styles.buttonTitle}
         />
+      </View>
+      <View style={styles.optionalText}>
+        <Text>Do you have an account?</Text>
+        <TouchableOpacity onPress={() => navigate(ScreenNames.LoginScreen)}>
+          <Text style={styles.toLogin}>Login</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
-  container: {
-    width: "70%",
-    paddingTop: 25,
-    paddingBottom: 25,
-    marginTop: 25,
+  layout: {
+    width: "100%",
+    gap: 16,
     alignItems: "center",
-
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-    borderStyle: "solid",
+  },
+  formLayout: {
+    width: "100%",
+    gap: 10,
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
   },
-  formContainer: {
-    width: "80%",
+  optionalText: {
+    gap: 4,
+    height: 20,
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  toLogin: {
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 20,
+    color: "#rgba(126,76,215,.75)",
+    textDecorationLine: "underline",
   },
   button: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 20,
+    borderRadius: 8,
+    paddingVertical: 12,
   },
-  buttonText: {
-    color: "white",
+  buttonTitle: {
+    fontWeight: "700",
     fontSize: 16,
+    lineHeight: 18,
   },
 });
 export default SignUp;
