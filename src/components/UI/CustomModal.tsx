@@ -8,9 +8,9 @@ import {
   Platform,
 } from "react-native";
 import CustomButton from "./CustomButton";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 
 interface ICustomModal extends ModalProps {
   children: React.ReactNode;

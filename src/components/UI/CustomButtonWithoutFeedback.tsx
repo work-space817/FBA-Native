@@ -1,52 +1,64 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import {
   StyleSheet,
+  TouchableOpacity,
   Text,
   ViewStyle,
-  TouchableWithoutFeedbackProps,
+  TouchableOpacityProps,
+  GestureResponderEvent,
+  TextStyle,
   TouchableWithoutFeedback,
-  View,
+  TouchableWithoutFeedbackProps,
 } from "react-native";
 
-interface ICustomButtonWithoutFeedback extends TouchableWithoutFeedbackProps {
+interface ICustomButtom extends TouchableWithoutFeedbackProps {
+  titleStyle?: TextStyle;
   title?: string;
   theme?: "none" | "primary" | "secondary";
-  onPress?: (e: any) => void;
+  onPress: (e: any) => void;
 }
 
-const CustomButtonWithoutFeedback: FC<ICustomButtonWithoutFeedback> = ({
-  children,
-  title,
-  style,
+const CustomButtonWithoutFeedback: FC<ICustomButtom> = ({
   theme = "none",
-  onPress,
-  disabled,
+  ...props
 }) => {
-  const buttonStyles: ViewStyle = styles[theme] || styles.none;
-  const textStyles = styles[`${theme}Text`] || styles.noneText;
+  const buttonStyles: ViewStyle = styles[theme];
+  const textStyles = styles[`${theme}Text`];
   return (
-    <TouchableWithoutFeedback onPress={onPress} disabled={disabled}>
-      <View style={[styles.button, style, buttonStyles]}>
-        {children}
-        {title ? <Text style={[styles.text, textStyles]}>{title}</Text> : null}
-      </View>
+    <TouchableWithoutFeedback
+      {...props}
+      onPress={props.onPress}
+      style={[styles.button, buttonStyles, props.style]}
+    >
+      {props.children}
+      {props.title && (
+        <Text style={[styles.text, textStyles, props.titleStyle]}>
+          {props.title}
+        </Text>
+      )}
     </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 6,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     borderRadius: 16,
     borderWidth: 0,
     alignItems: "center",
     justifyContent: "center",
   },
+
   text: {
     fontFamily: "Quicksand_600SemiBold",
+    margin: 0,
+    padding: 0,
+    lineHeight: 17,
   },
   none: {
     backgroundColor: "rgb(255,245,250)",
+    borderColor: "rgba(0,0,0,0.2)",
+    borderWidth: 1,
   },
   noneText: {
     color: "rgb(0,0,0)",
@@ -58,7 +70,7 @@ const styles = StyleSheet.create({
     color: "rgb(255,255,255)",
   },
   secondary: {
-    backgroundColor: "rgba(126,76,215,.75)",
+    backgroundColor: "rgba(110,115,125,1)",
   },
   secondaryText: {
     color: "rgb(255,255,255)",

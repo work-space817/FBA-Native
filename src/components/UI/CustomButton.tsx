@@ -6,30 +6,34 @@ import {
   ViewStyle,
   TouchableOpacityProps,
   GestureResponderEvent,
+  TextStyle,
 } from "react-native";
 
 interface ICustomButtom extends TouchableOpacityProps {
+  titleStyle?: TextStyle;
   title?: string;
   theme?: "none" | "primary" | "secondary";
-  onPress?: (e: any) => void;
+  onPress: (e: any) => void;
 }
 
-const CustomButton: FC<ICustomButtom> = memo(
-  ({ children, title, style, theme = "none", onPress, disabled }) => {
-    const buttonStyles: ViewStyle = styles[theme] || styles.none;
-    const textStyles = styles[`${theme}Text`] || styles.noneText;
-    return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={[styles.button, buttonStyles, style]}
-        disabled={disabled}
-      >
-        {children}
-        {title ? <Text style={[styles.text, textStyles]}>{title}</Text> : null}
-      </TouchableOpacity>
-    );
-  }
-);
+const CustomButton: FC<ICustomButtom> = ({ theme = "none", ...props }) => {
+  const buttonStyles: ViewStyle = styles[theme];
+  const textStyles = styles[`${theme}Text`];
+  return (
+    <TouchableOpacity
+      {...props}
+      onPress={props.onPress}
+      style={[styles.button, buttonStyles, props.style]}
+    >
+      {props.children}
+      {props.title && (
+        <Text style={[styles.text, textStyles, props.titleStyle]}>
+          {props.title}
+        </Text>
+      )}
+    </TouchableOpacity>
+  );
+};
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 6,
@@ -39,8 +43,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   text: {
     fontFamily: "Quicksand_600SemiBold",
+    margin: 0,
+    padding: 0,
+    lineHeight: 17,
   },
   none: {
     backgroundColor: "rgb(255,245,250)",

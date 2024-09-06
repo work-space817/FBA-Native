@@ -9,62 +9,35 @@ import {
 } from "react-native";
 
 interface CustomInputProps extends TextInputProps {
-  label?: string;
-  isSecureTextEntry?: boolean;
   field?: string;
-  value?: any;
-  onChange?: (text: any) => void;
+  label?: string;
   clientSideError?: string;
   touched?: boolean;
-  disabled?: boolean;
-  autoCapitalize?: "none" | "sentences" | "words" | "characters";
   layoutStyle?: ViewStyle;
 }
 
-const CustomInput: FC<CustomInputProps> = memo(
-  ({
-    layoutStyle,
-    style,
-    label,
-    inputMode = "text",
-    keyboardType = "default",
-    isSecureTextEntry,
-    value,
-    placeholder,
-    onChange,
-    clientSideError,
-    touched,
-    onFocus,
-    autoComplete = "",
-    disabled,
-    autoCapitalize,
-  }) => {
-    return (
-      <View style={[styles.layout, layoutStyle]}>
-        {label && <Text style={styles.label}>{label}</Text>}
-        <TextInput
-          style={[
-            styles.input,
-            { borderColor: clientSideError && touched ? "red" : "gray" },
-            style,
-          ]}
-          inputMode={inputMode}
-          onChangeText={onChange}
-          onFocus={onFocus}
-          value={value}
-          placeholder={placeholder}
-          secureTextEntry={isSecureTextEntry}
-          keyboardType={keyboardType}
-          editable={!disabled}
-          autoCapitalize={autoCapitalize}
-        />
-        {clientSideError && touched && (
-          <Text style={styles.errorText}>{clientSideError}</Text>
-        )}
-      </View>
-    );
-  }
-);
+const CustomInput: FC<CustomInputProps> = ({ ...props }) => {
+  console.log("props: ");
+  const border = props.clientSideError && props.touched ? "red" : "gray";
+  return (
+    <View style={[styles.layout, props.layoutStyle]}>
+      {props.label && <Text style={styles.label}>{props.label}</Text>}
+      <TextInput
+        {...props}
+        style={[
+          styles.input,
+          props.style,
+          {
+            borderColor: border,
+          },
+        ]}
+      />
+      {props.clientSideError && props.touched && (
+        <Text style={styles.errorText}>{props.clientSideError}</Text>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   layout: {
@@ -76,6 +49,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
+    margin: 0,
+    padding: 0,
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
