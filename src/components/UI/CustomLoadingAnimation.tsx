@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { Animated, View, StyleSheet } from "react-native";
 import HeaderSVG from "../../helpers/SVG/layoutComponents/HeaderSVG";
 
-const CustomLoadingAnimation = () => {
+const CustomLoadingAnimation = memo(() => {
   const translateX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const CustomLoadingAnimation = () => {
       </View>
     </View>
   );
-};
+});
 const styles = StyleSheet.create({
   layout: {
     width: "100%",

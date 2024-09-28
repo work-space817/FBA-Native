@@ -4,23 +4,27 @@ import {
   limit,
   orderBy,
   query,
+  QueryConstraint,
   where,
 } from "firebase/firestore";
 import { firestore } from "../config";
-import getUserId from "../../../helpers/functions/getUserId";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ITransaction } from "../../../components/transactions/types";
 
 const getTransactionData = async (
   startDate?: string,
   endDate?: string,
   requestLimit?: number
 ) => {
-  const userId = await getUserId();
+  const userId = await AsyncStorage.getItem("uid");
 
   const userTransactionsRef = collection(
     firestore,
     `transactions/${userId}/transaction`
   );
-  const transactionsQueryArgs = [orderBy("transactionDate", "desc")] as any[];
+  const transactionsQueryArgs: QueryConstraint[] = [
+    orderBy("transactionDate", "desc"),
+  ];
 
   if (startDate && endDate) {
     transactionsQueryArgs.push(where("transactionDate", ">=", startDate));
@@ -36,12 +40,16 @@ const getTransactionData = async (
     ...transactionsQueryArgs
   );
 
-  const transactionsData = await getDocs(transactionsQuery);
-  const totalAmountTransaction = (await getDocs(userTransactionsRef)).size;
+  const transactionQuerySnapshot = await getDocs(transactionsQuery);
+
+  const transactionsData = transactionQuerySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as ITransaction[];
 
   return {
     transactionsData,
-    totalAmountTransaction,
+    transactionQuerySnapshot,
   };
 };
 

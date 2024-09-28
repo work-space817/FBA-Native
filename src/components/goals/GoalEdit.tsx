@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { StyleSheet, Text, View } from "react-native";
 import React, { memo, useCallback, useState } from "react";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 import { updateDoc, deleteDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import getGoalsData from "../../api/firebase/goals/getGoalsData";
@@ -20,18 +20,24 @@ import {
 } from "../../store/reducers/goalReducers/types";
 
 const GoalEdit = memo(() => {
-  const dispatch = useDispatch();
-  const { selectedGoal } = useSelector((store: RootState) => store.selectGoal);
-  const [showCalendarList, setShowCalendarList] = useState(false);
   const init: IGoalEdit = {
     title: "",
     cost: "0",
     expireDate: "",
   };
+
+  const dispatch = useDispatch();
+  const today = new Date();
+
+  const { selectedGoal } = useSelector((store: RootState) => store.selectGoal);
+
+  const [showCalendarList, setShowCalendarList] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<any>(today);
+
   const goalDoneDelete = async () => {
     try {
-      const fetchGoals = await getGoalsData();
-      const fetchCurrentGoal = fetchGoals.docs.map((doc) =>
+      const { goalsQuerySnapshot } = await getGoalsData();
+      const fetchCurrentGoal = goalsQuerySnapshot.docs.map((doc) =>
         doc.id === selectedGoal?.id ? deleteDoc(doc.ref) : null
       );
       dispatch({
@@ -46,8 +52,6 @@ const GoalEdit = memo(() => {
     }
   };
 
-  const today = new Date();
-  const [selectedDay, setSelectedDay] = useState<any>(today);
   const handleDayPress = useCallback((day: any) => {
     setSelectedDay(day.dateString);
     setShowCalendarList(false);
@@ -57,15 +61,16 @@ const GoalEdit = memo(() => {
   const expireDate = format(selectedDay, "yyyy-MM-dd");
   const formattedDate = format(expireDate, "dd.MM.yyyy");
 
-  const onSubmitHandler = async (values: any) => {
+  const onSubmitHandler = async (values: IGoalEdit) => {
     try {
-      const fetchGoals = await getGoalsData();
+      const { goalsQuerySnapshot } = await getGoalsData();
       const data = {
         ...values,
+        cost: Number(values.cost),
         expireDate: expireDate,
       };
       console.log(data);
-      const fetchCurrentGoal = fetchGoals.docs.map((doc) =>
+      const fetchCurrentGoal = goalsQuerySnapshot.docs.map((doc) =>
         doc.id === selectedGoal?.id ? updateDoc(doc.ref, data) : null
       );
       handleReset(values);
@@ -124,7 +129,7 @@ const GoalEdit = memo(() => {
               cost={0}
               expireDate={minDate}
               title={"Your title"}
-              selectedCategories={<SelectCategoriesSVG id={""} />}
+              selectedCategories={""}
             />
           )}
           <View style={{ flexDirection: "row" }}>
@@ -142,10 +147,10 @@ const GoalEdit = memo(() => {
             label="Change your title"
             field="title"
             value={values.title}
-            onChange={handleChange("title")}
+            onChangeText={handleChange("title")}
             clientSideError={errors.title}
             touched={touched.title}
-            disabled={!selectedGoal}
+            editable={!selectedGoal}
           />
           <CustomInput
             label="Change goals' cost"
@@ -154,11 +159,11 @@ const GoalEdit = memo(() => {
             defaultValue=""
             keyboardType="number-pad"
             value={values.cost}
-            onChange={handleChange("cost")}
+            onChangeText={handleChange("cost")}
             onFocus={handleFocus}
             clientSideError={errors.cost}
             touched={touched.cost}
-            disabled={!selectedGoal}
+            editable={!selectedGoal}
           />
           <CustomButton
             style={styles.expireDateButton}

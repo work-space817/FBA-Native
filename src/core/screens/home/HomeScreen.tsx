@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigation } from "../../navigation/Navigation";
 import { useNavigation } from "@react-navigation/native";
-import OperationMenu from "../../../components/common/OperationMenu";
-import Card from "../../../components/card/Card";
+import OperationMenu from "../../../components/common/UI/OperationMenu";
 import { BackHandler } from "react-native";
 import GoalSlider from "../../../components/goals/GoalSlider";
 import { useDispatch } from "react-redux";
@@ -14,6 +13,7 @@ import { UserBalanceActionType } from "../../../store/reducers/userReducers/type
 import DefaultScrollableLayout from "../../layouts/default/DefaultScrollableLayout";
 import { ScreenNames } from "../../navigation/routes";
 import GoalAdd from "../../../components/goals/GoalAdd";
+import Card from "../../../components/card/Card";
 
 export default function HomeScreen() {
   const { navigate } = useNavigation<StackNavigation>();
@@ -49,10 +49,10 @@ export default function HomeScreen() {
   return (
     <DefaultScrollableLayout onRefreshComponents={onRefreshComponents}>
       <OperationMenu />
-      <GoalSlider />
+      {/* <GoalSlider /> */}
       <Card />
       <ExchangeRateLinear />
-      <GoalPieDiagram />
+      {/* <GoalPieDiagram /> */}
     </DefaultScrollableLayout>
   );
 }

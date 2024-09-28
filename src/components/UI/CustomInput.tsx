@@ -17,7 +17,7 @@ interface CustomInputProps extends TextInputProps {
 }
 
 const CustomInput: FC<CustomInputProps> = ({ ...props }) => {
-  console.log("props: ");
+  // console.log("props: ");
   const border = props.clientSideError && props.touched ? "red" : "gray";
   return (
     <View style={[styles.layout, props.layoutStyle]}>

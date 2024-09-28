@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewProps,
 } from "react-native";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { ITransaction } from "./types";
@@ -13,11 +14,19 @@ import TransactionSVG from "../../helpers/SVG/UI/TransactionSVG";
 import getTransactionData from "../../api/firebase/transactions/getTransactionData";
 import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteDoc, doc } from "firebase/firestore";
+import {
+  deleteDoc,
+  DocumentData,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 import updateUserInformation from "../../api/firebase/user/userInfo/updateUserInformation";
 import { RootState } from "../../store";
+import { limitedText } from "../../helpers/functions/limitedText";
+import { Categories } from "../common/category/types";
 
-const Transaction: FC<ITransaction> = ({
+interface ITransactionView extends ViewProps {}
+
+const Transaction: FC<ITransaction & ITransactionView> = ({
   transactionTitle,
   transactionValue,
   transactionTime,
@@ -25,16 +34,11 @@ const Transaction: FC<ITransaction> = ({
   selectedCategories,
   transactionType,
   id,
-  style,
+  ...props
 }) => {
-  const transformTitle = () => {
-    if (transactionTitle.length > 20) {
-      return transactionTitle.substring(0, 10) + "...";
-    }
-    return transactionTitle;
-  };
+  const limitedTitle = limitedText(transactionTitle, 20);
   const transactionValueType =
-    transactionType === "Income transaction" ? "+" : "-";
+    transactionType === Categories.incomeTransaction ? "+" : "-";
 
   const { userBalance } = useSelector((store: RootState) => store.userBalance);
   const [startPosition, setStartPosition] = useState({ x: 0 });
@@ -78,24 +82,26 @@ const Transaction: FC<ITransaction> = ({
   }, [tapPosition]);
   const transactionDelete = async () => {
     try {
-      const fetchTransactions = await getTransactionData();
+      const { transactionQuerySnapshot } = await getTransactionData();
 
-      const selectedTransaction = fetchTransactions.transactionsData.docs.find(
-        (doc) => (doc.id === id ? doc : null)
-      );
+      const selectedTransaction = transactionQuerySnapshot.docs.find((doc) =>
+        doc.id === id ? doc : null
+      ) as QueryDocumentSnapshot<DocumentData, DocumentData>;
       const selectedData = selectedTransaction?.data() as ITransaction;
 
-      if (selectedData.transactionType === "Income transaction") {
+      if (selectedData.transactionType === Categories.incomeTransaction) {
         updateUserInformation({
           currentBalance: userBalance - selectedData.transactionValue,
         });
-      } else if (selectedData.transactionType === "Outcome transaction") {
+      } else if (
+        selectedData.transactionType === Categories.outcomeTransaction
+      ) {
         updateUserInformation({
           currentBalance: userBalance + selectedData.transactionValue,
         });
       }
 
-      deleteDoc(selectedTransaction?.ref as any);
+      deleteDoc(selectedTransaction.ref);
       dispatch({
         type: TransactionListActionType.UPDATE_TRANSACTION_LIST,
         payload: false,
@@ -115,12 +121,12 @@ const Transaction: FC<ITransaction> = ({
         ]}
         {...panResponder.panHandlers}
       >
-        <View style={[styles.layout, style]}>
+        <View style={[styles.layout, props.style]}>
           <View style={styles.titleLayout}>
             <TransactionSVG id={transactionType} width={18} height={18} />
             <Text>{transactionTime}</Text>
             <SelectCategoriesSVG id={selectedCategories as string} />
-            <Text>{transformTitle()}</Text>
+            <Text>{limitedTitle}</Text>
           </View>
           <View style={styles.valueLayout}>
             <Text style={styles.transactionValueStyle}>

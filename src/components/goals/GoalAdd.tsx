@@ -2,26 +2,26 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { IGoalAdd } from "./types";
-import React, { useCallback, useMemo, useState } from "react";
-
+import React, { memo, useCallback, useMemo, useState } from "react";
 import { View, StyleSheet, Text, ViewStyle } from "react-native";
 import CustomButton from "../UI/CustomButton";
 import CustomInput from "../UI/CustomInput";
-import SelectCategories from "../common/SelectCategories";
+import SelectCategories from "../common/category/SelectCategories";
 import { format } from "date-fns";
 import { CalendarList, DateData } from "react-native-calendars";
 import setGoalsData from "../../api/firebase/goals/setGoalsData";
 import { RootState } from "../../store";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 import Goal from "./Goal";
 import {
   ModalCloserActionType,
   SelectCategoriesActionType,
 } from "../../store/reducers/common/types";
 import { GoalListActionType } from "../../store/reducers/goalReducers/types";
+import { Categories } from "../common/category/types";
 
-const GoalAdd = () => {
+const GoalAdd = memo(() => {
   const init: IGoalAdd = {
     title: "",
     cost: "",
@@ -39,6 +39,10 @@ const GoalAdd = () => {
   const [showCalendarList, setShowCalendarList] = useState(false);
   const [selectedDay, setSelectedDay] = useState<any>(today);
 
+  const minDate = format(today, "yyyy-MM-dd");
+  const expireDate = format(selectedDay, "yyyy-MM-dd");
+  const formattedDate = format(expireDate, "dd MMMM yyyy");
+
   const onLayout = useCallback((e: any) => {
     const { width } = e.nativeEvent.layout;
     setCalendarWidth(width);
@@ -47,15 +51,15 @@ const GoalAdd = () => {
     setSelectedDay(day.dateString);
     setShowCalendarList(false);
   }, []);
-  const minDate = format(today, "yyyy-MM-dd");
-  const expireDate = format(selectedDay, "yyyy-MM-dd");
-  const formattedDate = format(expireDate, "dd MMMM yyyy");
+  const goalPosition: ViewStyle = showCalendarList
+    ? { alignItems: "flex-start" }
+    : { alignItems: "center" };
 
   const onSubmitHandler = async (values: IGoalAdd) => {
     try {
       const data = {
         ...values,
-        cost: +values.cost,
+        cost: Number(values.cost),
         expireDate: expireDate,
         selectedCategories: selectedCategories,
       };
@@ -97,11 +101,20 @@ const GoalAdd = () => {
     onSubmit: onSubmitHandler,
     validationSchema: checkUpForm,
   });
-  const { values, touched, errors, handleSubmit, handleChange, handleReset } =
-    formik;
-  const goalPosition: ViewStyle = showCalendarList
-    ? { alignItems: "flex-start" }
-    : { alignItems: "center" };
+  const {
+    values,
+    touched,
+    errors,
+    handleSubmit,
+    handleChange,
+    handleReset,
+    setFieldValue,
+  } = formik;
+
+  const handleFocus = useCallback(() => {
+    setFieldValue("cost", "");
+  }, [setFieldValue]);
+
   return (
     <KeyboardAwareScrollView
       extraHeight={100}
@@ -127,7 +140,7 @@ const GoalAdd = () => {
         field="title"
         value={values.title}
         keyboardType="email-address"
-        onChange={handleChange("title")}
+        onChangeText={handleChange("title")}
         clientSideError={errors.title}
         touched={touched.title}
       />
@@ -137,7 +150,8 @@ const GoalAdd = () => {
         inputMode="numeric"
         keyboardType="number-pad"
         value={values.cost}
-        onChange={handleChange("cost")}
+        onChangeText={handleChange("cost")}
+        onFocus={handleFocus}
         clientSideError={errors.cost}
         touched={touched.cost}
       />
@@ -172,12 +186,12 @@ const GoalAdd = () => {
       )}
       <SelectCategories
         title="Select category of goal"
-        categoriesList={"All categories"}
+        categoriesList={Categories.allCategories}
       />
       <CustomButton title={"Add goal"} theme="primary" onPress={handleSubmit} />
     </KeyboardAwareScrollView>
   );
-};
+});
 
 export default GoalAdd;
 

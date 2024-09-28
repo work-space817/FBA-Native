@@ -1,4 +1,4 @@
-import DataByCalendarRange from "../../../components/common/DataByCalendarRange";
+import DataByCalendarRange from "../../../components/common/UI/DataByCalendarRange";
 import { useDispatch } from "react-redux";
 import React, { useEffect } from "react";
 import CustomCalendarHeader from "../../../lib/react-native-calendars/CustomCalendarHeader";

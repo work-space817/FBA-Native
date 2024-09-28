@@ -5,7 +5,7 @@ export enum ModalCloserActionType {
   MODAL_CLOSE = "MODAL_CLOSE",
 }
 export interface ISelectCategories {
-  selectedCategories: string | null;
+  selectedCategories: string;
   isSelected: boolean;
 }
 export enum SelectCategoriesActionType {

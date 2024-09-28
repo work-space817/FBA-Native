@@ -11,7 +11,7 @@ const DefaultLayout: FC<IDefaultLayout> = (props) => {
   return (
     <View style={[styles.outerLayout, props.outterStyle]}>
       <View {...props} style={[styles.innerLayout, props.style]}>
-        <DefaultHeader />
+        {/* <DefaultHeader /> */}
         {props.children}
       </View>
       <DefaultNavbar />
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   innerLayout: {
     flex: 1,
-    paddingTop: 40,
+    // paddingTop: 40,
     paddingHorizontal: 16,
   },
 });

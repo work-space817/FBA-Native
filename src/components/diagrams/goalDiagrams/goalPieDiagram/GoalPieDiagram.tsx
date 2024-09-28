@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { memo } from "react";
-import ComponentsLayout from "../../../../screens/layouts/components/ComponentsLayout";
+import ComponentsLayout from "../../../../core/layouts/components/ComponentsLayout";
 import PieDiagram from "./PieDiagram";
 
 const GoalPieDiagram = memo(() => {

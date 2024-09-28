@@ -2,24 +2,21 @@ import * as yup from "yup";
 import {
   LayoutChangeEvent,
   Platform,
-  StatusBar,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { ITransactionAdd } from "./types";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useFormik } from "formik";
 import setTransactionData from "../../api/firebase/transactions/setTransactionData";
-import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import { CalendarList } from "react-native-calendars";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 import CustomButton from "../UI/CustomButton";
 import CustomInput from "../UI/CustomInput";
-import SelectCategories from "../common/SelectCategories";
+import SelectCategories from "../common/category/SelectCategories";
 import { format } from "date-fns";
 import Transaction from "./Transaction";
 import DateTimePicker, {
@@ -33,8 +30,10 @@ import {
   SelectCategoriesActionType,
 } from "../../store/reducers/common/types";
 import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
+import { Categories } from "../common/category/types";
+
 interface ITransactionType {
-  transactionType: "Income transaction" | "Outcome transaction";
+  transactionType: Categories;
 }
 
 const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
@@ -134,18 +133,18 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
     try {
       const transactionData = {
         ...values,
-        transactionValue: +values.transactionValue,
+        transactionValue: Number(values.transactionValue),
         transactionTime: selectedTime,
         transactionDate: transactionDate,
         selectedCategories: selectedCategories,
       };
-      if (values.transactionType === "Income transaction") {
+      if (values.transactionType === Categories.incomeTransaction) {
         updateUserInformation({
-          currentBalance: userBalance + +values.transactionValue,
+          currentBalance: userBalance + Number(values.transactionValue),
         });
-      } else if (values.transactionType === "Outcome transaction") {
+      } else if (values.transactionType === Categories.outcomeTransaction) {
         updateUserInformation({
-          currentBalance: userBalance - +values.transactionValue,
+          currentBalance: userBalance - Number(values.transactionValue),
         });
       }
       setTransactionData(transactionData);
@@ -221,7 +220,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         field="transactionTitle"
         value={values.transactionTitle}
         keyboardType="email-address"
-        onChange={handleChange("transactionTitle")}
+        onChangeText={handleChange("transactionTitle")}
         clientSideError={errors.transactionTitle}
         touched={touched.transactionTitle}
       />
@@ -231,7 +230,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         inputMode="numeric"
         keyboardType="number-pad"
         value={values.transactionValue}
-        onChange={handleChange("transactionValue")}
+        onChangeText={handleChange("transactionValue")}
         clientSideError={errors.transactionValue}
         touched={touched.transactionValue}
       />

@@ -22,7 +22,7 @@ const DefaultHeader = memo(() => {
   };
 
   return (
-    <>
+    <View style={styles.layout}>
       <View style={styles.headerContainer}>
         <View style={styles.headerTitle}>
           <HeaderSVG id={"Cloud"} />
@@ -36,10 +36,15 @@ const DefaultHeader = memo(() => {
       <Text style={styles.headerOptionalText}>
         Get summary of your weekly online transactions here.
       </Text>
-    </>
+    </View>
   );
 });
 const styles = StyleSheet.create({
+  layout: {
+    paddingTop: 40,
+    backgroundColor: "rgba(140,0,255,.1)",
+    paddingHorizontal: 16,
+  },
   headerCloudImage: {
     width: 50,
     height: 50,
@@ -49,6 +54,7 @@ const styles = StyleSheet.create({
     height: 35,
   },
   headerContainer: {
+    // paddingHorizontal: 16,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -65,6 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   headerOptionalText: {
+    // paddingHorizontal: 16,
     fontSize: 15,
     fontFamily: "Quicksand_600SemiBold",
     color: "rgba(0,0,0,0.5)",

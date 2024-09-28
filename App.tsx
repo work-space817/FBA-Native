@@ -1,10 +1,10 @@
-import AndroidFont from "./src/helpers/functions/AndroidFont";
-import Navigation from "./src/navigation/Navigation";
 import { Provider } from "react-redux";
 import { store } from "./src/store";
+import Navigation from "./src/core/navigation/Navigation";
+import androidFont from "./src/core/fonts/androidFont";
 
 export default function App() {
-  const fontsLoaded = AndroidFont();
+  const fontsLoaded = androidFont();
   if (!fontsLoaded) {
     return <></>;
   }

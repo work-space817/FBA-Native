@@ -22,14 +22,11 @@ const TransactionList = (
     try {
       console.log("efirst");
       setLoading(true);
-      const { transactionsData, totalAmountTransaction } =
+      const { transactionsData, transactionQuerySnapshot } =
         await getTransactionData(startDate, endDate, requestLimit);
-      const transactionData = transactionsData.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as ITransaction[];
-      setTransactionList(transactionData);
-      setAmountTransaction(totalAmountTransaction);
+
+      setTransactionList(transactionsData);
+      setAmountTransaction(transactionQuerySnapshot.size);
       setLoading(false);
       dispatch({
         type: TransactionListActionType.UPDATE_TRANSACTION_LIST,

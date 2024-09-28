@@ -1,17 +1,17 @@
 import { collection, doc, getDocs } from "firebase/firestore";
 import { firestore } from "../../config";
-import getUserId from "../../../../helpers/functions/getUserId";
 import { ISignUp } from "../../../../components/auth/registration/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const getUserInformation = async () => {
-  const userId = await getUserId();
+  const userId = await AsyncStorage.getItem("uid");
   const userRef = collection(firestore, "users");
-  const querySnapshot = await getDocs(userRef);
-  const userInfo = querySnapshot.docs.find((user) =>
+  const userQuerySnapshot = await getDocs(userRef);
+  const userInfo = userQuerySnapshot.docs.find((user) =>
     user.id == userId ? user : null
   );
   const userData = userInfo?.data() as ISignUp;
 
-  return userData;
+  return { userData, userQuerySnapshot };
 };
 export default getUserInformation;

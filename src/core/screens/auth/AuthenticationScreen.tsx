@@ -8,8 +8,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "../../../components/UI/CustomButton";
 import { memo, useEffect, useState } from "react";
-import SignUp from "../../../components/auth/registration/SignUp";
-import LogIn from "../../../components/auth/login/LogIn";
+import SignUp from "../../../components/auth/registration/RegistrationView";
+import LogIn from "../../../components/auth/login/LoginView";
 import { StackNavigation } from "../../navigation/Navigation";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";

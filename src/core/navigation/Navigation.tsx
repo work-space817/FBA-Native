@@ -9,6 +9,7 @@ import { ScreenNames } from "./routes";
 import IntroductionScreen from "../screens/auth/introduction/IntroductionScreen";
 import LoginScreen from "../screens/auth/login/LoginScreen";
 import RegisterScreen from "../screens/auth/register/RegisterScreen";
+import DefaultHeader from "../layouts/default/DefaultHeader";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,11 +21,15 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false,
           animation: "fade",
         }}
       >
-        <Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            headerShown: false,
+            animation: "fade",
+          }}
+        >
           <Stack.Screen
             name={ScreenNames.IntroductionScreen}
             component={IntroductionScreen}
@@ -38,7 +43,11 @@ const Navigation = () => {
             component={LoginScreen}
           />
         </Stack.Group>
-        <Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            header: () => <DefaultHeader />,
+          }}
+        >
           <Stack.Screen
             name={ScreenNames.HomeScreen}
             component={HomeScreen}

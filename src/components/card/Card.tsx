@@ -1,20 +1,20 @@
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import { View, StyleSheet, Text } from "react-native";
-import CardUI from "./CardUI";
-import BalanceUI from "./BalanceUI";
 import { memo } from "react";
 import CustomCalendarHeader from "../../lib/react-native-calendars/CustomCalendarHeader";
+import BalanceView from "../balance/BalanceView";
+import CardView from "./CardView";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 
 const Card = memo(() => {
   return (
     <ComponentsLayout>
       <View style={styles.cardAndBalace}>
         <Text style={styles.titleText}>Card</Text>
-        {/* <CustomCalendarHeader /> */}
+        <CustomCalendarHeader />
       </View>
       <View style={styles.cardAndBalace}>
-        <CardUI />
-        <BalanceUI />
+        <CardView />
+        <BalanceView />
       </View>
     </ComponentsLayout>
   );

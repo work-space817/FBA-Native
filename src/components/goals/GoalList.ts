@@ -15,11 +15,8 @@ const GoalList = () => {
   const fetchUserGoals = async () => {
     try {
       setLoading(true);
-      const fetchGoals = await getGoalsData();
-      const goalsData = fetchGoals.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as IGoal[];
+      const { goalsData } = await getGoalsData();
+
       dispatch({
         type: GoalListActionType.GOAL_LIST,
         payload: goalsData,

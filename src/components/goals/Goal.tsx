@@ -9,15 +9,18 @@ import {
   StyleProp,
   ViewStyle,
   TouchableOpacity,
+  ViewProps,
 } from "react-native";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import SelectCategoriesSVG from "../../helpers/SVG/common/SelectCategoriesSVG";
 import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
 import DateFormater from "../../helpers/functions/dateFormater";
 import { format } from "date-fns";
 import { GoalSelectActionType } from "../../store/reducers/goalReducers/types";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 
-const Goal: FC<IGoal> = memo(
+interface IGoalView extends ViewProps {}
+
+const Goal: FC<IGoalView & IGoal> = memo(
   ({ cost, expireDate, title, selectedCategories, id, style }) => {
     const dispatch = useDispatch();
 
@@ -26,11 +29,11 @@ const Goal: FC<IGoal> = memo(
     const formattedDate = format(expireDate, "dd.MM.yyyy");
 
     const selectGoal = useCallback(async () => {
-      const fetchGoals = await getGoalsData();
-      const fetchCurrentGoal = fetchGoals.docs.find((doc) =>
+      const { goalsQuerySnapshot } = await getGoalsData();
+      const selectedData = goalsQuerySnapshot.docs.find((doc) =>
         id === doc.id ? doc.data() : null
       );
-      const currentGoalData = { ...fetchCurrentGoal?.data(), id };
+      const currentGoalData = selectedData?.data() as IGoal;
       console.log("currentGoalData: ", currentGoalData);
       if (id) {
         dispatch({

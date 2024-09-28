@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import getExchangeRate from "../../../api/currencyBeacon/getExchangeRate";
-import ComponentsLayout from "../../../screens/layouts/components/ComponentsLayout";
+import ComponentsLayout from "../../../core/layouts/components/ComponentsLayout";
 import {
   DimensionValue,
   LayoutChangeEvent,
@@ -11,7 +11,7 @@ import {
 import LineDiagram from "./LineDiagram";
 import ExchangeRateList from "./ExchangeRateList";
 
-const ExchangeRateLinear = () => {
+const ExchangeRateLinear = memo(() => {
   const { loading, rateUSD, rateEUR } = ExchangeRateList();
   const [customLayoutWidth, setCustomLayoutWidth] = useState<number>(0);
   const handleCustomLayout = useCallback((e: LayoutChangeEvent) => {
@@ -37,7 +37,7 @@ const ExchangeRateLinear = () => {
       />
     </ComponentsLayout>
   );
-};
+});
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 18,

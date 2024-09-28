@@ -1,9 +1,10 @@
 import { addDoc, collection, doc } from "firebase/firestore";
-import getUserId from "../../../helpers/functions/getUserId";
 import { firestore } from "../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ITransactionAdd } from "../../../components/transactions/types";
 
 const setTransactionData = async (values: any) => {
-  const userId = await getUserId();
+  const userId = await AsyncStorage.getItem("uid");
   const userTransactionsRef = doc(
     collection(firestore, "transactions"),
     `${userId}`

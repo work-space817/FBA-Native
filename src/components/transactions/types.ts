@@ -1,8 +1,8 @@
-import { ViewStyle } from "react-native";
+import { Categories } from "../common/category/types";
 
 export interface ITransactionAdd {
   transactionTitle: string;
-  transactionValue: number | string;
+  transactionValue: string; //! string
   transactionTime: string;
   transactionDate: string;
   transactionType: string;
@@ -11,11 +11,10 @@ export interface ITransactionAdd {
 
 export interface ITransaction {
   transactionTitle: string;
-  transactionValue: number;
+  transactionValue: number; //! number
   transactionTime: string;
   transactionDate: string;
   transactionType: string;
-  selectedCategories: string | React.ReactNode;
+  selectedCategories: string;
   id: string;
-  style?: ViewStyle[];
 }

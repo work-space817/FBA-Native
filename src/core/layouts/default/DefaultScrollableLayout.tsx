@@ -57,7 +57,7 @@ const DefaultScrollableLayout = ({
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <DefaultHeader />
+        {/* <DefaultHeader /> */}
         {props.children}
       </KeyboardAwareScrollView>
       <DefaultNavbar />
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     // justifyContent: "space-between",
   },
   innerLayout: {
-    paddingTop: 40,
+    // paddingTop: 40,
     paddingHorizontal: 16,
     paddingBottom: 10,
   },

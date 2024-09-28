@@ -13,12 +13,11 @@ import {
 } from "react-native";
 import { format } from "date-fns";
 import TransactionList from "./TransactionList";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
 import CustomInput from "../UI/CustomInput";
 import CustomLoadingAnimation from "../UI/CustomLoadingAnimation";
 import CustomButton from "../UI/CustomButton";
 import CalendarWithRange from "../../lib/react-native-calendars/CalendarWithRange";
-import ShowSelectedDates from "../../helpers/functions/UI/ShowSelectedDates";
+import ShowSelectedDates from "../common/UI/ShowSelectedDates";
 import Transaction from "./Transaction";
 import GeneralSVG from "../../helpers/SVG/common/GeneralSVG";
 import CalendarSVG from "../../helpers/SVG/common/CalendarSVG";
@@ -28,6 +27,7 @@ import { ITransaction } from "./types";
 import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
 import { ScrollViewPositionActionType } from "../../store/reducers/common/types";
 import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 
 const TransactionTable = memo(() => {
   const dispatch = useDispatch();
@@ -159,7 +159,12 @@ const TransactionTable = memo(() => {
         <View style={styles.headerFilters}>
           <Text style={styles.titleText}>Transaction History</Text>
           <View style={[styles.headerFilters, { gap: 5 }]}>
-            <CustomButton style={styles.searchButton}>
+            <CustomButton
+              style={styles.searchButton}
+              onPress={function (e: any): void {
+                throw new Error("Function not implemented.");
+              }}
+            >
               <GeneralSVG id={"Hash"} width={22} height={16} />
             </CustomButton>
             <CustomButton
@@ -192,7 +197,7 @@ const TransactionTable = memo(() => {
             style={{ height: 30 }}
             value={searchTransactionTitle}
             onFocus={() => setRequestLimit(undefined)}
-            onChange={(e) => setSearchTransactionTitle(e)}
+            onChange={(e: any) => setSearchTransactionTitle(e)}
             placeholder={"Search"}
           />
         </View>

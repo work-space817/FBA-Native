@@ -1,4 +1,3 @@
-import getUserId from "../../../../helpers/functions/getUserId";
 import {
   DocumentReference,
   collection,
@@ -7,11 +6,12 @@ import {
 } from "firebase/firestore";
 import { auth, firestore } from "../../config";
 import { User, updatePassword } from "firebase/auth";
-import { IUpdateUserInformation } from "../types";
+import { IUpdateUserInformation } from "./types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const updateUserInformation = async (values: IUpdateUserInformation) => {
   console.log("values: ", values);
-  const userId = await getUserId();
+  const userId = await AsyncStorage.getItem("uid");
   const userRef = collection(firestore, "users");
   const querySnapshot = await getDocs(userRef);
   const userInfo = querySnapshot.docs.find((user) =>

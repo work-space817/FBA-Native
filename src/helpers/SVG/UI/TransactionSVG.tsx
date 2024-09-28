@@ -1,5 +1,6 @@
 import { memo } from "react";
 import Svg, { Path, Shape, SvgProps } from "react-native-svg";
+import { Categories } from "../../../components/common/category/types";
 
 interface ITransactionSVGProps extends SvgProps {
   id: string;
@@ -12,7 +13,7 @@ const TransactionSVG = memo(
     fill = "none",
   }: ITransactionSVGProps) => {
     switch (id) {
-      case "Income transaction":
+      case Categories.incomeTransaction:
         return (
           <Svg width={width} height={height} viewBox="0 0 17 19" fill={fill}>
             <Path
@@ -21,7 +22,7 @@ const TransactionSVG = memo(
             />
           </Svg>
         );
-      case "Outcome transaction":
+      case Categories.outcomeTransaction:
         return (
           <Svg width={width} height={height} viewBox="0 0 17 19" fill={fill}>
             <Path

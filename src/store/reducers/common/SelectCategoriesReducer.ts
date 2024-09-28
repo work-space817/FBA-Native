@@ -1,7 +1,7 @@
 import { ISelectCategories, SelectCategoriesActionType } from "./types";
 
 const initState: ISelectCategories = {
-  selectedCategories: null,
+  selectedCategories: "",
   isSelected: false,
 };
 export const SelectCategoriesReducer = (

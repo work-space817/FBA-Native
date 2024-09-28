@@ -14,10 +14,15 @@ import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 
 interface ICustomModal extends ModalProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   customActive?: React.ReactNode;
 }
-const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
+const CustomModal: FC<ICustomModal> = ({
+  children,
+  title,
+  customActive,
+  ...props
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { isModalClose } = useSelector((store: RootState) => store.modalClose);
   useEffect(() => {
@@ -34,6 +39,7 @@ const CustomModal: FC<ICustomModal> = ({ children, title, customActive }) => {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
+        {...props}
       >
         <View style={styles.layout}>
           <ComponentsLayout style={[styles.modalView]}>

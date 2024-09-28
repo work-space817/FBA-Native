@@ -9,7 +9,7 @@ const setUserAuth = async (values: ISignUp, authResult: UserCredential) => {
   const additionalUserInformation = doc(firestore, "users", uid);
   const userAuth = await setDoc(additionalUserInformation, {
     ...values,
-    currentBalance: +values.currentBalance,
+    currentBalance: Number(values.currentBalance),
   });
 };
 

@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-import GoalEdit from "../../../components/goals/GoalEdit";
 import TransactionTable from "../../../components/transactions/TransactionTable";
 import { useEffect } from "react";
 import { ICalendarDatesRangeActionType } from "../../../store/reducers/calendarReducers/types";
@@ -10,8 +9,6 @@ import {
 import { TransactionListActionType } from "../../../store/reducers/transactionReducers/types";
 
 import DefaultLayout from "../../layouts/default/DefaultLayout";
-import DefaultScrollableLayout from "../../layouts/default/DefaultScrollableLayout";
-import GoalSlider from "../../../components/goals/GoalSlider";
 
 export default function TransactionScreen() {
   const dispatch = useDispatch();
@@ -45,13 +42,13 @@ export default function TransactionScreen() {
   }, []);
 
   return (
-    <DefaultScrollableLayout
-      scrollEnabled={false}
-      onRefreshComponents={onRefreshComponents}
+    <DefaultLayout
+      style={{ paddingHorizontal: 0 }}
+      // onRefreshComponents={onRefreshComponents}
     >
       {/* <GoalSlider />
       <GoalEdit /> */}
       <TransactionTable />
-    </DefaultScrollableLayout>
+    </DefaultLayout>
   );
 }

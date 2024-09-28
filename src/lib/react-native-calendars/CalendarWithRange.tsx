@@ -5,7 +5,7 @@ import {
   ViewStyle,
 } from "react-native";
 import React, { FC, useState } from "react";
-import ComponentsLayout from "../../screens/layouts/components/ComponentsLayout";
+import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 import { CalendarList } from "react-native-calendars";
 import { format, parseISO } from "date-fns";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
@@ -15,10 +15,15 @@ import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 import { RootState } from "../../store";
 import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
 
+export interface IDateRange {
+  startDate?: string;
+  endDate?: string;
+}
+
 interface ICalendarWithRange {
   maskStyle?: ViewStyle;
   style?: ViewStyle;
-  onConfirm: (e: any) => void;
+  onConfirm: (e: IDateRange) => void;
 }
 
 const CalendarWithRange: FC<ICalendarWithRange> = ({
@@ -35,7 +40,7 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
   );
 
   const [selectedDates, setSelectedDates] = useState<MarkedDates>({});
-  const [boundaryDates, setBoundaryDates] = useState({});
+  const [boundaryDates, setBoundaryDates] = useState<IDateRange>({});
 
   let updatedSelectedDates = { ...selectedDates };
   const selectedKeys = Object.keys(updatedSelectedDates);
