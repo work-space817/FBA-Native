@@ -6,11 +6,8 @@ import {
   ScrollViewProps,
   StyleSheet,
   View,
-  ViewProps,
   ViewStyle,
 } from "react-native";
-import DefaultHeader from "./DefaultHeader";
-import DefaultNavbar from "./DefaultNavbar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
@@ -57,10 +54,8 @@ const DefaultScrollableLayout = ({
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* <DefaultHeader /> */}
         {props.children}
       </KeyboardAwareScrollView>
-      <DefaultNavbar />
     </View>
   );
 };

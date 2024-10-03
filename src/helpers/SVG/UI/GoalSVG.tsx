@@ -2,7 +2,7 @@ import { memo } from "react";
 import Svg, { Path, Shape, SvgProps } from "react-native-svg";
 
 interface IGoalSVGProps extends SvgProps {
-  id: string;
+  id: "Clock" | "Empty";
 }
 
 const GoalSVG = memo(

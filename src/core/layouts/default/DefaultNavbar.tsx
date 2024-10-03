@@ -20,7 +20,7 @@ const DefaultNavbar = memo(() => {
         onPress={() => navigate(ScreenNames.HomeScreen)}
       >
         <View>
-          <NavbarSVG id="Overview" />
+          <NavbarSVG id="Home" />
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -56,7 +56,7 @@ const DefaultNavbar = memo(() => {
         onPress={() => navigate(ScreenNames.SettingsScreen)}
       >
         <View>
-          <NavbarSVG id="Settings" />
+          <NavbarSVG id="Goals" />
         </View>
       </TouchableOpacity>
     </View>

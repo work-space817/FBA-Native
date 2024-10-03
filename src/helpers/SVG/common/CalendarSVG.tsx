@@ -2,7 +2,7 @@ import { memo } from "react";
 import Svg, { Circle, G, Path, SvgProps } from "react-native-svg";
 
 interface ICalendarSVG extends SvgProps {
-  id: string;
+  id: "Calendar";
 }
 
 const CalendarSVG = memo(
@@ -15,30 +15,6 @@ const CalendarSVG = memo(
             <Path d="M33.5,17.331H1.541a1.25,1.25,0,0,1,0-2.5H33.5a1.25,1.25,0,0,1,0,2.5Z" />
             <Path d="M9.459,9.155a1.249,1.249,0,0,1-1.25-1.25V1.5a1.25,1.25,0,0,1,2.5,0V7.905A1.25,1.25,0,0,1,9.459,9.155Z" />
             <Path d="M25.542,9.155a1.249,1.249,0,0,1-1.25-1.25V1.5a1.25,1.25,0,0,1,2.5,0V7.905A1.25,1.25,0,0,1,25.542,9.155Z" />
-          </Svg>
-        );
-      case "ArrowLeft":
-        return (
-          <Svg width={width} height={height} viewBox="0 0 13 23" fill="none">
-            <Path
-              d="M11.5969 1.67163L1.9635 11.3051L11.5969 20.9385"
-              stroke="#7e4cd7d9"
-              strokeWidth="2.58466"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </Svg>
-        );
-      case "ArrowRight":
-        return (
-          <Svg width={width} height={height} viewBox="0 0 13 23" fill="none">
-            <Path
-              d="M1.49229 1.67163L11.1257 11.3051L1.49229 20.9385"
-              stroke="#7e4cd7d9"
-              strokeWidth="2.58466"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
           </Svg>
         );
       default:

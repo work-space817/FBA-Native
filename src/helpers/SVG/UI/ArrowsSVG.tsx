@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Svg, { Path, SvgProps } from "react-native-svg";
 interface IArrowsSVG extends SvgProps {
-  id: string;
+  id: "ArrowLeft" | "ArrowRight" | "ArrowDown";
 }
 
 const ArrowsSVG = memo(({ id, width, height }: IArrowsSVG) => {

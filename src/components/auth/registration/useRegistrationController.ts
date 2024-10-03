@@ -9,7 +9,8 @@ import { auth } from "../../../api/firebase/config";
 import { useDispatch } from "react-redux";
 import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
 import { StackNavigation } from "../../../core/navigation/Navigation";
-import { ScreenNames } from "../../../core/navigation/routes";
+import { ScreenNames, TabNames } from "../../../core/navigation/routes";
+import { TabsNavigation } from "../../../core/navigation/TabNavigation";
 
 export const useRegistrationController = () => {
   const init: ISignUp = {
@@ -19,7 +20,7 @@ export const useRegistrationController = () => {
   };
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { navigate } = useNavigation<StackNavigation>();
+  const { navigate } = useNavigation<TabsNavigation>();
   const dispatch = useDispatch();
 
   const toLogin = () => {
@@ -37,7 +38,7 @@ export const useRegistrationController = () => {
       );
       await setUserAuth(values, SignUpResult);
       dispatch({ type: AuthUserActionType.LOGIN_USER });
-      navigate(ScreenNames.HomeScreen);
+      navigate(TabNames.TabName, TabNames.Tabs.HomeScreen);
       handleReset(values);
       setLoading(false);
     } catch (error: any) {

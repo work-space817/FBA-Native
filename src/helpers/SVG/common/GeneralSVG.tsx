@@ -2,7 +2,7 @@ import { memo } from "react";
 import Svg, { Path, SvgProps } from "react-native-svg";
 
 interface IGeneralSVG extends SvgProps {
-  id: string;
+  id: "Search" | "Hash";
 }
 
 const GeneralSVG = memo(({ id, width = "24", height = "24" }: IGeneralSVG) => {

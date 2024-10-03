@@ -7,18 +7,21 @@ import {
 } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../../navigation/Navigation";
+
 import CustomButton from "../../../../components/UI/CustomButton";
 import IntroductionSVG from "../../../../helpers/SVG/auth/IntroductionSVG";
-import { ScreenNames } from "../../../navigation/routes";
+import { ScreenNames, TabNames } from "../../../navigation/routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import { AuthUserActionType } from "../../../../store/reducers/userReducers/types";
 import CustomLoadingAnimation from "../../../../components/UI/CustomLoadingAnimation";
+import { TabsNavigation } from "../../../navigation/TabNavigation";
+import { StackNavigation } from "../../../navigation/Navigation";
+
 const IntroductionScreen = memo(() => {
   const { width } = Dimensions.get("window");
-  const { navigate } = useNavigation<StackNavigation>();
+  const { navigate } = useNavigation<TabsNavigation & StackNavigation>();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,7 +34,7 @@ const IntroductionScreen = memo(() => {
         const uid = await AsyncStorage.getItem("uid");
         if (uid) {
           dispatch({ type: AuthUserActionType.LOGIN_USER });
-          navigate(ScreenNames.HomeScreen);
+          navigate(TabNames.TabName, TabNames.Tabs.HomeScreen);
         } else {
           dispatch({ type: AuthUserActionType.LOGOUT_USER });
         }

@@ -8,8 +8,8 @@ import { ILogIn } from "./types";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
-import { StackNavigation } from "../../../core/navigation/Navigation";
-import { ScreenNames } from "../../../core/navigation/routes";
+import { ScreenNames, TabNames } from "../../../core/navigation/routes";
+import { TabsNavigation } from "../../../core/navigation/TabNavigation";
 
 export const useLoginController = () => {
   const init: ILogIn = {
@@ -19,7 +19,7 @@ export const useLoginController = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const { navigate } = useNavigation<StackNavigation>();
+  const { navigate } = useNavigation<TabsNavigation>();
 
   const toRegister = () => {
     navigate(ScreenNames.RegisterScreen);
@@ -35,7 +35,7 @@ export const useLoginController = () => {
       );
       await setAuthToken(logInResult);
       dispatch({ type: AuthUserActionType.LOGIN_USER });
-      navigate(ScreenNames.HomeScreen);
+      navigate(TabNames.TabName, TabNames.Tabs.HomeScreen);
       handleReset(values);
       setLoading(false);
     } catch (error: any) {

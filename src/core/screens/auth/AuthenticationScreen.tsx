@@ -10,7 +10,6 @@ import CustomButton from "../../../components/UI/CustomButton";
 import { memo, useEffect, useState } from "react";
 import SignUp from "../../../components/auth/registration/RegistrationView";
 import LogIn from "../../../components/auth/login/LoginView";
-import { StackNavigation } from "../../navigation/Navigation";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
@@ -18,7 +17,8 @@ import CustomLoading from "../../../components/UI/CustomLoadingAnimation";
 import { RootState } from "../../../store";
 import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
 import AuthLayout from "../../layouts/auth/AuthLayout";
-import { ScreenNames } from "../../navigation/routes";
+import { TabNames } from "../../navigation/routes";
+import { TabsNavigation } from "../../navigation/TabNavigation";
 
 const AuthenticationScreen = memo(() => {
   const [logInVisible, setLogInVisible] = useState(false);
@@ -27,7 +27,7 @@ const AuthenticationScreen = memo(() => {
 
   const dispatch = useDispatch();
   const { isAuth } = useSelector((store: RootState) => store.auth);
-  const { navigate } = useNavigation<StackNavigation>();
+  const { navigate } = useNavigation<TabsNavigation>();
 
   useEffect(() => {
     const getUserId = async () => {
@@ -35,7 +35,7 @@ const AuthenticationScreen = memo(() => {
         const uid = await AsyncStorage.getItem("uid");
         if (uid) {
           dispatch({ type: AuthUserActionType.LOGIN_USER });
-          navigate(ScreenNames.HomeScreen);
+          navigate(TabNames.TabName, TabNames.Tabs.HomeScreen);
         } else {
           dispatch({ type: AuthUserActionType.LOGOUT_USER });
         }
@@ -64,7 +64,8 @@ const AuthenticationScreen = memo(() => {
     }
   };
 
-  const handleOnNavigate = () => navigate(ScreenNames.HomeScreen);
+  const handleOnNavigate = () =>
+    navigate(TabNames.TabName, TabNames.Tabs.HomeScreen);
 
   return (
     <AuthLayout>
