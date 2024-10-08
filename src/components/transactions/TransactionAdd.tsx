@@ -31,10 +31,13 @@ import {
 } from "../../store/reducers/common/types";
 import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 import { Categories } from "../common/category/types";
+import { useTheme } from "../../core/themes/useTheme";
 
 interface ITransactionType {
   transactionType: Categories;
 }
+
+const theme = useTheme();
 
 const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
   const init: ITransactionAdd = {
@@ -194,10 +197,10 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
       keyboardOpeningTime={0}
       onLayout={onLayout}
     >
-      <Text style={styles.titleText}>Future transaction</Text>
+      <Text style={[styles.text, styles.titleText]}>Future transaction</Text>
 
       <View style={{ alignItems: "center" }}>
-        <Text style={styles.titleByDate}>{formattedDate}</Text>
+        <Text style={[styles.text, styles.titleByDate]}>{formattedDate}</Text>
 
         <Transaction
           transactionTitle={
@@ -235,9 +238,7 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
         touched={touched.transactionValue}
       />
 
-      <Text style={{ marginBottom: 5, marginTop: 0 }}>
-        Select transaction time and date
-      </Text>
+      <Text style={styles.label}>Select transaction time and date</Text>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <CustomButton
@@ -267,11 +268,17 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
             maxDate={maxDate}
             onDayPress={handleDayPress}
             firstDay={1}
-            theme={{ calendarBackground: "transparent" }}
+            theme={{
+              calendarBackground: "transparent",
+              dayTextColor: theme.calendar.active,
+              textDisabledColor: theme.calendar.inactive,
+              todayTextColor: theme.purple,
+              monthTextColor: theme.text,
+            }}
             markedDates={{
               [selectedDay]: {
                 selected: true,
-                selectedColor: "rgba(126,76,215,.75)",
+                selectedColor: theme.purple,
               },
             }}
           />
@@ -293,6 +300,14 @@ const TransactionAdd: FC<ITransactionType> = ({ transactionType }) => {
 export default TransactionAdd;
 
 const styles = StyleSheet.create({
+  label: {
+    color: theme.text,
+    marginBottom: 5,
+    marginTop: 0,
+  },
+  text: {
+    color: theme.text,
+  },
   titleText: {
     fontSize: 18,
     fontFamily: "Quicksand_700Bold",
@@ -305,7 +320,7 @@ const styles = StyleSheet.create({
   expireDateButton: {
     width: "49%",
     borderRadius: 10,
-    borderColor: "rgba(0,0,0,0.5)",
+    borderColor: theme.border,
     marginTop: 5,
     marginBottom: 10,
   },

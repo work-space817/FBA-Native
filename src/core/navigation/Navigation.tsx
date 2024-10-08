@@ -7,6 +7,8 @@ import RegisterScreen from "../screens/auth/register/RegisterScreen";
 import DefaultHeader from "../layouts/default/DefaultHeader";
 import { ScreenNames } from "./routes";
 import TabNavigation from "./TabNavigation";
+import { memo } from "react";
+import { useTheme } from "../themes/useTheme";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +16,9 @@ type ScreenNamesType = keyof typeof ScreenNames;
 export type RootStackParamList = Record<ScreenNamesType[number], undefined>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
-const Navigation = () => {
+const theme = useTheme();
+
+const Navigation = memo(() => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -25,7 +29,6 @@ const Navigation = () => {
         <Stack.Group
           screenOptions={{
             headerShown: false,
-            animation: "fade",
           }}
         >
           <Stack.Screen
@@ -66,6 +69,6 @@ const Navigation = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
+});
 
 export default Navigation;

@@ -11,12 +11,16 @@ import CustomButton from "./CustomButton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
+import { useTheme } from "../../core/themes/useTheme";
 
 interface ICustomModal extends ModalProps {
   children: React.ReactNode;
   title?: string;
   customActive?: React.ReactNode;
+  theme?: "none" | "primary" | "secondary" | "transparent";
 }
+
+const theme = useTheme();
 const CustomModal: FC<ICustomModal> = ({
   children,
   title,
@@ -51,7 +55,7 @@ const CustomModal: FC<ICustomModal> = ({
         <CustomButton
           onPress={() => setModalVisible(true)}
           title={""}
-          theme="none"
+          theme={props.theme}
           style={{ borderWidth: 0 }}
         >
           {customActive}
@@ -60,7 +64,7 @@ const CustomModal: FC<ICustomModal> = ({
         <CustomButton
           onPress={() => setModalVisible(true)}
           title={title}
-          theme="primary"
+          theme={props.theme}
         />
       )}
     </>
@@ -70,7 +74,7 @@ const CustomModal: FC<ICustomModal> = ({
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    backgroundColor: "rgba(115,0,245,.15)",
+    backgroundColor: theme.background,
     justifyContent: "center",
     alignItems: "center",
   },

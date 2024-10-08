@@ -46,8 +46,6 @@ export default function TransactionScreen() {
       style={{ paddingHorizontal: 0 }}
       // onRefreshComponents={onRefreshComponents}
     >
-      {/* <GoalSlider />
-      <GoalEdit /> */}
       <TransactionTable />
     </DefaultLayout>
   );

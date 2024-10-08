@@ -3,6 +3,9 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import CustomInput from "../../UI/CustomInput";
 import CustomButton from "../../UI/CustomButton";
 import { useRegistrationController } from "./useRegistrationController";
+import { useTheme } from "../../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const RegistrationView = memo(() => {
   const {
@@ -62,7 +65,7 @@ const RegistrationView = memo(() => {
         />
       </View>
       <View style={styles.optionalText}>
-        <Text>Do you have an account?</Text>
+        <Text style={styles.text}>Do you have an account?</Text>
         <TouchableOpacity onPress={toLogin}>
           <Text style={styles.toLogin}>Login</Text>
         </TouchableOpacity>
@@ -85,6 +88,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
   },
+  text: {
+    color: theme.text,
+  },
   optionalText: {
     gap: 4,
     height: 20,
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     lineHeight: 20,
-    color: "#rgba(126,76,215,.75)",
+    color: theme.purple,
     textDecorationLine: "underline",
   },
   button: {

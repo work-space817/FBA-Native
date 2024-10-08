@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View, ViewProps, ViewStyle } from "react-native";
 import React, { FC } from "react";
+import { useTheme } from "../../themes/useTheme";
 export interface IDefaultLayout extends ViewProps {
   outterStyle?: ViewStyle;
 }
+
+const theme = useTheme();
 
 const DefaultLayout: FC<IDefaultLayout> = (props) => {
   return (
@@ -18,7 +21,7 @@ export default DefaultLayout;
 
 const styles = StyleSheet.create({
   outerLayout: {
-    backgroundColor: "rgba(140,0,255,.1)",
+    backgroundColor: theme.background,
     flex: 1,
   },
   innerLayout: {

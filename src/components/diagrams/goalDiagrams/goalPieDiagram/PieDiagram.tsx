@@ -5,6 +5,9 @@ import PieDiagramLabels from "./PieDiagramLabels";
 import GoalPieDiagramLegend from "./GoalPieDiagramLegend";
 import CustomLoadingAnimation from "../../../UI/CustomLoadingAnimation";
 import { memo } from "react";
+import { useTheme } from "../../../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const PieDiagram = memo(() => {
   const {
@@ -28,9 +31,7 @@ const PieDiagram = memo(() => {
     "#0000FF ",
   ];
   const outterPieData = outterData.map((goal) => {
-    const outterCOLORS = goal.isExpire
-      ? "rgb(255, 14, 66)"
-      : "rgb(54, 222, 34)";
+    const outterCOLORS = goal.isExpire ? theme.red : theme.green;
     return {
       value: goal.summaryCount,
       color: outterCOLORS,
@@ -74,10 +75,11 @@ const PieDiagram = memo(() => {
                   donut
                   showGradient
                   focusOnPress
-                  radius={95}
+                  radius={90}
                   strokeWidth={5}
-                  strokeColor="white"
                   innerRadius={70}
+                  // backgroundColor={theme.colors.none}
+                  // strokeColor={theme.background}
                   centerLabelComponent={() => {
                     return (
                       <View style={styles.innerPieLayout}>
@@ -87,10 +89,10 @@ const PieDiagram = memo(() => {
                           focusOnPress
                           radius={63}
                           showText
-                          textColor="black"
+                          textColor={theme.colors.black.default}
                           textSize={8}
                           strokeWidth={5}
-                          strokeColor="white"
+                          strokeColor={theme.background}
                         />
                       </View>
                     );
@@ -136,6 +138,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   textDiagram: {
+    color: theme.text,
     fontSize: 18,
     fontFamily: "Quicksand_700Bold",
     textAlign: "center",

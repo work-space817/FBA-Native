@@ -1,25 +1,23 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
-import { useDispatch } from "react-redux";
 import HeaderSVG from "../../../helpers/SVG/layoutComponents/HeaderSVG";
-import { AuthUserActionType } from "../../../store/reducers/userReducers/types";
 import { StackNavigation } from "../../navigation/Navigation";
 import { memo } from "react";
 import { StatusBar } from "expo-status-bar";
 import { ScreenNames } from "../../navigation/routes";
+import { useTheme } from "../../themes/useTheme";
+
+const theme = useTheme();
 
 const DefaultHeader = memo(() => {
-  const dispatch = useDispatch();
   const route = useRoute();
   const currentRouteName = route.name.replace("Screen", "");
   const { navigate } = useNavigation<StackNavigation>();
-  const handleOnNavigate = async () => {
-    await AsyncStorage.removeItem("token");
-    await AsyncStorage.removeItem("uid");
-    dispatch({ type: AuthUserActionType.LOGOUT_USER });
-    navigate(ScreenNames.IntroductionScreen);
+  const handleOnNavigate = () => {
+    navigate(ScreenNames.SettingsScreen);
   };
+
+  const statusBarOption = theme.type === "light" ? "dark" : "light";
 
   return (
     <View style={styles.layout}>
@@ -29,10 +27,10 @@ const DefaultHeader = memo(() => {
           <Text style={styles.headerTitleText}>{currentRouteName}</Text>
         </View>
         <TouchableOpacity onPress={handleOnNavigate}>
-          <HeaderSVG id={"LogOut"} />
+          <HeaderSVG id={"Settings"} height={44} width={44} />
         </TouchableOpacity>
       </View>
-      <StatusBar style="auto" />
+      <StatusBar animated={true} style={statusBarOption} />
       <Text style={styles.headerOptionalText}>
         Get summary of your weekly online transactions here.
       </Text>
@@ -42,7 +40,7 @@ const DefaultHeader = memo(() => {
 const styles = StyleSheet.create({
   layout: {
     paddingTop: 40,
-    backgroundColor: "rgba(140,0,255,.1)",
+    backgroundColor: theme.background,
     paddingHorizontal: 16,
   },
   headerCloudImage: {
@@ -69,13 +67,14 @@ const styles = StyleSheet.create({
   headerTitleText: {
     fontFamily: "Quicksand_700Bold",
     fontSize: 22,
+    color: theme.text,
   },
   headerOptionalText: {
     // paddingHorizontal: 16,
     fontSize: 15,
     fontFamily: "Quicksand_600SemiBold",
-    color: "rgba(0,0,0,0.5)",
     marginBottom: 15,
+    color: theme.subText,
   },
 });
 export default DefaultHeader;

@@ -17,8 +17,11 @@ import DateFormater from "../../helpers/functions/dateFormater";
 import { format } from "date-fns";
 import { GoalSelectActionType } from "../../store/reducers/goalReducers/types";
 import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
+import { useTheme } from "../../core/themes/useTheme";
 
 interface IGoalView extends ViewProps {}
+
+const theme = useTheme();
 
 const Goal: FC<IGoalView & IGoal> = memo(
   ({ cost, expireDate, title, selectedCategories, id, style }) => {
@@ -47,7 +50,6 @@ const Goal: FC<IGoalView & IGoal> = memo(
       now > compareDate ? styles.expiredLayout : null;
     const expiredDateText: StyleProp<any> =
       now > compareDate ? styles.expiredDateText : null;
-    const expiredClock = now > compareDate ? "red" : undefined;
 
     return (
       <TouchableOpacity activeOpacity={1} onPress={selectGoal}>
@@ -58,12 +60,12 @@ const Goal: FC<IGoalView & IGoal> = memo(
               <Text style={[styles.dateText, expiredDateText]}>
                 {formattedDate}
               </Text>
-              <GoalSVG id="Clock" width="12" height="15" fill={expiredClock} />
+              <GoalSVG id="Clock" width="12" height="15" />
             </View>
           </View>
           <View style={styles.distance}>
             <SelectCategoriesSVG id={selectedCategories as string} />
-            <Text>{title}</Text>
+            <Text style={styles.title}>{title}</Text>
           </View>
         </ComponentsLayout>
       </TouchableOpacity>
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   expiredLayout: {
-    borderColor: "red",
+    borderColor: theme.red,
     borderWidth: 1,
     borderStyle: "solid",
   },
@@ -86,7 +88,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     gap: 4,
   },
+  title: {
+    color: theme.text,
+  },
   cost: {
+    color: theme.text,
     fontSize: 16,
     fontFamily: "Quicksand_700Bold",
   },
@@ -97,12 +103,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   dateText: {
+    color: theme.subText,
     fontSize: 12,
     fontFamily: "Quicksand_600SemiBold",
-    color: "rgba(0,0, 0, 0.50)",
   },
   expiredDateText: {
-    color: "rgb(255,0, 0)",
+    color: theme.red,
   },
 });
 

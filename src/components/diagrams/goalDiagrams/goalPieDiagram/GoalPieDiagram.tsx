@@ -5,8 +5,7 @@ import PieDiagram from "./PieDiagram";
 
 const GoalPieDiagram = memo(() => {
   return (
-    <ComponentsLayout>
-      <Text style={styles.titleText}>Goal Status Diagram</Text>
+    <ComponentsLayout title="Goal Status Diagram">
       <PieDiagram />
     </ComponentsLayout>
   );

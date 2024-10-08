@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 import { RootState } from "../../store";
 import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarReducers/types";
+import { useTheme } from "../../core/themes/useTheme";
 
 export interface IDateRange {
   startDate?: string;
@@ -25,6 +26,7 @@ interface ICalendarWithRange {
   style?: ViewStyle;
   onConfirm: (e: IDateRange) => void;
 }
+const theme = useTheme();
 
 const CalendarWithRange: FC<ICalendarWithRange> = ({
   maskStyle,
@@ -97,8 +99,8 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
   };
 
   const getMarkedDateObject: MarkingProps = {
-    color: "rgba(126,76,215,.99)",
-    textColor: "rgba(255,255,255,.7)",
+    color: theme.purple,
+    textColor: theme.colors.white.default,
   };
 
   const onDismissByBackground = () => {
@@ -128,7 +130,13 @@ const CalendarWithRange: FC<ICalendarWithRange> = ({
                 maxDate={maxDate}
                 markingType={"period"}
                 markedDates={selectedDates}
-                theme={{ calendarBackground: "transparent" }}
+                theme={{
+                  calendarBackground: "transparent",
+                  dayTextColor: theme.calendar.active,
+                  textDisabledColor: theme.calendar.inactive,
+                  todayTextColor: theme.purple,
+                  monthTextColor: theme.text,
+                }}
               />
               <CustomButton
                 style={styles.confirmButton}

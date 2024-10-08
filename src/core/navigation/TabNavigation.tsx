@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationProp } from "@react-navigation/native";
 import DefaultHeader from "../layouts/default/DefaultHeader";
@@ -8,6 +8,7 @@ import StatisticScreen from "../screens/statistic/StatisticScreen";
 import TransactionScreen from "../screens/transaction/TransactionScreen";
 import { TabNames, ScreenNames } from "./routes";
 import NavbarSVG from "../../helpers/SVG/layoutComponents/NavbarSVG";
+import { useTheme } from "../themes/useTheme";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,18 +20,24 @@ export type RootTabsParamList = Record<
 
 export type TabsNavigation = NavigationProp<RootTabsParamList>;
 
-const TabNavigation = () => {
+const theme = useTheme();
+
+const TabNavigation = memo(() => {
   return (
     <Tab.Navigator
       screenOptions={{
         header: () => <DefaultHeader />,
-        tabBarActiveBackgroundColor: "rgba(119, 36, 197, 0.324)",
-        tabBarInactiveBackgroundColor: "#f5f5f5",
+        tabBarActiveBackgroundColor: theme.navbar.active,
+        tabBarInactiveBackgroundColor: theme.navbar.inactive,
         tabBarShowLabel: false,
         tabBarItemStyle: {
-          borderColor: "white",
+          borderColor: theme.neutral,
           borderRightWidth: 1,
           borderStyle: "solid",
+        },
+        tabBarStyle: {
+          borderTopWidth: 0,
+          backgroundColor: theme.background,
         },
       }}
     >
@@ -69,6 +76,6 @@ const TabNavigation = () => {
       />
     </Tab.Navigator>
   );
-};
+});
 
 export default TabNavigation;

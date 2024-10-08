@@ -11,6 +11,9 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import { useTheme } from "../../themes/useTheme";
+
+const theme = useTheme();
 
 interface IDefaultScrollableLayout extends ScrollViewProps {
   outterStyle?: ViewStyle;
@@ -29,6 +32,7 @@ const DefaultScrollableLayout = ({
     onRefreshComponents();
     setRefreshing(false);
   }, [onRefreshComponents]);
+
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setScrollPosition(event.nativeEvent.contentOffset.y);
   };
@@ -62,7 +66,7 @@ const DefaultScrollableLayout = ({
 
 const styles = StyleSheet.create({
   outerLayout: {
-    backgroundColor: "rgba(140,0,255,.1)",
+    backgroundColor: theme.background,
     flex: 1,
     // justifyContent: "space-between",
   },

@@ -2,6 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { memo, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
 import ArrowsSVG from "../../helpers/SVG/UI/ArrowsSVG";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const CustomCalendarHeader = memo(() => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -37,6 +40,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   currentMonth: {
+    color: theme.text,
     width: 115,
     textAlign: "center",
   },

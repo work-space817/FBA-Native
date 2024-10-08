@@ -1,6 +1,7 @@
-import { StyleProp, Text, TextProps, TextStyle } from "react-native";
+import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
 import React, { FC, memo } from "react";
 import { format } from "date-fns/format";
+import { useTheme } from "../../../core/themes/useTheme";
 
 interface IShowSelectedDates extends TextProps {
   dates: {
@@ -9,6 +10,8 @@ interface IShowSelectedDates extends TextProps {
   };
   dateFormat?: string;
 }
+
+const theme = useTheme();
 
 const ShowSelectedDates: FC<IShowSelectedDates> = memo(
   ({ dates, dateFormat = "dd.MM.yyyy", ...props }) => {
@@ -26,7 +29,7 @@ const ShowSelectedDates: FC<IShowSelectedDates> = memo(
       isDate = `All time`;
     }
     return (
-      <Text {...props} style={props.style}>
+      <Text {...props} style={[styles.titleText, props.style]}>
         {isDate}
       </Text>
     );
@@ -34,3 +37,9 @@ const ShowSelectedDates: FC<IShowSelectedDates> = memo(
 );
 
 export default ShowSelectedDates;
+
+const styles = StyleSheet.create({
+  titleText: {
+    color: theme.text,
+  },
+});

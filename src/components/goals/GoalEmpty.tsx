@@ -4,11 +4,17 @@ import GoalSVG from "../../helpers/SVG/UI/GoalSVG";
 import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 import CustomModal from "../UI/CustomModal";
 import GoalAdd from "./GoalAdd";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const GoalEmpty = memo(() => {
   return (
     <ComponentsLayout style={styles.layout}>
-      <CustomModal customActive={<GoalSVG id="Empty" width="40" height="40" />}>
+      <CustomModal
+        theme="transparent"
+        customActive={<GoalSVG id="Empty" width="40" height="40" />}
+      >
         <GoalAdd />
       </CustomModal>
       <View>
@@ -29,6 +35,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontFamily: "Quicksand_700Bold",
+    color: theme.text,
   },
 });
 

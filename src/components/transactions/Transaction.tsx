@@ -23,8 +23,11 @@ import updateUserInformation from "../../api/firebase/user/userInfo/updateUserIn
 import { RootState } from "../../store";
 import { limitedText } from "../../helpers/functions/limitedText";
 import { Categories } from "../common/category/types";
+import { useTheme } from "../../core/themes/useTheme";
 
 interface ITransactionView extends ViewProps {}
+
+const theme = useTheme();
 
 const Transaction: FC<ITransaction & ITransactionView> = ({
   transactionTitle,
@@ -124,12 +127,12 @@ const Transaction: FC<ITransaction & ITransactionView> = ({
         <View style={[styles.layout, props.style]}>
           <View style={styles.titleLayout}>
             <TransactionSVG id={transactionType} width={18} height={18} />
-            <Text>{transactionTime}</Text>
+            <Text style={styles.text}>{transactionTime}</Text>
             <SelectCategoriesSVG id={selectedCategories as string} />
-            <Text>{limitedTitle}</Text>
+            <Text style={styles.text}>{limitedTitle}</Text>
           </View>
           <View style={styles.valueLayout}>
-            <Text style={styles.transactionValueStyle}>
+            <Text style={[styles.transactionValueStyle, styles.text]}>
               {transactionValueType} {transactionValue} &#8372;
             </Text>
           </View>
@@ -161,6 +164,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  text: {
+    color: theme.text,
+  },
   leftViewStyle: {
     left: 0,
   },
@@ -179,7 +185,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255,245,250,1)",
+    backgroundColor: theme.componentsBackground,
   },
   titleLayout: {
     flexDirection: "row",
@@ -192,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   bordering: {
-    borderColor: "red",
+    borderColor: theme.red,
     borderWidth: 1,
     borderStyle: "solid",
   },

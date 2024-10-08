@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View, ViewProps } from "react-native";
 import React, { FC } from "react";
 import SelectCategoriesSVG from "../../../helpers/SVG/common/SelectCategoriesSVG";
+import { useTheme } from "../../../core/themes/useTheme";
 interface IPieDiagramLegend extends ViewProps {
   category: string;
   count: number;
   value: number;
   typeOfAction: string;
 }
+
+const theme = useTheme();
 
 const PieDiagramLegend: FC<IPieDiagramLegend> = ({
   style,
@@ -20,15 +23,15 @@ const PieDiagramLegend: FC<IPieDiagramLegend> = ({
       <View style={styles.caterogyView}>
         <SelectCategoriesSVG id={category} />
         <View>
-          <Text style={styles.legendText}>{category}</Text>
-          <Text style={styles.legendText}>
+          <Text style={[styles.text, styles.legendText]}>{category}</Text>
+          <Text style={[styles.text, styles.legendText]}>
             {count} {typeOfAction}
           </Text>
         </View>
       </View>
 
       <View>
-        <Text style={styles.legendText}>{value} &#8372;</Text>
+        <Text style={[styles.text, styles.legendText]}>{value} &#8372;</Text>
       </View>
     </View>
   );
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
   layout: {
     // padding: 5,
     paddingVertical: 8,
-    borderBottomColor: "rgba(0,0,0,.2)",
+    borderBottomColor: theme.border,
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -55,5 +58,8 @@ const styles = StyleSheet.create({
   legendText: {
     fontSize: 12,
     fontFamily: "Quicksand_600SemiBold",
+  },
+  text: {
+    color: theme.text,
   },
 });

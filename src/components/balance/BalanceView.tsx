@@ -1,6 +1,9 @@
 import React, { memo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import useBalanceController from "./useBalanceController";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const BalanceView = memo(() => {
   const { balance } = useBalanceController();
@@ -33,7 +36,7 @@ const BalanceView = memo(() => {
 const styles = StyleSheet.create({
   layout: {
     paddingLeft: 16,
-    borderColor: "rgb(222 226 230)",
+    borderColor: theme.border,
     borderLeftWidth: 1,
     borderStyle: "solid",
     alignItems: "flex-end",
@@ -46,24 +49,24 @@ const styles = StyleSheet.create({
   currentBalanceText: {
     fontFamily: "Quicksand_600SemiBold",
     fontSize: 20,
-    color: "blue",
+    color: theme.text,
     textAlign: "right",
   },
   incomeBalanceText: {
     fontFamily: "Quicksand_600SemiBold",
     fontSize: 16,
-    color: "green",
+    color: theme.green,
     textAlign: "right",
   },
   outcomeBalanceText: {
     fontFamily: "Quicksand_600SemiBold",
     fontSize: 16,
-    color: "red",
+    color: theme.red,
     textAlign: "right",
   },
   descriptionText: {
     fontSize: 12,
-    color: "rgba(0, 0, 0, 0.5)",
+    color: theme.subText,
     fontFamily: "Quicksand_500Medium",
   },
 });

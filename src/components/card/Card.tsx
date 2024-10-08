@@ -7,11 +7,11 @@ import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
 
 const Card = memo(() => {
   return (
-    <ComponentsLayout>
-      <View style={styles.cardAndBalace}>
-        <Text style={styles.titleText}>Card</Text>
-        <CustomCalendarHeader />
-      </View>
+    <ComponentsLayout title="Card">
+      {/* <Text style={styles.titleText}>Card</Text> */}
+      {/* <View style={styles.cardAndBalace}>
+     <CustomCalendarHeader /> 
+      </View> */}
       <View style={styles.cardAndBalace}>
         <CardView />
         <BalanceView />
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     fontFamily: "Quicksand_700Bold",
   },
   cardAndBalace: {
+    // width: "100%",
     marginVertical: 6,
     flexDirection: "row",
     justifyContent: "space-between",

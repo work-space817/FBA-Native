@@ -18,6 +18,9 @@ import {
   GoalListActionType,
   GoalSelectActionType,
 } from "../../store/reducers/goalReducers/types";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const GoalEdit = memo(() => {
   const init: IGoalEdit = {
@@ -111,8 +114,7 @@ const GoalEdit = memo(() => {
     setFieldValue("cost", "");
   }, [setFieldValue]);
   return (
-    <ComponentsLayout>
-      <Text style={[styles.titleText]}>Select above to edit</Text>
+    <ComponentsLayout title="Select above to edit">
       <View style={styles.layout}>
         <View style={styles.goalLayout}>
           {selectedGoal != null ? (
@@ -187,7 +189,7 @@ const GoalEdit = memo(() => {
                 markedDates={{
                   [selectedDay]: {
                     selected: true,
-                    selectedColor: "rgba(126,76,215,.75)",
+                    selectedColor: theme.purple,
                   },
                 }}
               />
@@ -215,12 +217,12 @@ const styles = StyleSheet.create({
   expireDateButton: {
     width: "100%",
     borderRadius: 10,
-    borderColor: "rgba(0,0,0,0.5)",
+    borderColor: theme.border,
     marginTop: 5,
     marginBottom: 10,
   },
   layout: {
-    marginTop: 10,
+    marginVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",

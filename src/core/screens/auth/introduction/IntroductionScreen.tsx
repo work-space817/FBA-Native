@@ -18,6 +18,9 @@ import { AuthUserActionType } from "../../../../store/reducers/userReducers/type
 import CustomLoadingAnimation from "../../../../components/UI/CustomLoadingAnimation";
 import { TabsNavigation } from "../../../navigation/TabNavigation";
 import { StackNavigation } from "../../../navigation/Navigation";
+import { useTheme } from "../../../themes/useTheme";
+
+const theme = useTheme();
 
 const IntroductionScreen = memo(() => {
   const { width } = Dimensions.get("window");
@@ -89,7 +92,7 @@ export default IntroductionScreen;
 
 const styles = StyleSheet.create({
   layout: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.background,
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
@@ -100,14 +103,14 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
-    color: "#14171D",
+    color: theme.text,
     fontWeight: "600",
     fontSize: 32,
     lineHeight: 38.4,
     textAlign: "left",
   },
   subtitle: {
-    color: "#14171D",
+    color: theme.text,
     fontWeight: "400",
     fontSize: 16,
     lineHeight: 19.2,

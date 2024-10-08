@@ -2,6 +2,10 @@ import React, { memo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useCardController } from "./useCardController";
 import { limitedText } from "../../helpers/functions/limitedText";
+import { colors } from "../../core/themes/colors";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const CardView = memo(() => {
   const { userData, randomDigit, today } = useCardController();
@@ -35,7 +39,7 @@ const CardView = memo(() => {
 });
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "rgba(126,76,215,.75)",
+    backgroundColor: theme.purple,
     borderRadius: 18,
     width: "60%",
     marginHorizontal: 6,
@@ -43,12 +47,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   cardTitleText: {
-    color: "white",
+    color: colors.white.default,
     fontSize: 15,
     fontFamily: "Quicksand_700Bold",
   },
   cardOptionalText: {
-    color: "rgba(255,255, 255, 0.50)",
+    color: colors.white.white500,
     fontSize: 10,
     fontFamily: "Quicksand_500Medium",
   },
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
   },
   digitText: {
     fontSize: 16,
-    color: "white",
+    color: colors.white.default,
     fontFamily: "Quicksand_500Medium",
   },
   infoLayout: {
@@ -70,12 +74,12 @@ const styles = StyleSheet.create({
   },
   textSmall: {
     fontSize: 10,
-    color: "rgba(255, 255, 255, 0.5)",
+    color: colors.white.white500,
     fontFamily: "Quicksand_500Medium",
   },
   textMedium: {
     fontSize: 12,
-    color: "white",
+    color: colors.white.default,
     fontFamily: "Quicksand_500Medium",
   },
 });

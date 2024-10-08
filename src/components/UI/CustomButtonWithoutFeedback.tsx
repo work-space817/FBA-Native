@@ -1,42 +1,50 @@
 import React, { FC, memo } from "react";
 import {
   StyleSheet,
-  TouchableOpacity,
   Text,
-  ViewStyle,
   TouchableOpacityProps,
-  GestureResponderEvent,
   TextStyle,
+  ViewStyle,
   TouchableWithoutFeedback,
-  TouchableWithoutFeedbackProps,
 } from "react-native";
+import { useTheme } from "../../core/themes/useTheme";
 
-interface ICustomButtom extends TouchableWithoutFeedbackProps {
+const themes = useTheme();
+
+interface ICustomButtom extends TouchableOpacityProps {
+  label?: string;
   titleStyle?: TextStyle;
   title?: string;
-  theme?: "none" | "primary" | "secondary";
+  theme?: "none" | "primary" | "secondary" | "transparent";
   onPress: (e: any) => void;
 }
 
-const CustomButtonWithoutFeedback: FC<ICustomButtom> = ({
-  theme = "none",
-  ...props
-}) => {
-  const buttonStyles: ViewStyle = styles[theme];
-  const textStyles = styles[`${theme}Text`];
+const CustomButton: FC<ICustomButtom> = ({ theme = "none", ...props }) => {
+  const buttonStyles = themes.button[theme]?.background;
+  const borderStyles = themes.button[theme]?.border;
+  const textStyles = themes.button[theme]?.text;
+
   return (
-    <TouchableWithoutFeedback
-      {...props}
-      onPress={props.onPress}
-      style={[styles.button, buttonStyles, props.style]}
-    >
-      {props.children}
-      {props.title && (
-        <Text style={[styles.text, textStyles, props.titleStyle]}>
-          {props.title}
-        </Text>
-      )}
-    </TouchableWithoutFeedback>
+    <>
+      {props.label && <Text style={styles.label}>{props.label}</Text>}
+      <TouchableWithoutFeedback
+        {...props}
+        onPress={props.onPress}
+        style={[
+          styles.button,
+          { backgroundColor: buttonStyles, borderColor: borderStyles },
+
+          props.style,
+        ]}
+      >
+        {props.children}
+        {props.title && (
+          <Text style={[styles.text, { color: textStyles }, props.titleStyle]}>
+            {props.title}
+          </Text>
+        )}
+      </TouchableWithoutFeedback>
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -44,36 +52,19 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 16,
-    borderWidth: 0,
+    borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-
   text: {
     fontFamily: "Quicksand_600SemiBold",
     margin: 0,
     padding: 0,
     lineHeight: 17,
   },
-  none: {
-    backgroundColor: "rgb(255,245,250)",
-    borderColor: "rgba(0,0,0,0.2)",
-    borderWidth: 1,
-  },
-  noneText: {
-    color: "rgb(0,0,0)",
-  },
-  primary: {
-    backgroundColor: "rgba(126,76,215,.75)",
-  },
-  primaryText: {
-    color: "rgb(255,255,255)",
-  },
-  secondary: {
-    backgroundColor: "rgba(110,115,125,1)",
-  },
-  secondaryText: {
-    color: "rgb(255,255,255)",
+  label: {
+    color: themes.text,
+    marginBottom: 5,
   },
 });
-export default CustomButtonWithoutFeedback;
+export default CustomButton;

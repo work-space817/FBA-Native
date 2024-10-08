@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigation } from "../../navigation/Navigation";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import OperationMenu from "../../../components/common/UI/OperationMenu";
-import { BackHandler } from "react-native";
+import { Alert, BackHandler } from "react-native";
 import { useDispatch } from "react-redux";
 import ExchangeRateLinear from "../../../components/diagrams/exchangeRate/ExchangeRateLinear";
 import { GoalListActionType } from "../../../store/reducers/goalReducers/types";
@@ -23,14 +23,20 @@ export default function HomeScreen() {
   };
   useEffect(() => {
     checkUpUser();
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        return true;
-      }
-    );
-    return () => backHandler.remove();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        () => {
+          BackHandler.exitApp();
+          return true;
+        }
+      );
+      return () => backHandler.remove();
+    }, [])
+  );
 
   const onRefreshComponents = () => {
     dispatch({

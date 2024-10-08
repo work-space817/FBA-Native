@@ -20,6 +20,9 @@ import {
 } from "../../store/reducers/common/types";
 import { GoalListActionType } from "../../store/reducers/goalReducers/types";
 import { Categories } from "../common/category/types";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const GoalAdd = memo(() => {
   const init: IGoalAdd = {
@@ -156,8 +159,8 @@ const GoalAdd = memo(() => {
         touched={touched.cost}
       />
 
-      <Text style={{ marginBottom: 5, marginTop: 0 }}>Select expire date</Text>
       <CustomButton
+        label="Select expire date"
         style={styles.expireDateButton}
         title={formattedDate}
         theme="none"
@@ -174,11 +177,17 @@ const GoalAdd = memo(() => {
             minDate={minDate}
             onDayPress={handleDayPress}
             firstDay={1}
-            theme={{ calendarBackground: "transparent" }}
+            theme={{
+              calendarBackground: "transparent",
+              dayTextColor: theme.calendar.active,
+              textDisabledColor: theme.calendar.inactive,
+              todayTextColor: theme.purple,
+              monthTextColor: theme.text,
+            }}
             markedDates={{
               [selectedDay]: {
                 selected: true,
-                selectedColor: "rgba(126,76,215,.75)",
+                selectedColor: theme.purple,
               },
             }}
           />
@@ -199,11 +208,11 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 18,
     fontFamily: "Quicksand_700Bold",
+    color: theme.text,
   },
   expireDateButton: {
     width: "100%",
     borderRadius: 10,
-    borderColor: "rgba(0,0,0,0.5)",
     marginTop: 5,
     marginBottom: 10,
   },

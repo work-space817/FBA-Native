@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import LineDiagram from "./LineDiagram";
 import ExchangeRateList from "./ExchangeRateList";
+import { useTheme } from "../../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const ExchangeRateLinear = memo(() => {
   const { loading, rateUSD, rateEUR } = ExchangeRateList();
@@ -19,33 +22,35 @@ const ExchangeRateLinear = memo(() => {
     setCustomLayoutWidth(width);
   }, []);
   return (
-    <ComponentsLayout onLayout={handleCustomLayout} style={{ gap: 10 }}>
-      <Text style={styles.titleText}>Exchange Rate Diagram</Text>
-      <Text style={styles.descriptionText}>UAH & USD</Text>
-      <LineDiagram
-        width={customLayoutWidth}
-        data={rateUSD}
-        loading={loading}
-        currency="USD"
-      />
-      <Text style={styles.descriptionText}>UAH & EUR</Text>
-      <LineDiagram
-        width={customLayoutWidth}
-        data={rateEUR}
-        loading={loading}
-        currency="EUR"
-      />
+    <ComponentsLayout
+      onLayout={handleCustomLayout}
+      title="Exchange Rate Diagram"
+      // style={{ gap: 10 }}
+    >
+      <View style={{ gap: 10 }}>
+        <Text style={styles.descriptionText}>UAH & USD</Text>
+        <LineDiagram
+          width={customLayoutWidth}
+          data={rateUSD}
+          loading={loading}
+          currency="USD"
+        />
+        <Text style={styles.descriptionText}>UAH & EUR</Text>
+        <LineDiagram
+          width={customLayoutWidth}
+          data={rateEUR}
+          loading={loading}
+          currency="EUR"
+        />
+      </View>
     </ComponentsLayout>
   );
 });
 const styles = StyleSheet.create({
-  titleText: {
-    fontSize: 18,
-    fontFamily: "Quicksand_700Bold",
-  },
   descriptionText: {
     fontSize: 14,
     fontFamily: "Quicksand_400Regular",
+    color: theme.subText,
   },
 });
 

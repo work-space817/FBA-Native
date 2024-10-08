@@ -14,9 +14,7 @@ const getGoalsData = async () => {
 
   const userGoalsRef = collection(firestore, `goals/${userId}/goal`);
 
-  const goalsQueryArgs: QueryConstraint[] = [
-    orderBy("transactionDate", "desc"),
-  ];
+  const goalsQueryArgs: QueryConstraint[] = [orderBy("expireDate", "desc")];
   const goalQuery = query(userGoalsRef, ...goalsQueryArgs);
   const goalsQuerySnapshot = await getDocs(goalQuery);
 

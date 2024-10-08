@@ -28,6 +28,9 @@ import { ICalendarDatesRangeActionType } from "../../store/reducers/calendarRedu
 import { ScrollViewPositionActionType } from "../../store/reducers/common/types";
 import { TransactionListActionType } from "../../store/reducers/transactionReducers/types";
 import ComponentsLayout from "../../core/layouts/components/ComponentsLayout";
+import { useTheme } from "../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const TransactionTable = memo(() => {
   const dispatch = useDispatch();
@@ -100,7 +103,7 @@ const TransactionTable = memo(() => {
       const formattedDate = format(date, "dd MMMM yyyy");
       return (
         <View style={styles.layoutByDate} key={date}>
-          <Text style={styles.titleByDate}>{formattedDate}</Text>
+          <Text style={[styles.text, styles.titleByDate]}>{formattedDate}</Text>
           <View style={styles.layoutTransactionByDate}>
             {sortedByTime.map((transaction: ITransaction) => (
               <Transaction key={transaction.id} {...transaction} />
@@ -157,14 +160,11 @@ const TransactionTable = memo(() => {
       />
       <View style={[styles.headerLayout]}>
         <View style={styles.headerFilters}>
-          <Text style={styles.titleText}>Transaction History</Text>
+          <Text style={[styles.text, styles.titleText]}>
+            Transaction History
+          </Text>
           <View style={[styles.headerFilters, { gap: 5 }]}>
-            <CustomButton
-              style={styles.searchButton}
-              onPress={function (e: any): void {
-                throw new Error("Function not implemented.");
-              }}
-            >
+            <CustomButton style={styles.searchButton} onPress={() => {}}>
               <GeneralSVG id={"Hash"} width={22} height={16} />
             </CustomButton>
             <CustomButton
@@ -178,7 +178,7 @@ const TransactionTable = memo(() => {
               style={[styles.searchButton]}
               onPress={onDefaultRange}
             >
-              <Text style={[styles.titleColor, { paddingHorizontal: 5 }]}>
+              <Text style={[styles.subText, { paddingHorizontal: 5 }]}>
                 Clear
               </Text>
             </CustomButton>
@@ -190,7 +190,7 @@ const TransactionTable = memo(() => {
               startDate: dateRange[0],
               endDate: dateRange[1],
             }}
-            style={[styles.titleByDate, styles.titleColor]}
+            style={[styles.titleByDate, styles.subText]}
           />
           <CustomInput
             layoutStyle={styles.inputLayoutStyle}
@@ -249,6 +249,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Quicksand_700Bold",
   },
+  text: {
+    color: theme.text,
+  },
+  subText: {
+    color: theme.subText,
+  },
   layoutByDate: {
     marginVertical: 10,
     alignItems: "center",
@@ -258,12 +264,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Quicksand_700Bold",
   },
-  titleColor: {
-    color: "rgba(0,0, 0, 0.6)",
-  },
+
   layoutTransactionByDate: {
     borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.2)",
+    borderTopColor: theme.border,
     borderStyle: "solid",
   },
   calendarLayout: {
@@ -275,7 +279,7 @@ const styles = StyleSheet.create({
   },
   maskStyle: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    backgroundColor: theme.neutral,
     zIndex: 2,
     borderRadius: 18,
     borderBottomLeftRadius: 0,

@@ -3,6 +3,7 @@ import React, { FC, useCallback } from "react";
 import { LineChart } from "react-native-gifted-charts";
 import { format, parseISO } from "date-fns";
 import CustomLoadingAnimation from "../../UI/CustomLoadingAnimation";
+import { useTheme } from "../../../core/themes/useTheme";
 
 interface ILineDiagram {
   data: any[];
@@ -10,6 +11,7 @@ interface ILineDiagram {
   loading: boolean;
   currency: string;
 }
+const theme = useTheme();
 
 const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
   const selectedCurrency = currency === "USD" ? "$" : "€";
@@ -38,8 +40,8 @@ const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
   const newData = data.map((item, index) => ({
     ...item,
     label: item.label.slice(8),
-    newValue: item.value, //lib bug
-    newLabel: item.label, //lib bug
+    newValue: item.value, //!lib bug
+    newLabel: item.label, //!lib bug
     index: index,
   }));
 
@@ -56,18 +58,22 @@ const LineDiagram: FC<ILineDiagram> = ({ data, width, loading, currency }) => {
           yAxisOffset={minValue - 0.1}
           yAxisLabelSuffix={" ₴ "}
           yAxisLabelWidth={42}
+          yAxisColor={theme.text}
+          xAxisColor={theme.text}
+          yAxisTextStyle={{ color: theme.text }}
+          xAxisLabelTextStyle={{ color: theme.text }}
           curved
           hideRules
           showVerticalLines
           lineGradient
-          lineGradientEndColor="rgb(255, 105, 66)"
+          lineGradientEndColor={theme.orange}
           showTextOnFocus
           hideDataPoints
           pointerConfig={{
             pointer1Color: "transparent",
             pointerStripWidth: 5,
             pointerStripUptoDataPoint: true,
-            pointerStripColor: "rgba(126,76,215,.95)",
+            pointerStripColor: theme.purple,
             pointerLabelWidth: 110,
             activatePointersOnLongPress: true,
             pointerLabelComponent: (item: any) => {
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   dateTextBorder: {
-    borderColor: "rgb(222 226 230)",
+    borderColor: theme.border,
     borderBottomWidth: 1,
     borderStyle: "solid",
   },

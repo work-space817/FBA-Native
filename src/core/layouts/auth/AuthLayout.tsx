@@ -1,10 +1,12 @@
 import { Dimensions, StyleSheet, Text, View, ViewProps } from "react-native";
 import React, { FC } from "react";
 import HeaderSVG from "../../../helpers/SVG/layoutComponents/HeaderSVG";
+import { useTheme } from "../../themes/useTheme";
 
 interface IAuthLayout extends ViewProps {
   subtitle?: string;
 }
+const theme = useTheme();
 
 const AuthLayout: FC<IAuthLayout> = (props) => {
   const { height } = Dimensions.get("window");
@@ -26,7 +28,7 @@ export default AuthLayout;
 
 const styles = StyleSheet.create({
   defaultStyle: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.background,
     alignItems: "center",
     flex: 1,
     paddingHorizontal: 16,
@@ -44,10 +46,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 24,
     lineHeight: 28.8,
-    color: "#14171D",
+    color: theme.text,
   },
   subtitle: {
-    color: "#667085",
+    color: theme.subText,
     fontWeight: "400",
     fontSize: 16,
     lineHeight: 22.4,

@@ -2,11 +2,14 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { FC } from "react";
 import PieDiagramLegend from "../../common/PieDiagramLegend";
 import { IGoalByCategory } from "../types";
+import { useTheme } from "../../../../core/themes/useTheme";
 
 interface IGoalPieDiagramLegend {
   activeGroupByCategory: IGoalByCategory[];
   expireGroupByCategory: IGoalByCategory[];
 }
+
+const theme = useTheme();
 
 const GoalPieDiagramLegend: FC<IGoalPieDiagramLegend> = ({
   activeGroupByCategory,
@@ -30,36 +33,24 @@ const GoalPieDiagramLegend: FC<IGoalPieDiagramLegend> = ({
     return goals;
   };
   return (
-    <View style={{ flexDirection: "row" }}>
-      <View
-        style={{
-          paddingRight: 10,
-          width: "50%",
-          borderColor: "rgba(0, 0, 0, 0.2)",
-          borderRightWidth: 1,
-        }}
-      >
-        <Text style={styles.titleText}>Active goals</Text>
+    <View style={styles.layout}>
+      <View style={styles.activeGroup}>
+        <Text style={[styles.text, styles.titleText]}>Active goals</Text>
         <>
           {activeVisibleLegend("active").length > 0 ? (
             activeVisibleLegend("active")
           ) : (
-            <Text>Goal wasn't created</Text>
+            <Text style={styles.text}>Goal wasn't created</Text>
           )}
         </>
       </View>
-      <View
-        style={{
-          paddingLeft: 10,
-          width: "50%",
-        }}
-      >
-        <Text style={styles.titleText}>Expired goals</Text>
+      <View style={styles.expiredGroup}>
+        <Text style={[styles.text, styles.titleText]}>Expired goals</Text>
         <>
           {activeVisibleLegend("expire").length > 0 ? (
             activeVisibleLegend("expire")
           ) : (
-            <Text>Goal wasn't created</Text>
+            <Text style={styles.text}>Goal wasn't created</Text>
           )}
         </>
       </View>
@@ -70,8 +61,26 @@ const GoalPieDiagramLegend: FC<IGoalPieDiagramLegend> = ({
 export default GoalPieDiagramLegend;
 
 const styles = StyleSheet.create({
+  layout: {
+    flexDirection: "row",
+  },
+  activeGroup: {
+    paddingRight: 10,
+    width: "50%",
+    borderColor: theme.border,
+    borderRightWidth: 1,
+  },
+  expiredGroup: {
+    paddingLeft: 10,
+    width: "50%",
+    borderColor: theme.border,
+    borderLeftWidth: 1,
+  },
   titleText: {
     fontSize: 15,
     fontFamily: "Quicksand_700Bold",
+  },
+  text: {
+    color: theme.text,
   },
 });

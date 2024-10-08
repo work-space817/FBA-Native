@@ -5,6 +5,9 @@ import CustomButton from "../../UI/CustomButton";
 import ComponentsLayout from "../../../core/layouts/components/ComponentsLayout";
 import { ISelectCategoriesProps } from "./types";
 import { useCategoryController } from "./useCategoryController";
+import { useTheme } from "../../../core/themes/useTheme";
+
+const theme = useTheme();
 
 const SelectCategories: FC<ISelectCategoriesProps> = memo(
   ({ title, categoriesList }) => {
@@ -13,7 +16,7 @@ const SelectCategories: FC<ISelectCategoriesProps> = memo(
 
     return (
       <>
-        <Text>{title}</Text>
+        <Text style={styles.text}>{title}</Text>
         <View style={styles.itemsList}>
           {categoryByType.map((icon, index) => (
             <ComponentsLayout style={styles.categoriesLayout} key={icon.id}>
@@ -39,6 +42,9 @@ const styles = StyleSheet.create({
     gap: 10,
     marginVertical: 10,
     paddingLeft: 5,
+  },
+  text: {
+    color: theme.text,
   },
   categoriesLayout: {
     paddingVertical: 0,

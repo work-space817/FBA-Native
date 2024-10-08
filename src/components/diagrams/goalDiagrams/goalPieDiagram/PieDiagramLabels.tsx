@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import { FC } from "react";
-import { IGoalByCategory, IGoalCircleStatisticList } from "../types";
+import { IGoalCircleStatisticList } from "../types";
+import { useTheme } from "../../../../core/themes/useTheme";
 
 interface IPieDiagramLabels {
   labelState: "expired" | "active";
   goalGroup: IGoalCircleStatisticList[];
   totalItems: number;
 }
+
+const theme = useTheme();
 
 const PieDiagramLabels: FC<IPieDiagramLabels> = ({
   labelState,
@@ -48,10 +51,11 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontFamily: "Quicksand_700Bold",
+    color: theme.text,
   },
   percent: {
     fontSize: 14,
-    color: "rgba(0, 0, 0, 0.5)",
+    color: theme.subText,
     fontFamily: "Quicksand_600SemiBold",
   },
 });
